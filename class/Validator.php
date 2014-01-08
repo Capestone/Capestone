@@ -5,42 +5,24 @@ class Validator {
     //put your code here
     
     public static function emailIsValid( $str ) {
-       if ( is_string($str) && !empty($str) && preg_match("/[A-Za-z0-9_]{2,}+@[A-Za-z0-9_]{2,}+\.[A-Za-z0-9_]{2,}/",$str) != 0 ) {
+       if ( is_string($str) && !empty($str) && strlen($str) == 100 && preg_match("/[A-Za-z0-9_]{2,}+@[A-Za-z0-9_]{2,}+\.[A-Za-z0-9_]{2,}/",$str) != 0 ) {
            return true;
        }        
        return false; 
     }
 
      public static function usernameIsValid( $str ) {
-       if ( is_string($str) && !empty($str) && preg_match("/[A-Za-z0-9_]/",$str) !=0 ) {
+       if ( is_string($str) && !empty($str) && strlen($str) == 50 && preg_match("/[A-Za-z0-9_]/",$str) !=0 ) {
            return true;
        }        
        return false; 
     }
     
     public static function passwordIsValid( $str ) {
-       if ( is_string($str) && !empty($str) ) {
+       if ( is_string($str) && !empty($str) && strlen($str) == 50 ) {
            return true;
        }        
        return false; 
-    }
-    
-    public static function isString($str)
-    {
-        if ( is_string($str) && !empty($str) ) {
-            return true;
-        }        
-        return false;
-        
-    }
-    
-    public static function isInt($int)
-    {
-        if ( is_numeric($int) && strlen($int) === 10 ) {
-            return true;
-        }        
-        return false;
-        
     }
     
     public static function loginIsValidPost()

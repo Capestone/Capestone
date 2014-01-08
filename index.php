@@ -31,8 +31,14 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                
-                
+                <h4>Stephen McCormick</h4>
+                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
+                <h4>Erik Lougee</h4>
+                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
                 
             </div> <!-- end div container -->
             
