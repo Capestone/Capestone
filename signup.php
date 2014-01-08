@@ -17,8 +17,14 @@
             
             if($signupClass->entryIsValid()) // will call all the checking to make sure it is a valid signup form
             {
-                $signupClass->saveEntry(); // if everything was good the entrys will save
-                header("Location: login.php"); // send them to login.php if they signed up correctly
+                if( $signupClass->saveEntry() ) // if everything was good the entrys will save
+                {
+                    header("Location: login.php"); // send them to login.php if they signed up correctly
+                }
+                else
+                {
+                    echo "something went wrong";
+                }
             } 
             else
             {

@@ -5,21 +5,21 @@ class Validator {
     //put your code here
     
     public static function emailIsValid( $str ) {
-       if ( is_string($str) && !empty($str) && strlen($str) == 100 && preg_match("/[A-Za-z0-9_]{2,}+@[A-Za-z0-9_]{2,}+\.[A-Za-z0-9_]{2,}/",$str) != 0 ) {
+       if ( is_string($str) && !empty($str) && strlen($str) <= 100 && preg_match("/[A-Za-z0-9_]{2,}+@[A-Za-z0-9_]{2,}+\.[A-Za-z0-9_]{2,}/",$str) != 0 ) {
            return true;
        }        
        return false; 
     }
 
      public static function usernameIsValid( $str ) {
-       if ( is_string($str) && !empty($str) && strlen($str) == 50 && preg_match("/[A-Za-z0-9_]/",$str) !=0 ) {
+       if ( is_string($str) && !empty($str) && strlen($str) <= 50 && preg_match("/[A-Za-z0-9_]/",$str) !=0 ) {
            return true;
        }        
        return false; 
     }
     
     public static function passwordIsValid( $str ) {
-       if ( is_string($str) && !empty($str) && strlen($str) == 50 ) {
+       if ( is_string($str) && !empty($str) && strlen($str) <= 50 ) {
            return true;
        }        
        return false; 
