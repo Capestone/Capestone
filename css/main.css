@@ -1,0 +1,93 @@
+#wrapper{
+	position:relative;
+	margin:auto;
+	width:960px;
+	height:800px;
+	padding:10px;
+        background-color:black;
+}
+
+#header{
+	float:left;
+	width:960px;
+	height:100px;
+        background-color:green;
+}
+
+/*  --  navigation style  --  */
+#nav{
+	float:left;
+	width:960px;
+	height:40px;
+	padding-top:10px;
+}
+
+#buttons{
+	position:relative;
+	margin:auto;
+	width:808px;
+	height:30px;
+}
+
+.btn{
+	float:left;
+	width:100px;
+	height:30px;
+	text-decoration:none;
+	text-align:center;
+	line-height:30px;
+	color:#000000;
+	background-color:#ffffff;
+	margin-right:1px;
+	text-shadow:2px 2px 7px #000000;
+}
+
+.btn:hover{
+	float:left;
+	width:100px;
+	height:30px;
+	text-decoration:none;
+	text-align:center;
+	line-height:30px;
+	color:#ffffff;
+	background-color:#000000;
+	margin-right:1px;
+	text-shadow:2px 2px 7px #ffffff;
+}
+
+ /*  --  end navigation  --  */
+
+ /*  --  start main page data  --  */
+#container{
+	float:left;
+	width:960px;
+	height:500px;
+	margin-top:10px;
+	margin-bottom:15px;
+        background-color:white;
+}
+
+ /*  --  end main page data  --  */
+
+ /*  --  start footer  --  */
+#footer{
+	float:left;
+	width:960px;
+	height:100px;
+	clear:both;
+	font-size:16px;
+	color:#ffffff;
+}
+
+.copyr{
+	float:right;
+	line-height:100px;
+	margin:0 10px 0 0;
+}
+
+.info{
+	float:left;
+	line-height:100px;
+	margin:0 0 0 10px;
+}
+ /*  --  end footer  --  */
