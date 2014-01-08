@@ -34,6 +34,15 @@
            
             <div id="container">
                 
+                <!--  ****    ****    *****    *****   
+                  - - - - - - - - - - - - - - - - - - - 
+                
+                put your div and anything else for your game right here
+                
+                - - - - - - - - - - - - - - - - - - - 
+                ****    ****    *****    ***** -->
+                
+                
                 
                 
             </div> <!-- end div container -->
