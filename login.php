@@ -1,0 +1,115 @@
+<?php include 'dependency.php'; ?>
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>LOGIN</title>
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+    </head>
+    <body>
+        <?php
+        session_regenerate_id(true);
+        $errors;
+        
+        $token = uniqid();
+        
+        //this is to avoid session hijaking
+        if( !isset($_SESSION["token"]) )
+        {
+            $_SESSION["token"] = $token;
+        }
+        else
+        {
+            if( isset($_POST["token"]) && $_SESSION["token"] != $_POST["token"] )
+            {
+                session_destroy();
+                header("Location:login.php");
+                exit();
+            }
+        }
+        
+        $_SESSION["token"] = $token;
+        
+        $username = (isset($_POST["username"]) ? $_POST["username"] : "");
+        $password = (isset($_POST["password"]) ? $_POST["password"] : "");
+        
+        if(count($_POST))
+        {
+            if ( Validator::loginIsValid($username, $password) ) //check to make sure username and password match in database
+            {
+                $thisMore = new WebSiteDB(); // websitedb class
+                
+                $_SESSION["isLoggedin"] = true; // they are now logged in
+                
+                $userID = $thisMore->getUserID(); // use the class to get user id  
+                $_SESSION["userID"] = $userID;
+                
+                header("Location:capestone.php");
+            }
+            else
+            {
+               $errors = "Username or Password are not correct!" ;
+            }
+        }
+        
+        // if they are already logged in or if they have just successfuly logged in
+        if( isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] == true )
+        {
+            header("Location:admin.php");
+        }
+        ?>
+        
+         <div id="wrapper">
+            <div id="header">
+                <h1>Capstone Project</h1>
+            </div>   <!-- end div header -->
+            
+            <div id="nav">  <!--  start nav  -->
+                <div id="buttons">
+                    <a class="btn" href="index.php"><b>HOME</b></a>
+                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="#"><b>Link</b></a>	
+                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="login.php"><b>GAME</b></a>
+                </div>  
+            </div>  <!--  end nav  -->    
+           
+            <div id="container">
+                
+                <h1>Login</h1>
+                    <form name="loginform" action="login.php" method="post">
+                        <?php 
+                           if ( !empty($errors) )
+                           {
+                               echo '<p>',$errors,'</p>'; // display errors
+                           }       
+                        ?>
+                        Username: <input type="text" name="username" /> <br />
+                        Password: <input type="password" name="password" /> <br />
+
+                        <input type="hidden" name="token" value="<?php echo $token; ?>"/> <!-- avoid session hijacking-->
+
+                        <input type="submit" value="Login" />
+                        <p class='link'>Don't have an account? <a href ="signup.php">Sign Up</a></p>
+
+                    </form>
+                
+                
+                
+            </div> <!-- end div container -->
+            
+            <div id="footer">  <!--  start footer  -->
+                    <p class="info">Terms of use | site map | contact</p>
+                    <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
+            </div>  <!--  end footer  -->
+        
+        </div><!-- end div wrapper -->
+        
+        
+        
+    </body>
+</html>

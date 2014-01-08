@@ -4,12 +4,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>HOME</title>
+        <title>Capestone</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
     <body>
         <?php
-        // put your code here
+        
+        
+        
         ?>
         
         <div id="wrapper">
@@ -43,6 +45,6 @@
         
         </div><!-- end div wrapper -->
         
+        
     </body>
 </html>
- 
