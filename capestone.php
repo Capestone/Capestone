@@ -10,6 +10,16 @@
     <body>
         <?php
         
+        if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
+        {
+            header("Location:login.php");
+        }
+        
+        if ( isset( $_GET["logout"]) && $_GET["logout"] == 1) // if the user clicks logout they will go back to login page
+        {
+            session_destroy();
+            header("Location:login.php");
+        }
         
         
         ?>
@@ -17,6 +27,8 @@
         <div id="wrapper">
             <div id="header">
                 <h1>Capstone Project</h1>
+                
+                <a href ="capestone.php?logout=1" style="color:white; float:right;">Logout</a>
             </div>   <!-- end div header -->
             
             <div id="nav">  <!--  start nav  -->

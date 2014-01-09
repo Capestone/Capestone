@@ -67,6 +67,23 @@
         background-color:white;
 }
 
+#forms{
+    border:1px solid black;
+    width:350px;
+    padding:15px;
+    margin: 15px;
+    border-radius:1em;
+    background-color:white;
+}
+
+.link{
+    float:right;
+}
+
+.errorText{
+    color:red;
+}
+
  /*  --  end main page data  --  */
 
  /*  --  start footer  --  */

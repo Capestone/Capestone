@@ -53,33 +53,35 @@
            
             <div id="container">
                 
-                <h1>Sign Up</h1>
-                <form name="signupform" action="signup.php" method="post">
+                <div id="forms">
+                    <h1>Sign Up</h1>
+                    <form name="signupform" action="signup.php" method="post">
 
-                    Username: <input type="text" name="username" /> <br />
-                        <?php 
-                            if ( !empty($enteryErrors["username"]) )
-                            {
-                                echo '<p>',$enteryErrors["username"],'</p>'; // display errors
-                            }       
-                        ?>
-                    Email: <input type="text" name="email" /> <br />
-                        <?php 
-                            if ( !empty($enteryErrors["email"]) )
-                            {
-                                echo '<p>',$enteryErrors["email"],'</p>'; // display errors
-                            }       
-                        ?>
-                    Password: <input type="password" name="password" /> <br />
-                        <?php 
-                            if ( !empty($enteryErrors["password"]) )
-                            {
-                                echo '<p>',$enteryErrors["password"],'</p>'; // display errors
-                            }       
-                        ?>
-                    <input type="submit" value="Sign Up" />
-                    <p class='link'>Already have an account? <a href ="login.php">Login</a></p>
-                </form>
+                        Username: <input type="text" name="username" /> <br />
+                            <?php 
+                                if ( !empty($enteryErrors["username"]) )
+                                {
+                                    echo '<p class="errorText">',$enteryErrors["username"],'</p>'; // display errors
+                                }       
+                            ?>
+                        Email: <input type="text" name="email" /> <br />
+                            <?php 
+                                if ( !empty($enteryErrors["email"]) )
+                                {
+                                    echo '<p class="errorText">',$enteryErrors["email"],'</p>'; // display errors
+                                }       
+                            ?>
+                        Password: <input type="password" name="password" /> <br />
+                            <?php 
+                                if ( !empty($enteryErrors["password"]) )
+                                {
+                                    echo '<p class="errorText">',$enteryErrors["password"],'</p>'; // display errors
+                                }       
+                            ?>
+                        <input type="submit" value="Sign Up" />
+                        <p class='link'>Already have an account? <a href ="login.php">Login</a></p>
+                    </form>
+                </div>
                 
             </div> <!-- end div container -->
             

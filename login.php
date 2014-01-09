@@ -38,14 +38,9 @@
         {
             if ( Validator::loginIsValid($username, $password) ) //check to make sure username and password match in database
             {
-                $thisMore = new WebSiteDB(); // websitedb class
-                
                 $_SESSION["isLoggedin"] = true; // they are now logged in
                 
-                $userID = $thisMore->getUserID(); // use the class to get user id  
-                $_SESSION["userID"] = $userID;
-                
-                header("Location:capestone.php");
+                header("Location: capestone.php");
             }
             else
             {
@@ -56,7 +51,7 @@
         // if they are already logged in or if they have just successfuly logged in
         if( isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] == true )
         {
-            header("Location:admin.php");
+            header("Location: capestone.php");
         }
         ?>
         
@@ -80,12 +75,13 @@
            
             <div id="container">
                 
-                <h1>Login</h1>
+                <div id="forms">
+                    <h1>Login</h1>
                     <form name="loginform" action="login.php" method="post">
                         <?php 
                            if ( !empty($errors) )
                            {
-                               echo '<p>',$errors,'</p>'; // display errors
+                               echo '<p class="errorText">',$errors,'</p>'; // display errors
                            }       
                         ?>
                         Username: <input type="text" name="username" /> <br />
@@ -97,7 +93,7 @@
                         <p class='link'>Don't have an account? <a href ="signup.php">Sign Up</a></p>
 
                     </form>
-                
+                </div>
                 
                 
             </div> <!-- end div container -->
