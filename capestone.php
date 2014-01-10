@@ -1,6 +1,6 @@
 <?php include 'dependency.php'; ?>
 <!DOCTYPE html>
-<!-- this is a comments -->
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -47,12 +47,9 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                
+                                
                 <canvas id="idCanvas" width="176" height ="264" class="simpleBorder"></canvas>
-		        <div id="idConsole" class="console"></div>
-                
-                
-                
+                <div id="idConsole" class="console"></div>
                 
             </div> <!-- end div container -->
             
