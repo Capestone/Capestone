@@ -61,7 +61,7 @@
 #container{
 	float:left;
 	width:960px;
-	height:500px;
+	/*height:500px;*/
 	margin-top:10px;
 	margin-bottom:15px;
         background-color:white;
