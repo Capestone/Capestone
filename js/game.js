@@ -29,10 +29,10 @@ var cons = document.getElementById("idConsole");
 //image, armorClass, attackBonus, color, currentHP, damage, desc, inventory, maxHP, pass, x, y
 //I think there is a better way to do this. This will get confusing down the line. It's already confusing.
 //Fixed so it's less confusing. Now you just pass the x y values. 
-var hero = new being("sprites/rogue.png", 0, 0);
-var enemy = new being("sprites/octopod.png", mapWidth-1, mapHeight-1);
+var hero = new being("images/rogue.png", 0, 0);
+var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
 // Let's give fence some paramaters so we can destroy it!
-var fence = new being("sprites/fence.png", -1,-1);
+var fence = new being("images/fence.png", -1,-1);
 
 ////Global variables
 var xSize = 16;
@@ -176,7 +176,7 @@ function autoLoader()
 function barrier(y)
 {
 	for (i=0; i<mapWidth; i++) {
-		coordinates[i][y] = new being("sprites/fence.png", i, y);
+		coordinates[i][y] = new being("images/fence.png", i, y);
 		
 		//add an item to the sixth fence's inventory.
 		if (i==5) {
@@ -225,7 +225,7 @@ function enemyLoader()
 	enemy.color = "red";
 	enemy.currentHP = 10;
 	enemy.desc = "Octopod, son of Octothorpe";
-	enemy.image.src = "sprites/octopod.png"
+	enemy.image.src = "images/octopod.png"
 	enemy.maxHP = 10;
 	enemy.pass = "";
 	enemy.x = mapWidth-1;
@@ -268,7 +268,7 @@ function heroLoader()
 	hero.color = "blue";	
 	hero.currentHP = 10;
 	hero.desc = "Buttlord, Lord of the Glut";
-	hero.image.src = "sprites/rogue.png"
+	hero.image.src = "images/rogue.png"
 	hero.maxHP = 10;
 	hero.pass = false;	
 	hero.x = 0;
@@ -288,11 +288,11 @@ function item(image, x, y)
 }
 
 
-var sword = new item("sprites/sword.png", 6, 6);
+var sword = new item("images/sword.png", 6, 6);
 coordinates[sword.x][sword.y] = sword;
 redrawCoordinates();
 
-//var hero = new being("sprites/rogue.png", 0, 0);
+//var hero = new being("images/rogue.png", 0, 0);
 
 
 /*
@@ -711,5 +711,5 @@ function equipItems()
  * but it would execture randomBarrier;. To double check, comment out the line below and
  * comment in the one below it. */
 
-btnAction.onclick = function() { console.log(cons); };
+//btnAction.onclick = function() { console.log(cons); };
 //btnAction.onclick = attack(hero,enemy);
