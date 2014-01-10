@@ -711,5 +711,5 @@ function equipItems()
  * but it would execture randomBarrier;. To double check, comment out the line below and
  * comment in the one below it. */
 
-btnAction.onclick = function() { console.log(cons); }
+btnAction.onclick = function() { console.log(cons); };
 //btnAction.onclick = attack(hero,enemy);
