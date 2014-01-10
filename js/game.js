@@ -2,7 +2,7 @@
 window.onload = autoLoader;
 
 ////Event handlers
-
+//This is a test of the emergency broadcast system
 //This is the prototype button
 var btnAction = document.getElementById("idRandom");
 
