@@ -37,8 +37,8 @@ var fence = new being("images/fence.png", -1,-1);
 ////Global variables
 var xSize = 16;
 var ySize = 24;
-var mapWidth = 11;
-var mapHeight = 11;
+var mapWidth = 21;
+var mapHeight = 21;
 
 //We only need this if we are making barriers
 //var numberOfBarriers;
@@ -208,7 +208,7 @@ function being(image, x, y)
 function canvasBackground()
 {
 	context.fillStyle = "#212121";
-	context.fillRect(0, 0, 176, 264);
+	context.fillRect(0, 0, 336, 528);
 }
 
 function clearHTML()
