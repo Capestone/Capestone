@@ -6,8 +6,10 @@
         <meta charset="UTF-8">
         <title>Capestone</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <link rel="stylesheet" type="text/css" href="css/game.css" />
     </head>
     <body>
+        
         <?php
         
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
@@ -46,13 +48,8 @@
            
             <div id="container">
                 
-                <!--  ****    ****    *****    *****   
-                  - - - - - - - - - - - - - - - - - - - 
-                
-                put your div and anything else for your game right here
-                
-                - - - - - - - - - - - - - - - - - - - 
-                ****    ****    *****    ***** -->
+                <canvas id="idCanvas" width="176" height ="264" class="simpleBorder"></canvas>
+		        <div id="idConsole" class="console"></div>
                 
                 
                 
@@ -67,5 +64,6 @@
         </div><!-- end div wrapper -->
         
         
+        <script type="text/javascript" src="js/game.js"></script>
     </body>
 </html>

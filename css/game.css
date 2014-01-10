@@ -1,0 +1,25 @@
+.simpleBorder
+{
+	border:3px;
+	border-style:double;
+	border-color: #000000;
+	float:left;
+}
+
+.console
+{
+	background-color:#212121;
+	color:red;
+	font-family:"Courier New";
+	border-width:3px;
+	border-style:double;
+	border-color:black;
+	width:352;
+	height:264;
+	float:left;
+}
+
+.hidden
+{
+	display: none;
+}
