@@ -1,6 +1,6 @@
 <?php include 'dependency.php'; ?>
 <!DOCTYPE html>
-
+<!-- this is a comments -->
 <html>
     <head>
         <meta charset="UTF-8">
