@@ -2,7 +2,7 @@
 	position:relative;
 	margin:auto;
 	width:960px;
-	height:800px;
+	height:900px;
 	padding:10px;
         background-color:black;
 }
@@ -61,7 +61,7 @@
 #container{
 	float:left;
 	width:960px;
-	/*height:500px;*/
+	height:625px;
 	margin-top:10px;
 	margin-bottom:15px;
         background-color:white;
@@ -84,6 +84,9 @@
     color:red;
 }
 
+#pdf{
+    height:625px;
+}
  /*  --  end main page data  --  */
 
  /*  --  start footer  --  */
