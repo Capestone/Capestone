@@ -67,7 +67,7 @@ for (var i=0; i<mapWidth; i++) {
 function attack(assailant, defender)
 {
 	console.log(assailant.desc + " attacks " + defender.desc);
-	cons.innerHTML = assailant.desc + " attacks " + defender.desc;
+	cons.innerHTML = assailant.desc + " attacks " + defender.desc + "!<br/>";
 	
 	attackDie = rollDice(20);
 	cons.innerHTML += "You rolled a " + attackDie;
