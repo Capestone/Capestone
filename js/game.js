@@ -47,14 +47,14 @@ var heightPixels = 528;
 ////Matrix creation / declaration
 var coordinates = new Array(mapWidth);
 for (var i =0; i <mapWidth; i++) {
-	coordinates[i] = new Array(mapHeight);			
+    coordinates[i] = new Array(mapHeight);			
 }
 
 //sets array to 0 which is not an object
 for (var i=0; i<mapWidth; i++) {
-	for (var j=0; j<mapHeight; j++) {
-		coordinates[i][j] = 0;
-	}
+    for (var j=0; j<mapHeight; j++) {
+        coordinates[i][j] = 0;
+    }
 }
 
 ////Functions (try to keep these in alphabetical order after object)
@@ -75,43 +75,41 @@ function attack(assailant, defender)
 
     if (attackDie === 1) //Critical miss
     {
-            cons.innerHTML += "<br/>You poor excuse for an adventurer. You widely miss and stagger!!";
+        cons.innerHTML += "<br/>You poor excuse for an adventurer. You widely miss and stagger!!";
     } 
 
     else if (attackDie === 20) //Critical Threat
     {
-            cons.innerHTML += "<br/>A critical threat!";
-            attackDie = rollDice(20) + assailant.attackBonus;
-            if (attackDie >= defender.armorClass)
-            {
-                    cons.innerHTML += "<br/>Oho! You've scored an excellent hit!!";
-                    damageDie = rollDice(assailant.damage) * 2;
-                    cons.innerHTML += "<br/>You did " + damageDie + " damage!!";
-                    defender.currentHP -= damageDie;
-                    cons.innerHTML += "<br/>Your enemy now has " + defender.currentHP + " HP left.";
-            } else 
-            {
-                    cons.innerHTML += "<br/>But it did not confirm.";
-                    damageDie = rollDice(assailant.damage);
-                    cons.innerHTML += "<br/> You hit for " + damageDie + " damage.";
-                    defender.currentHP -= damageDie;
-                    cons.innerHTML += "<br/>Your enemy now has " + defender.currentHP + " HP left.";
-            }	  
-    } else if (attackDie + assailant.attackBonus >= defender.armorClass)
+        cons.innerHTML += "<br/>A critical threat!";
+        attackDie = rollDice(20) + assailant.attackBonus;
+        if (attackDie >= defender.armorClass)
+        {
+            cons.innerHTML += "<br/>Oho! You've scored an excellent hit!!";
+            damageDie = rollDice(assailant.damage) * 2;
+            cons.innerHTML += "<br/>You did " + damageDie + " damage!!";
+            defender.currentHP -= damageDie;
+        } 
+        else 
+        {
+            cons.innerHTML += "<br/>But it did not confirm.";
+            damageDie = rollDice(assailant.damage);
+            cons.innerHTML += "<br/> You hit for " + damageDie + " damage.";
+            defender.currentHP -= damageDie;
+        }	  
+    } 
+    else if (attackDie + assailant.attackBonus >= defender.armorClass)
     {
-                    cons.innerHTML += "<br/>You've scored a hit!";
-                    damageDie = rollDice(assailant.damage);
-                    console.log("You did " + damageDie + " damage.")
-                    cons.innerHTML += "<br /> You did " + damageDie + " damage.";
-                    defender.currentHP -= damageDie;
-                    console.log("Your enemy now has " + defender.currentHP + " HP left.");
+        cons.innerHTML += "<br/>You've scored a hit!";
+        damageDie = rollDice(assailant.damage);
+        console.log("You did " + damageDie + " damage.");
+        cons.innerHTML += "<br /> You did " + damageDie + " damage.";
+        defender.currentHP -= damageDie;
     }
-            else 
-            {
-                    cons.innerHTML += "<br />You miss!!";
-                    console.log("You miss!!");
-                    console.log("Your enemy still has " + defender.currentHP + " HP left.");
-            }
+        else 
+        {
+                cons.innerHTML += "<br />You miss!!";
+                console.log("You miss!!");
+        }
     console.log(assailant, defender);
     checkDeath(assailant, defender);
     
@@ -140,23 +138,26 @@ function checkDeath(assailant, defender) {
         cons.innerHTML += "You strike down " + defender.desc + " with the fury of the Gods!";
         //looooooooooooooooooooot
         if (defender.inventory.length > 0) {
-                cons.innerHTML += "<br />You found " + defender.inventory + ".";
-                //This will now pick up everything in the inventory
-                for (i = 0; i <= defender.inventory.length; i++)
-                {
-                        assailant.inventory.push(defender.inventory.pop());
-                }
-
-        } else {
-                cons.innerHTML += "<br />You found nothing.";
+            cons.innerHTML += "<br />You found " + defender.inventory + ".";
+            //This will now pick up everything in the inventory
+            for (i = 0; i <= defender.inventory.length; i++)
+            {
+                assailant.inventory.push(defender.inventory.pop());
+            }
+        } 
+        else 
+        {
+            cons.innerHTML += "<br />You found nothing.";
         }
 
         console.log(assailant.inventory);
 
 
         //return true; //This isn't used yet.
-    } else {
-            //return false; //This isn't used either.
+    } 
+    else 
+    {
+        //return false; //This isn't used either.
     }
 }
 
@@ -202,125 +203,124 @@ function displayControls()
 
 function autoLoader()
 {
-	canvasBackground();
-	enemyLoader();
-	heroLoader();	
-	fenceLoader();
-
+    canvasBackground();
+    enemyLoader();
+    heroLoader();	
+    fenceLoader();
 }
 
 //Barrier now creates a destroyable, unique fence in each place
 function barrier(y)
 {
-	for (i=0; i<mapWidth; i++) {
-		coordinates[i][y] = new being("images/fence.png", i, y);
-		
-		//add an item to the sixth fence's inventory.
-		if (i===5) {
-			coordinates[i][y].inventory.push("Corellon's Arrow");
-		}
-	}
-	redrawCoordinates();
+    for (i=0; i<mapWidth; i++) {
+        coordinates[i][y] = new being("images/fence.png", i, y);
+
+        //add an item to the sixth fence's inventory.
+        if (i===5) {
+                coordinates[i][y].inventory.push("Corellon's Arrow");
+        }
+    }
+    redrawCoordinates();
 }
 
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
 function being(image, x, y) 
 {
-	this.image = new Image();
-	this.armorClass = 0;
-	this.attackBonus = 0;
-	this.color = "";
-	this.currentHP = 0;
-	this.damage = 0;
-	this.desc = "";
-	this.image.src = image;
-	this.inventory = new Array();
-	this.maxHP = 0;
-	this.pass = false;
-	this.x = x;
-	this.y = y;
+    this.image = new Image();
+    this.armorClass = 0;
+    this.attackBonus = 0;
+    this.color = "";
+    this.currentHP = 0;
+    this.damage = 0;
+    this.desc = "";
+    this.image.src = image;
+    this.inventory = new Array();
+    this.maxHP = 0;
+    this.pass = false;
+    this.x = x;
+    this.y = y;
 }
 
 function canvasBackground()
 {
-	context.fillStyle = "#212121";
-	context.fillRect(0, 0, widthPixels, heightPixels);
+    context.fillStyle = "#212121";
+    context.fillRect(0, 0, widthPixels, heightPixels);
 }
 
-function clearHTML()
+//Kind of a useless function right now
+function clearConsole()
 {
-	//cons.HTML = "";
+    cons.innerHTML = "";
 }
 
 function enemyLoader()
 {	
-	randomInventory(enemy);
-	//Enemy attributes
-	enemy.armorClass = 10;
-	enemy.attackBonus = 1;
-	enemy.color = "red";
-	enemy.currentHP = 10;
-	enemy.desc = "Octopod, son of Octothorpe";
-	enemy.image.src = "images/octopod.png"
-	enemy.maxHP = 10;
-	enemy.pass = "";
-	enemy.x = mapWidth-1;
-	enemy.y = mapHeight-1;
-	coordinates[enemy.x][enemy.y] = enemy;
-	redrawCoordinates();
+    randomInventory(enemy);
+    //Enemy attributes
+    enemy.armorClass = 10;
+    enemy.attackBonus = 1;
+    enemy.color = "red";
+    enemy.currentHP = 10;
+    enemy.desc = "Octopod, son of Octothorpe";
+    enemy.image.src = "images/octopod.png";
+    enemy.maxHP = 10;
+    enemy.pass = "";
+    enemy.x = mapWidth-1;
+    enemy.y = mapHeight-1;
+    coordinates[enemy.x][enemy.y] = enemy;
+    redrawCoordinates();
 
-	//cons.innerHTML = "Can you defeat your enemy?";
+    //cons.innerHTML = "Can you defeat your enemy?";
 }
 
 function fenceLoader()
 {
-	//barrier(5);
-	fence.armorClass = 1;
-	fence.attackBonus = 0;
-	fence.color = "red";
-	fence.currentHP = 50;
-	fence.desc = "a fence";
-	fence.inventory = ["Some wood"];
-	fence.maxHP = 50;
-	fence.pass = false;
-	fence.x = 5;
-	fence.y = 5;
-	coordinates[fence.x][fence.y] = fence;
-	redrawCoordinates();
-	//image, armorClass, attackBonus, color, currentHP, desc, inventory, maxHP, pass, x, y
-	//var fence = new being("fence.png", 1, 0, "red", 50, "a fence", "wood", 50, false, -1,-1);
-
+    //barrier(5);
+    fence.armorClass = 1;
+    fence.attackBonus = 0;
+    fence.color = "red";
+    fence.currentHP = 50;
+    fence.desc = "a fence";
+    fence.inventory = ["Some wood"];
+    fence.maxHP = 50;
+    fence.pass = false;
+    fence.x = 5;
+    fence.y = 5;
+    coordinates[fence.x][fence.y] = fence;
+    redrawCoordinates();
+    //image, armorClass, attackBonus, color, currentHP, desc, inventory, maxHP, pass, x, y
+    //var fence = new being("fence.png", 1, 0, "red", 50, "a fence", "wood", 50, false, -1,-1);
 }
 
 
 function heroLoader()
 {
-	//Gives hero.armorClass and hero.damage
-	randomInventory(hero);
+    //Gives hero.armorClass and hero.damage
+    randomInventory(hero);
 
-	hero.armorClass = 10;
-	hero.attackBonus = 1;
-	hero.color = "blue";	
-	hero.currentHP = 10;
-	hero.desc = "Buttlord, Lord of the Glut";
-	hero.image.src = "images/rogue.png"
-	hero.maxHP = 10;
-	hero.pass = false;	
-	hero.x = 0;
-	hero.y = 0;
-	coordinates[hero.x][hero.y] = hero;
-	redrawCoordinates();
+    hero.armorClass = 10;
+    hero.attackBonus = 1;
+    hero.color = "blue";	
+    hero.currentHP = 10;
+    hero.desc = "Buttlord, Lord of the Glut";
+    hero.image.src = "images/rogue.png";
+    hero.maxHP = 10;
+    hero.pass = false;	
+    hero.x = 0;
+    hero.y = 0;
+    coordinates[hero.x][hero.y] = hero;
+    redrawCoordinates();
 }
 
 function item(image, x, y) 
 {
-	this.image = new Image();
-	this.image.src = image;
-	this.damage = 0;
-	this.price = 0;
-	this.x = x;
-	this.y = y;
+    this.image = new Image();
+    this.image.src = image;
+    this.damage = 0;
+    this.price = 0;
+    this.x = x;
+    this.y = y;
 }
 
 
@@ -343,26 +343,25 @@ function randomBarrier()
 }*/
 
 function redrawCoordinates() {
-	canvasBackground();
-        cons.innerHTML = "";
-	for (var i=0; i < mapWidth; i++) {
-		for (var j=0; j < mapHeight; j++) {
-			if (coordinates[i][j] != 0) {
-				context.drawImage(coordinates[i][j].image, i*xSize, j*ySize);
-			}
-		}
-	}
-        
+    canvasBackground();
+    cons.innerHTML = "";
+    for (var i=0; i < mapWidth; i++) {
+        for (var j=0; j < mapHeight; j++) {
+            if (coordinates[i][j] !== 0) {
+                context.drawImage(coordinates[i][j].image, i*xSize, j*ySize);
+            }
+        }
+    }  
 }
 
 function RNG(maxNum)
 {
-	return Math.floor(Math.random()*maxNum);
+    return Math.floor(Math.random()*maxNum);
 }
 
 function rollDice(maxDie)
 {
-	return Math.floor(Math.random()*maxDie + 1);
+    return Math.floor(Math.random()*maxDie + 1);
 }
 
 // Just a kind of test, working with inventory and advancedish battle behaviors
@@ -372,118 +371,122 @@ function rollDice(maxDie)
 // And their quantities too.
 
 function throwArrow() {
-	var indexArrow = hero.inventory.indexOf("Corellon's Arrow");
-	var willSplice = false; // By commenting out willSplice = true, corellon's arrow is infinite
-	var targetX;
-	var targetY;
-	// rather than reiterating conditions separately, I'm setting values to these two vars
-	// that will then be applied to coordinates to search for a target
-	var dirX;
-	var dirY;
-	var foundTarget = false;
-	
-	var damage = 0;
-	
-	// presently arrow has unlimited range.
-	if (indexArrow != -1) {
-		cons.innerHTML = "Choose a direction to cast the heavenly, god-slaying bolt."
-		alert();
-		// find coordinates of target
-		document.onkeypress=function(f) {
-                    console.log(f);
-                    var f=window.event || f
-                    keyPressed = f.charCode;
+    var indexArrow = hero.inventory.indexOf("Corellon's Arrow");
+    var willSplice = false; // By commenting out willSplice = true, corellon's arrow is infinite
+    var targetX;
+    var targetY;
+    // rather than reiterating conditions separately, I'm setting values to these two vars
+    // that will then be applied to coordinates to search for a target
+    var dirX;
+    var dirY;
+    var foundTarget = false;
 
-                    switch (keyPressed) {
-                        // 1 down left
-                        case 49:
-                            dirX = -1;
-                            dirY = 1;
-                            break;
-                        // 2 down
-                        case 50:
-                            dirX = 0;
-                            dirY = 1;
-                            break;
-                        // 3 down right
-                        case 51:
-                            dirX = 1
-                            dirY = 1;
-                            break;
-                        // 4 left
-                        case 52:
-                            dirX = -1;
-                            dirY = 0;
-                            break;
-                        // 5 Wait a turn
-                        case 53:
-                            cons.innerHTML += "<br/>You wait in anticipation...";
-                            break;
-                        // 6 right
-                        case 54:
-                            dirX = 1;
-                            dirY = 0;
-                            break;
-                        // 7 up left
-                        case 55:
-                            dirX = -1;
-                            dirY = -1;
-                            break;
-                        // 8 up
-                        case 56:
-                            dirX = 0;
-                            dirY = -1;
-                            break;
-                        // 9 up right
-                        case 57:
-                            dirX = 1;
-                            dirY = -1;
-                            break;
+    var damage = 0;
+
+    // presently arrow has unlimited range.
+    if (indexArrow !== -1) {
+        cons.innerHTML = "Choose a direction to cast the heavenly, god-slaying bolt."
+        alert();
+        // find coordinates of target
+        document.onkeypress=function(f) {
+            console.log(f);
+            var f=window.event || f
+            keyPressed = f.charCode;
+
+            switch (keyPressed) {
+                // 1 down left
+                case 49:
+                    dirX = -1;
+                    dirY = 1;
+                    break;
+                // 2 down
+                case 50:
+                    dirX = 0;
+                    dirY = 1;
+                    break;
+                // 3 down right
+                case 51:
+                    dirX = 1;
+                    dirY = 1;
+                    break;
+                // 4 left
+                case 52:
+                    dirX = -1;
+                    dirY = 0;
+                    break;
+                // 5 Wait a turn
+                case 53:
+                    cons.innerHTML += "<br/>You wait in anticipation...";
+                    break;
+                // 6 right
+                case 54:
+                    dirX = 1;
+                    dirY = 0;
+                    break;
+                // 7 up left
+                case 55:
+                    dirX = -1;
+                    dirY = -1;
+                    break;
+                // 8 up
+                case 56:
+                    dirX = 0;
+                    dirY = -1;
+                    break;
+                // 9 up right
+                case 57:
+                    dirX = 1;
+                    dirY = -1;
+                    break;
+            }
+        }
+
+        //This looks weird, but it will increment x and y in the direction that we
+        //are asking them to go until one of the exits the map.
+        for (var x=0; (x>=0) && (x<mapWidth); x+=dirX) {
+            for (var y=0; (y>=0) && (y<mapHeight); y+=dirY) {
+                //check to see if it is not empty
+                if (coordinates[x][y] !== 0) {
+                    //check to see if it is a monster, sort of
+                    if (coordinates[x][y].currentHP>0) {
+                            targetX = x;
+                            targetY = y;
+                            foundTarget = true;
                     }
-		}
-		
-		//This looks weird, but it will increment x and y in the direction that we
-		//are asking them to go until one of the exits the map.
-		for (var x=0; (x>=0) && (x<mapWidth); x+=dirX) {
-			for (var y=0; (y>=0) && (y<mapHeight); y+=dirY) {
-				//check to see if it is not empty
-				if (coordinates[x][y] != 0) {
-					//check to see if it is a monster, sort of
-					if (coordinates[x][y].currentHP>0) {
-						targetX = x;
-						targetY = y;
-						foundTarget = true;
-					}
-				}
-			}
-		}
-		
-		if (foundTarget) {
-			for (var i=0; i<5; i++) {
-				damage += rollDice(6);
-			}
-			coordinates[targetX][targetY].currentHP -= damage;
-			
-			cons.innerHTML = "You struck " + coordinates[targetX][targetY].desc + " for " + damage + " damage!";
-			cons.innerHTML += "Hei Corellon shar-sheleru!";
-			
-			checkDeath(hero, coordinates[targetX][targetY]);
-		} else {
-			cons.innerHTML += "<br />There is no target in that direction."
-		}
-		
-	} else {
-		cons.innerHTML = "You have not found Corellon's Arrow!";
-	}
+                }
+            }
+        }
+
+        if (foundTarget) {
+            for (var i=0; i<5; i++) {
+                damage += rollDice(6);
+            }
+            coordinates[targetX][targetY].currentHP -= damage;
+
+            cons.innerHTML = "You struck " + coordinates[targetX][targetY].desc + " for " + damage + " damage!";
+            cons.innerHTML += "Hei Corellon shar-sheleru!";
+
+            checkDeath(hero, coordinates[targetX][targetY]);
+        } 
+        else 
+        {
+            cons.innerHTML += "<br />There is no target in that direction.";
+        }
+
+    } 
+    else 
+    {
+        cons.innerHTML = "You have not found Corellon's Arrow!";
+    }
 }
 
 //KEYHANDLER GET!!!
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
-	var e=window.event || e
+    var e=window.event || e;
     //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
-    console.log("CharCode value: "+e.charCode)
+    console.log("CharCode value: "+e.charCode);
     keyPressed = e.charCode;
     
     /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
@@ -496,172 +499,183 @@ document.onkeypress=function(e)
     
     switch (keyPressed)
     {
-		//Keyboard S (capital)
-		// Throw Corellon's arrow
-		case 83:
-			throwArrow();
-		break;
-		
-		//Numpad 1
-		//Move down and left
-		case 49:
-    		if ((hero.x-1 >= 0) && (hero.y+1 <= mapHeight) )
-	 		{
-			if (coordinates[hero.x-1][hero.y+1] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x--;
-				hero.y++;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) {
-				attack(hero,coordinates[hero.x-1][hero.y+1]);
-			}
-		}
-			break;
+        //Keyboard S (capital)
+        // Throw Corellon's arrow
+        case 83:
+            throwArrow();
+        break;
 
-		//Numpad 2
-		//Move down
-		case 50:
-    		if (hero.y+1 < mapHeight) 
-	 		{
-				if (coordinates[hero.x][hero.y+1] == 0) {
-					coordinates[hero.x][hero.y] = 0;
-					hero.y++;
-					coordinates[hero.x][hero.y] = hero;
-					redrawCoordinates();
-				} else
-				if (coordinates[hero.x][hero.y+1].currentHP > 0) {
-					attack(hero,coordinates[hero.x][hero.y+1]);
-				}
-			}
-			
-			break;
+        //Numpad 1
+        //Move down and left
+        case 49:
+        if ((hero.x-1 >= 0) && (hero.y+1 <= mapHeight) )
+        {
+            if (coordinates[hero.x-1][hero.y+1] === 0) 
+            {
+                coordinates[hero.x][hero.y] = 0;
+                hero.x--;
+                hero.y++;
+                coordinates[hero.x][hero.y] = hero;
+                redrawCoordinates();
+            }
+            else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) 
+            {
+                attack(hero,coordinates[hero.x-1][hero.y+1]);
+            }
+        }
+        break;
 
-		//Numpad 3
-		//Move down and right
-		case 51:
-		if ((hero.x+1<mapWidth) && (hero.y+1<mapHeight)) 
-			{
-			if (coordinates[hero.x+1][hero.y+1] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x++;
-				hero.y++;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) {
-				attack(hero,coordinates[hero.x+1][hero.y+1]);
-				}
-			}
-			break;
-		
+        //Numpad 2
+        //Move down
+        case 50:
+        if (hero.y+1 < mapHeight) 
+        {
+            if (coordinates[hero.x][hero.y+1] === 0) {
+                coordinates[hero.x][hero.y] = 0;
+                hero.y++;
+                coordinates[hero.x][hero.y] = hero;
+                redrawCoordinates();
+            } 
+            else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
+            {
+                attack(hero,coordinates[hero.x][hero.y+1]);
+            }
+        }
+        break;
 
-		//Numpad 4
-		//Move left
-		case 52:
-		if (hero.x-1>=0) {
-			
-			if (coordinates[hero.x-1][hero.y] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x--;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x-1][hero.y].currentHP > 0) {
-				attack(hero,coordinates[hero.x-1][hero.y]);
-			}
-		}
-			break;
+        //Numpad 3
+        //Move down and right
+        case 51:
+        if ((hero.x+1<mapWidth) && (hero.y+1<mapHeight)) 
+        {
+            if (coordinates[hero.x+1][hero.y+1] === 0) {
+                coordinates[hero.x][hero.y] = 0;
+                hero.x++;
+                hero.y++;
+                coordinates[hero.x][hero.y] = hero;
+                redrawCoordinates();
+            }
+            else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) 
+            {
+                attack(hero,coordinates[hero.x+1][hero.y+1]);
+            }
+        }
+        break;
 
-		//Numpad 5
-		//Wait a turn
-		// -- In the future it would be smart for each move (including wait) to increment a sort of clock huh?
-		//	that way poisons/healing effects would occur when you wait.
 
-                case 53:
+        //Numpad 4
+        //Move left
+        case 52:
+        if (hero.x-1>=0) 
+        {
+            if (coordinates[hero.x-1][hero.y] === 0) {
+                coordinates[hero.x][hero.y] = 0;
+                hero.x--;
+                coordinates[hero.x][hero.y] = hero;
+                redrawCoordinates();
+            }
+            else if (coordinates[hero.x-1][hero.y].currentHP > 0) 
+            {
+                attack(hero,coordinates[hero.x-1][hero.y]);
+            }
+        }
+        break;
+
+        //Numpad 5
+        //Wait a turn
+        case 53:
+            redrawCoordinates();
+            cons.innerHTML += "You wait in anticipation...";
+            break;
+
+
+        //Numpad 6
+        //Move right
+        case 54:
+            if (hero.x+1 < mapWidth) 
+            {
+                if (coordinates[hero.x+1][hero.y] === 0) {
+                    coordinates[hero.x][hero.y] = 0;
+                    hero.x++;
+                    coordinates[hero.x][hero.y] = hero;
                     redrawCoordinates();
-                    cons.innerHTML += "You wait in anticipation...";
-                    break;
-			
+                }
+                else if (coordinates[hero.x+1][hero.y].currentHP > 0) 
+                {
+                    attack(hero,coordinates[hero.x+1][hero.y]);
+                }
+            }
+            break;
 
-		//Numpad 6
-		//Move right
-		case 54:
-			if (hero.x+1 < mapWidth) 
-			{
-			if (coordinates[hero.x+1][hero.y] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x++;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x+1][hero.y].currentHP > 0) {
-				attack(hero,coordinates[hero.x+1][hero.y]);
-			}
-			}
-			break;
+        //Numpad 7
+        //Move up and left
+        case 55:
+            if ((hero.x-1>=0) && (hero.y-1>=0))
+            {
+                if (coordinates[hero.x-1][hero.y-1] === 0) {
+                    coordinates[hero.x][hero.y] = 0;
+                    hero.x--;
+                    hero.y--;
+                    coordinates[hero.x][hero.y] = hero;
+                    redrawCoordinates();
+                }
+                else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) 
+                {
+                    attack(hero,coordinates[hero.x-1][hero.y-1]);
+                }
+            }
+            break;
 
-		//Numpad 7
-		//Move up and left
-		case 55:
-			if ((hero.x-1>=0) && (hero.y-1>=0))
-			{
-			if (coordinates[hero.x-1][hero.y-1] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x--;
-				hero.y--;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) {
-				attack(hero,coordinates[hero.x-1][hero.y-1]);
-			}
-			}
-			break;
+        //Numpad 8
+        //Move up
+        case 56:
+            if (hero.y-1>=0) 
+            {
+                if (coordinates[hero.x][hero.y-1] === 0) {
+                    coordinates[hero.x][hero.y] = 0;
+                    hero.y--;
+                    coordinates[hero.x][hero.y] = hero;
+                    redrawCoordinates();
+                }
+                else if (coordinates[hero.x][hero.y-1].currentHP > 0) 
+                {
+                    attack(hero,coordinates[hero.x][hero.y-1]);
+                }
+            }
+            break;
 
-		//Numpad 8
-		//Move up
-		case 56:
-			if (hero.y-1>=0) 
-			{
-			if (coordinates[hero.x][hero.y-1] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.y--;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x][hero.y-1].currentHP > 0) {
-				attack(hero,coordinates[hero.x][hero.y-1]);
-			}
-			}
-			break;
+        //Numpad 9
+        //Move up and right
+        case 57:
+            if ((hero.x+1<mapWidth) && (hero.y-1>=0))
+            {
+                if (coordinates[hero.x+1][hero.y-1] === 0) {
+                    coordinates[hero.x][hero.y] = 0;
+                    hero.x++;
+                    hero.y--;
+                    coordinates[hero.x][hero.y] = hero;
+                    redrawCoordinates();
+                }
+                else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) 
+                {
+                    attack(hero,coordinates[hero.x+1][hero.y-1]);
+                }
+            }
+            break;
 
-		//Numpad 9
-		//Move up and right
-		case 57:
-			if ((hero.x+1<mapWidth) && (hero.y-1>=0))
-			{
-			if (coordinates[hero.x+1][hero.y-1] == 0) {
-				coordinates[hero.x][hero.y] = 0;
-				hero.x++;
-				hero.y--;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) {
-				attack(hero,coordinates[hero.x+1][hero.y-1]);
-			}
-			}
-			break;
-                        
-                case 99:
-                        displayControls();
-                        break;
-                        
-		case 101:
-			equipItems();
-			break;
+        case 99:
+            displayControls();
+            break;
 
-		case 105:
-			displayInventory();
-			break;
+        case 101:
+            equipItems();
+            break;
 
+        case 105:
+            displayInventory();
+            break;
 	}
-}
+};
 
 //---------------------------------------------------------------------------------------------------------
 //We should put this in the main code after you check it out, I just wanted to keep it all in the same place
@@ -671,73 +685,73 @@ document.onkeypress=function(e)
 //Weapon table and damage table are associated, so make sure if you add weapons to update the damage table.
 //I did it this way so we can assign random weapons when starting. To get the damage, view the damage table. 
 var weaponTable = [
-	"Bastard Sword",
-	"Morningstar",
-	"Handaxe",
-	"Dagger",
-	"Gauntlet"
-]
+    "Bastard Sword",
+    "Morningstar",
+    "Handaxe",
+    "Dagger",
+    "Gauntlet"
+];
 
 //Note the curly braces!
 //You can't use indices so you can't get random values this way. It's a key:value pair 
 //so we would have to pass damageTable["Bastard Sword"]
 var damageTable = {
-	"Bastard Sword" : 10,
-	"Morningstar" : 8,
-	"Handaxe" : 6,
-	"Dagger" : 4,
-	"Gauntlet" : 3
-}
+    "Bastard Sword" : 10,
+    "Morningstar" : 8,
+    "Handaxe" : 6,
+    "Dagger" : 4,
+    "Gauntlet" : 3
+};
 
 var armorTable = [
-	"Studded Leather",
-	"Scalemail",
-	"Chainmail",
-	"Splintmail",
-	"Half-plate",
-	"Full-plate"
-]
+    "Studded Leather",
+    "Scalemail",
+    "Chainmail",
+    "Splintmail",
+    "Half-plate",
+    "Full-plate"
+];
 
 var acTable = {
-	"Studded Leather" : 3,
-	"Scalemail" : 4,
-	"Chainmail" : 5,
-	"Splintmail" : 6,
-	"Half-plate" : 7,
-	"Full-plate" : 8
-}
+    "Studded Leather" : 3,
+    "Scalemail" : 4,
+    "Chainmail" : 5,
+    "Splintmail" : 6,
+    "Half-plate" : 7,
+    "Full-plate" : 8
+};
 
 
 
 function randomInventory(possessor){
-	var weaponIndex = RNG(weaponTable.length);
-	possessor.inventory.push(weaponTable[weaponIndex]);
-	possessor.damage = damageTable[weaponTable[weaponIndex]];
+    var weaponIndex = RNG(weaponTable.length);
+    possessor.inventory.push(weaponTable[weaponIndex]);
+    possessor.damage = damageTable[weaponTable[weaponIndex]];
 
-	var armorIndex = RNG(armorTable.length);
-	possessor.inventory.push(armorTable[RNG(armorTable.length)]);
-	possessor.armorClass = acTable[armorTable[armorIndex]];
+    var armorIndex = RNG(armorTable.length);
+    possessor.inventory.push(armorTable[RNG(armorTable.length)]);
+    possessor.armorClass = acTable[armorTable[armorIndex]];
 }
 
 
 
 function displayInventory()
 {
-	//hero.inventory.sort();
-	cons.innerHTML = "You have the following items:<br/> ";
-	for (i = 0; i < hero.inventory.length; i++)
-	{
-		cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
-	}
-	console.log(hero.damage);
-	console.log(hero.ac);
+    //hero.inventory.sort();
+    cons.innerHTML = "You have the following items:<br/> ";
+    for (i = 0; i < hero.inventory.length; i++)
+    {
+        cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
+    }
+    console.log(hero.damage);
+    console.log(hero.ac);
 }
 
 function equipItems()
 {
-	//How can we implement this??? It's going to be tough!
-	cons.innerHTML = "What do you wish to equip?<br/>"
-	displayInventory();
+    //How can we implement this??? It's going to be tough!
+    cons.innerHTML = "What do you wish to equip?<br/>"
+    displayInventory();
 }
 
 
