@@ -30,6 +30,7 @@ var cons = document.getElementById("idConsole");
 //Fixed so it's less confusing. Now you just pass the x y values. 
 var hero = new being("images/rogue.png", 0, 0);
 var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
+var enemy2 = new being("images/octopod.png", mapWidth-1, 0);
 // Let's give fence some paramaters so we can destroy it!
 var fence = new being("images/fence.png", -1,-1);
 
@@ -244,8 +245,10 @@ function autoLoader()
 {
     canvasBackground();
     enemyLoader();
+    enemyLoader2();
     heroLoader();	
     fenceLoader();
+    randomBarrier();
 }
 
 //Barrier now creates a destroyable, unique fence in each place
@@ -312,6 +315,25 @@ function enemyLoader()
     redrawCoordinates();
 }
 
+function enemyLoader2()
+{
+    randomInventory(enemy2);
+    //Enemy attributes
+    enemy2.armorClass = 10;
+    enemy2.attackBonus = 1;
+    enemy2.color = "red";
+    enemy2.currentHP = 10;
+    enemy2.desc = "Octopod, son of Octothorpe";
+    enemy2.image.src = "images/octopod.png";
+    enemy2.maxHP = 10;
+    enemy2.pass = "";
+    enemy2.x = mapWidth-1;
+    enemy2.y = 0;
+    coordinates[enemy2.x][enemy2.y] = enemy2;
+    enemyList.push(enemy2);
+    redrawCoordinates();
+}
+
 function fenceLoader()
 {
     //barrier(5);
@@ -362,23 +384,26 @@ function item(image, x, y)
 }
 
 
-var sword = new item("images/sword.png", 6, 6);
-coordinates[sword.x][sword.y] = sword;
-redrawCoordinates();
 
-/*
+
+
 function randomBarrier()
 {
 	//coordinates[fence.x][fence.y] == 0 && 
 	//This needs to be rewritten, as it stands now you can overwrite old barriers so the collision detection isn't really working for that purpose.
 	// -- *See above*
-	fence.x = RNG(mapWidth);
-	fence.y = RNG(mapHeight);
-	if (coordinates[fence.x][fence.y] == 0) {
+        for(var i = 0; i < 30; i++)
+        {
+            fence.x = RNG(mapWidth);
+            fence.y = RNG(mapHeight);
+            if (coordinates[fence.x][fence.y] == 0) 
+            {
 		coordinates[fence.x][fence.y] = fence;
-	}
+            } 
+        }
+	
 	redrawCoordinates();	
-}*/
+}
 
 function redrawCoordinates() {
     canvasBackground();
