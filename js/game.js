@@ -2,7 +2,6 @@
 window.onload = autoLoader;
 
 ////Event handlers
-//This is a test of the emergency broadcast system
 //This is the prototype button
 var btnAction = document.getElementById("idRandom");
 
@@ -39,6 +38,8 @@ var xSize = 16;
 var ySize = 24;
 var mapWidth = 21;
 var mapHeight = 21;
+var widthPixels = 336;
+var heightPixels = 528;
 
 //We only need this if we are making barriers
 //var numberOfBarriers;
@@ -66,102 +67,137 @@ for (var i=0; i<mapWidth; i++) {
 
 function attack(assailant, defender)
 {
-	console.log(assailant.desc + " attacks " + defender.desc);
-	cons.innerHTML = assailant.desc + " attacks " + defender.desc + "!<br/>";
-	
-	attackDie = rollDice(20);
-	cons.innerHTML += "You rolled a " + attackDie;
-	console.log("You rolled a " + attackDie);
-	
-	//Critical miss
-	if (attackDie == 1)
-	{
-		cons.innerHTML += "<br />You poor excuse for an adventurer. You widely miss and stagger!!";
-		console.log("You poor excuse for an adventurer. You widely miss and stagger!!");
-	} else
-	if (attackDie == 20) //Critical Threat
-	{
-		cons.innerHTML += "<br />A critical threat!";
-		console.log("A critical threat!");
-		attackDie = rollDice(20) + assailant.attackBonus;
-		if (attackDie >= defender.armorClass)
-		{
-			cons.innerHTML += "<br />Oho! You've scored an excellent hit!!";
-			console.log("Oho! You've scored an excellent hit!!");
-			damageDie = rollDice(assailant.damage) * 2;
-			console.log("You did " + damageDie + " damage!!")
-			defender.currentHP -= damageDie;
-			console.log("Your enemy now has " + defender.currentHP + " HP left.");
-		} else 
-		{
-			cons.innerHTML += "<br />But it did not confirm.";
-			console.log("But it did not confirm.");
-			damageDie = rollDice(assailant.damage);
-			cons.innerHTML += "<br /> You hit for " + damageDie + " damage.";
-			console.log("You did " + damageDie + " damage.")
-			defender.currentHP -= damageDie;
-			console.log("Your enemy now has " + defender.currentHP + " HP left.");
-		}	  
-	} else if (attackDie + assailant.attackBonus >= defender.armorClass)
-	{
-			cons.innerHTML = "You've scored a hit.";
-			damageDie = rollDice(assailant.damage);
-			console.log("You did " + damageDie + " damage.")
-			cons.innerHTML += "<br /> You did " + damageDie + " damage.";
-			defender.currentHP -= damageDie;
-			console.log("Your enemy now has " + defender.currentHP + " HP left.");
-	}
-		else 
-		{
-			cons.innerHTML += "<br />You miss!!";
-			console.log("You miss!!");
-			console.log("Your enemy still has " + defender.currentHP + " HP left.");
-		}
-	console.log(assailant, defender);
-	checkDeath(assailant, defender);
+    cons.innerHTML = "";
+    console.log(assailant.desc + " attacks " + defender.desc);
+    cons.innerHTML += assailant.desc + " attacks " + defender.desc + "!<br/>";
+    attackDie = rollDice(20);
+    cons.innerHTML += "You rolled a " + attackDie + ".";
+
+    if (attackDie === 1) //Critical miss
+    {
+            cons.innerHTML += "<br/>You poor excuse for an adventurer. You widely miss and stagger!!";
+    } 
+
+    else if (attackDie === 20) //Critical Threat
+    {
+            cons.innerHTML += "<br/>A critical threat!";
+            attackDie = rollDice(20) + assailant.attackBonus;
+            if (attackDie >= defender.armorClass)
+            {
+                    cons.innerHTML += "<br/>Oho! You've scored an excellent hit!!";
+                    damageDie = rollDice(assailant.damage) * 2;
+                    cons.innerHTML += "<br/>You did " + damageDie + " damage!!";
+                    defender.currentHP -= damageDie;
+                    cons.innerHTML += "<br/>Your enemy now has " + defender.currentHP + " HP left.";
+            } else 
+            {
+                    cons.innerHTML += "<br/>But it did not confirm.";
+                    damageDie = rollDice(assailant.damage);
+                    cons.innerHTML += "<br/> You hit for " + damageDie + " damage.";
+                    defender.currentHP -= damageDie;
+                    cons.innerHTML += "<br/>Your enemy now has " + defender.currentHP + " HP left.";
+            }	  
+    } else if (attackDie + assailant.attackBonus >= defender.armorClass)
+    {
+                    cons.innerHTML += "<br/>You've scored a hit!";
+                    damageDie = rollDice(assailant.damage);
+                    console.log("You did " + damageDie + " damage.")
+                    cons.innerHTML += "<br /> You did " + damageDie + " damage.";
+                    defender.currentHP -= damageDie;
+                    console.log("Your enemy now has " + defender.currentHP + " HP left.");
+    }
+            else 
+            {
+                    cons.innerHTML += "<br />You miss!!";
+                    console.log("You miss!!");
+                    console.log("Your enemy still has " + defender.currentHP + " HP left.");
+            }
+    console.log(assailant, defender);
+    checkDeath(assailant, defender);
+    
 }
 
 function checkDeath(assailant, defender) {
-	// Death check
-	// Should probably be another function that attack calls, which will accomplish this
-	// as well as increment exp and dole out wealth etc, which should also probably be
-	// properties of being. Or like dnd calculate exp based on a level property.
-	// Spit balling: if the constructor initialized image and a level property, a loader
-	// function could initialize stats according to level, which would probably come from
-	// a swithc--or, better yet, a formula. Octopods have 10hp per level or something so
-	// initializing them means maxHP = level * 10. Maybe attackBonus would be = level.
-	// Additionally, painfully, we could put static values for the scaling of the properties
-	// into an array of arrays, and each monster type has an ID that determines the array
-	// of scaling values for its properties. Now I'm going crazy. Let's maybe talk about this.
-	
-	// Also adds opponent's inventory
+    // Death check
+    // Should probably be another function that attack calls, which will accomplish this
+    // as well as increment exp and dole out wealth etc, which should also probably be
+    // properties of being. Or like dnd calculate exp based on a level property.
+    // Spit balling: if the constructor initialized image and a level property, a loader
+    // function could initialize stats according to level, which would probably come from
+    // a swithc--or, better yet, a formula. Octopods have 10hp per level or something so
+    // initializing them means maxHP = level * 10. Maybe attackBonus would be = level.
+    // Additionally, painfully, we could put static values for the scaling of the properties
+    // into an array of arrays, and each monster type has an ID that determines the array
+    // of scaling values for its properties. Now I'm going crazy. Let's maybe talk about this.
 
-	
-	if (defender.currentHP <= 0) {
-		console.log("VICTORY");
-		cons.innerHTML = "<font size = +2>You defeated your enemy!</font>"
-		coordinates[defender.x][defender.y] = 0;
-		redrawCoordinates();
-		//looooooooooooooooooooot
-		if (defender.inventory.length > 0) {
-			cons.innerHTML += "<br />You found " + defender.inventory;
-			//This will now pick up everything in the inventory
-			for (i = 0; i <= defender.inventory.length; i++)
-			{
-				assailant.inventory.push(defender.inventory.pop());
-			}
-			
-		} else {
-			cons.innerHTML += "<br />You found nothing.";
-		}
-		
-		console.log(assailant.inventory);
-		
-		
-		//return true; //This isn't used yet.
-	} else {
-		//return false; //This isn't used either.
-	}
+    // Also adds opponent's inventory
+
+
+    if (defender.currentHP <= 0) {
+        coordinates[defender.x][defender.y] = 0;
+        redrawCoordinates();
+        cons.innerHTML = "";
+        cons.innerHTML += "You strike down " + defender.desc + " with the fury of the Gods!";
+        //looooooooooooooooooooot
+        if (defender.inventory.length > 0) {
+                cons.innerHTML += "<br />You found " + defender.inventory + ".";
+                //This will now pick up everything in the inventory
+                for (i = 0; i <= defender.inventory.length; i++)
+                {
+                        assailant.inventory.push(defender.inventory.pop());
+                }
+
+        } else {
+                cons.innerHTML += "<br />You found nothing.";
+        }
+
+        console.log(assailant.inventory);
+
+
+        //return true; //This isn't used yet.
+    } else {
+            //return false; //This isn't used either.
+    }
+}
+
+function enemyBehavior(creature)
+{
+    //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
+    if (hero.x > enemy.x)
+    {
+        creature.x++;
+    }
+    if (hero.x < enemy.x)
+    {
+        creature.x--;
+    }
+    if (hero.y > enemy.y)
+    {
+        creature.y++;
+    }
+    if (hero.y < enemy.y)
+    {
+        creature.y--;
+    }
+    //coordinates[enemy.x][enemy.y] = enemy;
+}
+
+function displayControls()
+{
+    cons.innerHTML = "Controls <br/>";
+    cons.innerHTML += "C: Display this help file<br/>";
+    cons.innerHTML += "E: Equip Item<br/>";
+    cons.innerHTML += "I: Inventory<br/>";
+    cons.innerHTML += "1: Move Down and Left<br/>";
+    cons.innerHTML += "2: Move Down<br/>";
+    cons.innerHTML += "3: Move Down and Right<br/>";
+    cons.innerHTML += "4: Move Left<br/>";
+    cons.innerHTML += "5: Wait a turn<br/>";
+    cons.innerHTML += "6: Move Right<br/>";
+    cons.innerHTML += "7: Move Up and Left<br/>";
+    cons.innerHTML += "8: Move Up<br/>";
+    cons.innerHTML += "9: Move Up and Right<br/>";
+    cons.innerHTML += "Move toward enemy: Attack enemy<br/>";
 }
 
 function autoLoader()
@@ -170,6 +206,7 @@ function autoLoader()
 	enemyLoader();
 	heroLoader();	
 	fenceLoader();
+
 }
 
 //Barrier now creates a destroyable, unique fence in each place
@@ -179,7 +216,7 @@ function barrier(y)
 		coordinates[i][y] = new being("images/fence.png", i, y);
 		
 		//add an item to the sixth fence's inventory.
-		if (i==5) {
+		if (i===5) {
 			coordinates[i][y].inventory.push("Corellon's Arrow");
 		}
 	}
@@ -208,12 +245,12 @@ function being(image, x, y)
 function canvasBackground()
 {
 	context.fillStyle = "#212121";
-	context.fillRect(0, 0, 336, 528);
+	context.fillRect(0, 0, widthPixels, heightPixels);
 }
 
 function clearHTML()
 {
-	cons.HTML = "";
+	//cons.HTML = "";
 }
 
 function enemyLoader()
@@ -230,7 +267,6 @@ function enemyLoader()
 	enemy.pass = "";
 	enemy.x = mapWidth-1;
 	enemy.y = mapHeight-1;
-	//enemy.image.src="octopod.png"; //Defined, as above
 	coordinates[enemy.x][enemy.y] = enemy;
 	redrawCoordinates();
 
@@ -292,9 +328,6 @@ var sword = new item("images/sword.png", 6, 6);
 coordinates[sword.x][sword.y] = sword;
 redrawCoordinates();
 
-//var hero = new being("images/rogue.png", 0, 0);
-
-
 /*
 function randomBarrier()
 {
@@ -311,7 +344,7 @@ function randomBarrier()
 
 function redrawCoordinates() {
 	canvasBackground();
-	
+        cons.innerHTML = "";
 	for (var i=0; i < mapWidth; i++) {
 		for (var j=0; j < mapHeight; j++) {
 			if (coordinates[i][j] != 0) {
@@ -319,6 +352,7 @@ function redrawCoordinates() {
 			}
 		}
 	}
+        
 }
 
 function RNG(maxNum)
@@ -356,55 +390,56 @@ function throwArrow() {
 		alert();
 		// find coordinates of target
 		document.onkeypress=function(f) {
-			console.log(f);
-			var f=window.event || f
-			keyPressed = f.charCode;
-			
-			switch (keyPressed) {
-				// 1 down left
-				case 49:
-					dirX = -1;
-					dirY = 1;
-					break;
-				// 2 down
-				case 50:
-					dirX = 0;
-					dirY = 1;
-					break;
-				// 3 down right
-				case 51:
-					dirX = 1
-					dirY = 1;
-					break;
-				// 4 left
-				case 52:
-					dirX = -1;
-					dirY = 0;
-					break;
-				/* 5
-				case 53:
-					break;*/
-				// 6 right
-				case 54:
-					dirX = 1;
-					dirY = 0;
-					break;
-				// 7 up left
-				case 55:
-					dirX = -1;
-					dirY = -1;
-					break;
-				// 8 up
-				case 56:
-					dirX = 0;
-					dirY = -1;
-					break;
-				// 9 up right
-				case 57:
-					dirX = 1;
-					dirY = -1;
-					break;
-			}
+                    console.log(f);
+                    var f=window.event || f
+                    keyPressed = f.charCode;
+
+                    switch (keyPressed) {
+                        // 1 down left
+                        case 49:
+                            dirX = -1;
+                            dirY = 1;
+                            break;
+                        // 2 down
+                        case 50:
+                            dirX = 0;
+                            dirY = 1;
+                            break;
+                        // 3 down right
+                        case 51:
+                            dirX = 1
+                            dirY = 1;
+                            break;
+                        // 4 left
+                        case 52:
+                            dirX = -1;
+                            dirY = 0;
+                            break;
+                        // 5 Wait a turn
+                        case 53:
+                            cons.innerHTML += "<br/>You wait in anticipation...";
+                            break;
+                        // 6 right
+                        case 54:
+                            dirX = 1;
+                            dirY = 0;
+                            break;
+                        // 7 up left
+                        case 55:
+                            dirX = -1;
+                            dirY = -1;
+                            break;
+                        // 8 up
+                        case 56:
+                            dirX = 0;
+                            dirY = -1;
+                            break;
+                        // 9 up right
+                        case 57:
+                            dirX = 1;
+                            dirY = -1;
+                            break;
+                    }
 		}
 		
 		//This looks weird, but it will increment x and y in the direction that we
@@ -540,14 +575,12 @@ document.onkeypress=function(e)
 		//Wait a turn
 		// -- In the future it would be smart for each move (including wait) to increment a sort of clock huh?
 		//	that way poisons/healing effects would occur when you wait.
-		case 53:
-			if (coordinates[hero.x][hero.y] == 0) 
-			{
-				coordinates[hero.x][hero.y] = 0;
-				coordinates[hero.x][hero.y] = hero;
-				redrawCoordinates();
-			}
-			break;
+
+                case 53:
+                    redrawCoordinates();
+                    cons.innerHTML += "You wait in anticipation...";
+                    break;
+			
 
 		//Numpad 6
 		//Move right
@@ -614,7 +647,11 @@ document.onkeypress=function(e)
 			}
 			}
 			break;
-
+                        
+                case 99:
+                        displayControls();
+                        break;
+                        
 		case 101:
 			equipItems();
 			break;
@@ -686,8 +723,8 @@ function randomInventory(possessor){
 
 function displayInventory()
 {
-	hero.inventory.sort();
-	cons.innerHTML += "<br/>You have the following items:<br/> ";
+	//hero.inventory.sort();
+	cons.innerHTML = "You have the following items:<br/> ";
 	for (i = 0; i < hero.inventory.length; i++)
 	{
 		cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
