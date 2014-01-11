@@ -30,9 +30,8 @@ var cons = document.getElementById("idConsole");
 //Fixed so it's less confusing. Now you just pass the x y values. 
 var hero = new being("images/rogue.png", 0, 0);
 var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
-var enemy2 = new being("images/octopod.png", mapWidth-1, 0);
 // Let's give fence some paramaters so we can destroy it!
-var fence = new being("images/fence.png", -1,-1);
+var fence = new being("images/brokenFence.png", 0, 0);
 
 ////Global variables
 var xSize = 16;
@@ -159,66 +158,70 @@ function enemyBehavior(creature)
 {
     //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
     //Move right towards the hero
-    if (hero.x > creature.x)
+    if (creature.currentHP > 0)
     {
-        if (coordinates[creature.x+1][creature.y] === 0) 
+        if (hero.x > creature.x)
         {
-            coordinates[creature.x][creature.y] = 0;
-            creature.x++;
-            coordinates[creature.x][creature.y] = creature;
-            redrawCoordinates();
+            if (coordinates[creature.x+1][creature.y] === 0) 
+            {
+                coordinates[creature.x][creature.y] = 0;
+                creature.x++;
+                coordinates[creature.x][creature.y] = creature;
+                redrawCoordinates();
+            }
+            else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
+            {
+                attack(creature,coordinates[creature.x+1][creature.y]);
+            }
         }
-        else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
+        //Move left towards the hero
+        if (hero.x < creature.x)
         {
-            attack(creature,coordinates[creature.x+1][creature.y]);
+            if (coordinates[creature.x-1][creature.y] === 0) 
+            {
+                coordinates[creature.x][creature.y] = 0;
+                creature.x--;
+                coordinates[creature.x][creature.y] = creature;
+                redrawCoordinates();
+            } 
+            else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
+            {
+                attack(creature,coordinates[creature.x-1][creature.y]);
+            }
         }
-    }
-    //Move left towards the hero
-    if (hero.x < creature.x)
-    {
-        if (coordinates[creature.x-1][creature.y] === 0) 
+        //Move down towards the hero
+        if (hero.y > creature.y)
         {
-            coordinates[creature.x][creature.y] = 0;
-            creature.x--;
-            coordinates[creature.x][creature.y] = creature;
-            redrawCoordinates();
-        } 
-        else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
-        {
-            attack(creature,coordinates[creature.x-1][creature.y]);
+            if (coordinates[creature.x][creature.y+1] === 0) 
+            {
+                coordinates[creature.x][creature.y] = 0;
+                creature.y++;
+                coordinates[creature.x][creature.y] = creature;
+                redrawCoordinates();
+            } 
+            else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
+            {
+                attack(creature,coordinates[creature.x][creature.y+1]);
+            }
         }
-    }
-    //Move down towards the hero
-    if (hero.y > creature.y)
-    {
-        if (coordinates[creature.x][creature.y+1] === 0) 
+        //Move up towards the hero
+        if (hero.y < creature.y)
         {
-            coordinates[creature.x][creature.y] = 0;
-            creature.y++;
-            coordinates[creature.x][creature.y] = creature;
-            redrawCoordinates();
-        } 
-        else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
-        {
-            attack(creature,coordinates[creature.x][creature.y+1]);
+            if (coordinates[creature.x][creature.y-1] === 0) 
+            {
+                coordinates[creature.x][creature.y] = 0;
+                creature.y--;
+                coordinates[creature.x][creature.y] = creature;
+                redrawCoordinates();
+            }
+            else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
+            {
+                attack(creature,coordinates[creature.x][creature.y-1]);
+            }
         }
-    }
-    //Move up towards the hero
-    if (hero.y < creature.y)
-    {
-        if (coordinates[creature.x][creature.y-1] === 0) 
-        {
-            coordinates[creature.x][creature.y] = 0;
-            creature.y--;
-            coordinates[creature.x][creature.y] = creature;
-            redrawCoordinates();
-        }
-        else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
-        {
-            attack(creature,coordinates[creature.x][creature.y-1]);
-        }
-    }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
+    }
+    
 }
 
 
@@ -244,30 +247,15 @@ function displayControls()
 function autoLoader()
 {
     canvasBackground();
+    randomBarrier();
     enemyLoader();
-    enemyLoader2();
     heroLoader();	
     fenceLoader();
-    randomBarrier();
+    
 }
-
-//Barrier now creates a destroyable, unique fence in each place
-function barrier(y)
-{
-    for (i=0; i<mapWidth; i++) {
-        coordinates[i][y] = new being("images/fence.png", i, y);
-
-        //add an item to the sixth fence's inventory.
-        if (i===5) {
-                coordinates[i][y].inventory.push("Corellon's Arrow");
-        }
-    }
-    redrawCoordinates();
-}
-
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
-function being(image, x, y) 
+function being(image, x, y, options) 
 {
     this.image = new Image();
     this.armorClass = 0;
@@ -315,25 +303,6 @@ function enemyLoader()
     redrawCoordinates();
 }
 
-function enemyLoader2()
-{
-    randomInventory(enemy2);
-    //Enemy attributes
-    enemy2.armorClass = 10;
-    enemy2.attackBonus = 1;
-    enemy2.color = "red";
-    enemy2.currentHP = 10;
-    enemy2.desc = "Octopod, son of Octothorpe";
-    enemy2.image.src = "images/octopod.png";
-    enemy2.maxHP = 10;
-    enemy2.pass = "";
-    enemy2.x = mapWidth-1;
-    enemy2.y = 0;
-    coordinates[enemy2.x][enemy2.y] = enemy2;
-    enemyList.push(enemy2);
-    redrawCoordinates();
-}
-
 function fenceLoader()
 {
     //barrier(5);
@@ -372,7 +341,8 @@ function heroLoader()
     coordinates[hero.x][hero.y] = hero;
     redrawCoordinates();
 }
-
+/*
+ * //This function is going to be replaced soon
 function item(image, x, y) 
 {
     this.image = new Image();
@@ -382,27 +352,27 @@ function item(image, x, y)
     this.x = x;
     this.y = y;
 }
-
-
-
-
+*/
 
 function randomBarrier()
 {
-	//coordinates[fence.x][fence.y] == 0 && 
-	//This needs to be rewritten, as it stands now you can overwrite old barriers so the collision detection isn't really working for that purpose.
-	// -- *See above*
-        for(var i = 0; i < 30; i++)
-        {
-            fence.x = RNG(mapWidth);
-            fence.y = RNG(mapHeight);
-            if (coordinates[fence.x][fence.y] == 0) 
-            {
-		coordinates[fence.x][fence.y] = fence;
-            } 
-        }
-	
-	redrawCoordinates();	
+    var x, y, barriers = rollDice(30);
+    for (var i = 0; i < barriers; i++) 
+    {
+        x = RNG(20);
+        y = RNG(20);
+        coordinates[x][y] = new being("images/brokenFence.png", x, y, {"currentHP" : "10"});
+    }
+
+    barriers = rollDice(30);
+    for (var i = 0; i < barriers; i++) 
+    {
+        x = RNG(20);
+        y = RNG(20);
+        coordinates[x][y] = new being("images/stableFence.png", x, y, {"currentHP" : "10"});	
+    }
+
+    redrawCoordinates();	
 }
 
 function redrawCoordinates() {
@@ -430,202 +400,207 @@ function rollDice(maxDie)
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
-    cons.innerHTML = "";
-    var e=window.event || e;
-    //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
-    console.log("CharCode value: "+e.charCode);
-    keyPressed = e.charCode;
-    
-    /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
-     * he attacks it. Another way to do it is add an isEnemy true/false properties to being.
-     * The shape of it changed because 1st and foremost we check to see if where he wants to go
-     * is in the array, if it is we check to see if its empy, and if it isn't then we attack it.
-     * This structure avoids all weird undefined runtime errors.
-     * */
-    // S activates throwArrow(); 
-    
-    switch (keyPressed)
+    if(hero.currentHP > 0)
     {
-        //Keyboard S (capital)
-        // Throw Corellon's arrow
-        case 83:
-            throwArrow();
-        break;
+        cons.innerHTML = "";
+        var e=window.event || e;
+        //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
+        console.log("CharCode value: "+e.charCode);
+        keyPressed = e.charCode;
 
-        //Numpad 1
-        //Move down and left
-        case 49:
-        if ((hero.x-1 >= 0) && (hero.y+1 <= mapHeight) )
+        /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
+         * he attacks it. Another way to do it is add an isEnemy true/false properties to being.
+         * The shape of it changed because 1st and foremost we check to see if where he wants to go
+         * is in the array, if it is we check to see if its empy, and if it isn't then we attack it.
+         * This structure avoids all weird undefined runtime errors.
+         * */
+        // S activates throwArrow(); 
+
+        switch (keyPressed)
         {
-            if (coordinates[hero.x-1][hero.y+1] === 0) 
-            {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x--;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-                redrawCoordinates();
-            }
-            else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x-1][hero.y+1]);
-            }
-        }
-        break;
-
-        //Numpad 2
-        //Move down
-        case 50:
-        if (hero.y+1 < mapHeight) 
-        {
-            if (coordinates[hero.x][hero.y+1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-                redrawCoordinates();
-            } 
-            else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x][hero.y+1]);
-            }
-        }
-        break;
-
-        //Numpad 3
-        //Move down and right
-        case 51:
-        if ((hero.x+1<mapWidth) && (hero.y+1<mapHeight)) 
-        {
-            if (coordinates[hero.x+1][hero.y+1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x++;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-                redrawCoordinates();
-            }
-            else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x+1][hero.y+1]);
-            }
-        }
-        break;
-
-
-        //Numpad 4
-        //Move left
-        case 52:
-        if (hero.x-1>=0) 
-        {
-            if (coordinates[hero.x-1][hero.y] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x--;
-                coordinates[hero.x][hero.y] = hero;
-                redrawCoordinates();
-            }
-            else if (coordinates[hero.x-1][hero.y].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x-1][hero.y]);
-            }
-        }
-        break;
-
-        //Numpad 5
-        //Wait a turn
-        case 53:
-            redrawCoordinates();
-            cons.innerHTML += "You wait in anticipation...";
+            //Keyboard S (capital)
+            // Throw Corellon's arrow
+            case 83:
+                throwArrow();
             break;
 
-
-        //Numpad 6
-        //Move right
-        case 54:
-            if (hero.x+1 < mapWidth) 
+            //Numpad 1
+            //Move down and left
+            case 49:
+            if ((hero.x-1 >= 0) && (hero.y+1 <= mapHeight) )
             {
-                if (coordinates[hero.x+1][hero.y] === 0) {
-                    coordinates[hero.x][hero.y] = 0;
-                    hero.x++;
-                    coordinates[hero.x][hero.y] = hero;
-                    redrawCoordinates();
-                }
-                else if (coordinates[hero.x+1][hero.y].currentHP > 0) 
+                if (coordinates[hero.x-1][hero.y+1] === 0) 
                 {
-                    attack(hero,coordinates[hero.x+1][hero.y]);
-                }
-            }
-            break;
-
-        //Numpad 7
-        //Move up and left
-        case 55:
-            if ((hero.x-1>=0) && (hero.y-1>=0))
-            {
-                if (coordinates[hero.x-1][hero.y-1] === 0) {
                     coordinates[hero.x][hero.y] = 0;
                     hero.x--;
-                    hero.y--;
+                    hero.y++;
                     coordinates[hero.x][hero.y] = hero;
                     redrawCoordinates();
                 }
-                else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) 
+                else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) 
                 {
-                    attack(hero,coordinates[hero.x-1][hero.y-1]);
+                    attack(hero,coordinates[hero.x-1][hero.y+1]);
                 }
             }
             break;
 
-        //Numpad 8
-        //Move up
-        case 56:
-            if (hero.y-1>=0) 
+            //Numpad 2
+            //Move down
+            case 50:
+            if (hero.y+1 < mapHeight) 
             {
-                if (coordinates[hero.x][hero.y-1] === 0) {
+                if (coordinates[hero.x][hero.y+1] === 0) {
                     coordinates[hero.x][hero.y] = 0;
-                    hero.y--;
+                    hero.y++;
                     coordinates[hero.x][hero.y] = hero;
                     redrawCoordinates();
-                }
-                else if (coordinates[hero.x][hero.y-1].currentHP > 0) 
+                } 
+                else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
                 {
-                    attack(hero,coordinates[hero.x][hero.y-1]);
+                    attack(hero,coordinates[hero.x][hero.y+1]);
                 }
             }
             break;
 
-        //Numpad 9
-        //Move up and right
-        case 57:
-            if ((hero.x+1<mapWidth) && (hero.y-1>=0))
+            //Numpad 3
+            //Move down and right
+            case 51:
+            if ((hero.x+1<mapWidth) && (hero.y+1<mapHeight)) 
             {
-                if (coordinates[hero.x+1][hero.y-1] === 0) {
+                if (coordinates[hero.x+1][hero.y+1] === 0) {
                     coordinates[hero.x][hero.y] = 0;
                     hero.x++;
-                    hero.y--;
+                    hero.y++;
                     coordinates[hero.x][hero.y] = hero;
                     redrawCoordinates();
                 }
-                else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) 
+                else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) 
                 {
-                    attack(hero,coordinates[hero.x+1][hero.y-1]);
+                    attack(hero,coordinates[hero.x+1][hero.y+1]);
                 }
             }
             break;
 
-        case 99:
-            displayControls();
+
+            //Numpad 4
+            //Move left
+            case 52:
+            if (hero.x-1>=0) 
+            {
+                if (coordinates[hero.x-1][hero.y] === 0) {
+                    coordinates[hero.x][hero.y] = 0;
+                    hero.x--;
+                    coordinates[hero.x][hero.y] = hero;
+                    redrawCoordinates();
+                }
+                else if (coordinates[hero.x-1][hero.y].currentHP > 0) 
+                {
+                    attack(hero,coordinates[hero.x-1][hero.y]);
+                }
+            }
             break;
 
-        case 101:
-            equipItems();
-            break;
+            //Numpad 5
+            //Wait a turn
+            case 53:
+                redrawCoordinates();
+                cons.innerHTML += "You wait in anticipation...";
+                break;
 
-        case 105:
-            displayInventory();
-            break;
+
+            //Numpad 6
+            //Move right
+            case 54:
+                if (hero.x+1 < mapWidth) 
+                {
+                    if (coordinates[hero.x+1][hero.y] === 0) {
+                        coordinates[hero.x][hero.y] = 0;
+                        hero.x++;
+                        coordinates[hero.x][hero.y] = hero;
+                        redrawCoordinates();
+                    }
+                    else if (coordinates[hero.x+1][hero.y].currentHP > 0) 
+                    {
+                        attack(hero,coordinates[hero.x+1][hero.y]);
+                    }
+                }
+                break;
+
+            //Numpad 7
+            //Move up and left
+            case 55:
+                if ((hero.x-1>=0) && (hero.y-1>=0))
+                {
+                    if (coordinates[hero.x-1][hero.y-1] === 0) {
+                        coordinates[hero.x][hero.y] = 0;
+                        hero.x--;
+                        hero.y--;
+                        coordinates[hero.x][hero.y] = hero;
+                        redrawCoordinates();
+                    }
+                    else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) 
+                    {
+                        attack(hero,coordinates[hero.x-1][hero.y-1]);
+                    }
+                }
+                break;
+
+            //Numpad 8
+            //Move up
+            case 56:
+                if (hero.y-1>=0) 
+                {
+                    if (coordinates[hero.x][hero.y-1] === 0) {
+                        coordinates[hero.x][hero.y] = 0;
+                        hero.y--;
+                        coordinates[hero.x][hero.y] = hero;
+                        redrawCoordinates();
+                    }
+                    else if (coordinates[hero.x][hero.y-1].currentHP > 0) 
+                    {
+                        attack(hero,coordinates[hero.x][hero.y-1]);
+                    }
+                }
+                break;
+
+            //Numpad 9
+            //Move up and right
+            case 57:
+                if ((hero.x+1<mapWidth) && (hero.y-1>=0))
+                {
+                    if (coordinates[hero.x+1][hero.y-1] === 0) {
+                        coordinates[hero.x][hero.y] = 0;
+                        hero.x++;
+                        hero.y--;
+                        coordinates[hero.x][hero.y] = hero;
+                        redrawCoordinates();
+                    }
+                    else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) 
+                    {
+                        attack(hero,coordinates[hero.x+1][hero.y-1]);
+                    }
+                }
+                break;
+
+            case 99:
+                displayControls();
+                break;
+
+            case 101:
+                equipItems();
+                break;
+
+            case 105:
+                displayInventory();
+                break;
+        }
+        for(var i = 0; i < enemyList.length; i++)
+        {
+            enemyBehavior(enemyList[i]);
+        }
     }
-    for(var i = 0; i < enemyList.length; i++)
-    {
-        enemyBehavior(enemyList[i]);
-    }
+    else
+        cons.innerHTML = "You have died...";
     
     redrawCoordinates();
 };
