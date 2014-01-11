@@ -40,6 +40,7 @@ var mapWidth = 21;
 var mapHeight = 21;
 var widthPixels = 336;
 var heightPixels = 528;
+var enemyList = new Array();
 
 //We only need this if we are making barriers
 //var numberOfBarriers;
@@ -67,15 +68,13 @@ for (var i=0; i<mapWidth; i++) {
 
 function attack(assailant, defender)
 {
-    cons.innerHTML = "";
-    console.log(assailant.desc + " attacks " + defender.desc);
     cons.innerHTML += assailant.desc + " attacks " + defender.desc + "!<br/>";
     attackDie = rollDice(20);
-    cons.innerHTML += "You rolled a " + attackDie + ".";
+    cons.innerHTML += "They rolled a " + attackDie + ".";
 
     if (attackDie === 1) //Critical miss
     {
-        cons.innerHTML += "<br/>You poor excuse for an adventurer. You widely miss and stagger!!";
+        cons.innerHTML += "<br/>What a poor excuse for an attack! They widely misses and staggers!!";
     } 
 
     else if (attackDie === 20) //Critical Threat
@@ -84,32 +83,31 @@ function attack(assailant, defender)
         attackDie = rollDice(20) + assailant.attackBonus;
         if (attackDie >= defender.armorClass)
         {
-            cons.innerHTML += "<br/>Oho! You've scored an excellent hit!!";
+            cons.innerHTML += "<br/>Oho! They scored an excellent hit!!";
             damageDie = rollDice(assailant.damage) * 2;
-            cons.innerHTML += "<br/>You did " + damageDie + " damage!!";
+            cons.innerHTML += "<br/>They did " + damageDie + " damage!!";
             defender.currentHP -= damageDie;
         } 
         else 
         {
             cons.innerHTML += "<br/>But it did not confirm.";
             damageDie = rollDice(assailant.damage);
-            cons.innerHTML += "<br/> You hit for " + damageDie + " damage.";
+            cons.innerHTML += "<br/>They hit for " + damageDie + " damage.";
             defender.currentHP -= damageDie;
         }	  
     } 
     else if (attackDie + assailant.attackBonus >= defender.armorClass)
     {
-        cons.innerHTML += "<br/>You've scored a hit!";
+        cons.innerHTML += "<br/>They scored a hit!";
         damageDie = rollDice(assailant.damage);
-        console.log("You did " + damageDie + " damage.");
-        cons.innerHTML += "<br /> You did " + damageDie + " damage.";
+        cons.innerHTML += "<br />They did " + damageDie + " damage.";
         defender.currentHP -= damageDie;
     }
         else 
         {
-            cons.innerHTML += "<br />You miss!!";
-            console.log("You miss!!");
+            cons.innerHTML += "<br />They missed!!";
         }
+    cons.innerHTML += "<br/>";
     console.log(assailant, defender);
     checkDeath(assailant, defender);
     
@@ -130,15 +128,14 @@ function checkDeath(assailant, defender) {
 
     // Also adds opponent's inventory
 
-
     if (defender.currentHP <= 0) {
         coordinates[defender.x][defender.y] = 0;
         redrawCoordinates();
         cons.innerHTML = "";
-        cons.innerHTML += "You strike down " + defender.desc + " with the fury of the Gods!";
+        cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
         //looooooooooooooooooooot
         if (defender.inventory.length > 0) {
-            cons.innerHTML += "<br />You found " + defender.inventory + ".";
+            cons.innerHTML += "<br />They received " + defender.inventory + ".";
             //This will now pick up everything in the inventory
             for (i = 0; i <= defender.inventory.length; i++)
             {
@@ -147,12 +144,8 @@ function checkDeath(assailant, defender) {
         } 
         else 
         {
-            cons.innerHTML += "<br />You found nothing.";
+            cons.innerHTML += "<br />But they found nothing.";
         }
-
-        console.log(assailant.inventory);
-
-
         //return true; //This isn't used yet.
     } 
     else 
@@ -161,60 +154,68 @@ function checkDeath(assailant, defender) {
     }
 }
 
-function enemyBehavior(creatureList)
+function enemyBehavior(creature)
 {
     //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
     //Move right towards the hero
-    if (hero.x > enemy.x)
+    if (hero.x > creature.x)
     {
-        if (coordinates[creatureList.x+1][creatureList.y] === 0) 
+        if (coordinates[creature.x+1][creature.y] === 0) 
         {
-            coordinates[creatureList.x][creatureList.y] = 0;
-            creatureList.x++;
-            coordinates[creatureList.x][creatureList.y] = creatureList;
+            coordinates[creature.x][creature.y] = 0;
+            creature.x++;
+            coordinates[creature.x][creature.y] = creature;
             redrawCoordinates();
         }
-        else if (coordinates[creatureList.x+1][creatureList.y].currentHP > 0) 
+        else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
         {
-            attack(creatureList,coordinates[creatureList.x+1][creatureList.y]);
+            attack(creature,coordinates[creature.x+1][creature.y]);
         }
     }
     //Move left towards the hero
-    if (hero.x < creatureList.x)
+    if (hero.x < creature.x)
     {
-        if (coordinates[creatureList.x-1][creatureList.y] === 0) 
+        if (coordinates[creature.x-1][creature.y] === 0) 
         {
-            coordinates[creatureList.x][creatureList.y] = 0;
-            creatureList.x--;
-            coordinates[creatureList.x][creatureList.y] = creatureList;
+            coordinates[creature.x][creature.y] = 0;
+            creature.x--;
+            coordinates[creature.x][creature.y] = creature;
             redrawCoordinates();
         } 
+        else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
+        {
+            attack(creature,coordinates[creature.x-1][creature.y]);
+        }
     }
     //Move down towards the hero
-    if (hero.y > creatureList.y)
+    if (hero.y > creature.y)
     {
-        if (coordinates[creatureList.x][creatureList.y+1] === 0) 
+        if (coordinates[creature.x][creature.y+1] === 0) 
         {
-            coordinates[creatureList.x][creatureList.y] = 0;
-            creatureList.y++;
-            coordinates[creatureList.x][creatureList.y] = creatureList;
+            coordinates[creature.x][creature.y] = 0;
+            creature.y++;
+            coordinates[creature.x][creature.y] = creature;
             redrawCoordinates();
         } 
-        else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
+        else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
         {
-            attack(hero,coordinates[hero.x][hero.y+1]);
+            attack(creature,coordinates[creature.x][creature.y+1]);
         }
     }
     //Move up towards the hero
-    if (hero.y < enemy.y)
+    if (hero.y < creature.y)
     {
-        if (coordinates[creatureList.x][creatureList.y-1] === 0) 
+        if (coordinates[creature.x][creature.y-1] === 0) 
         {
-            coordinates[creatureList.x][creatureList.y] = 0;
-            creatureList.y--;
-            coordinates[creatureList.x][creatureList.y] = creatureList;
+            coordinates[creature.x][creature.y] = 0;
+            creature.y--;
+            coordinates[creature.x][creature.y] = creature;
             redrawCoordinates();
-        } 
+        }
+        else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
+        {
+            attack(creature,coordinates[creature.x][creature.y-1]);
+        }
     }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
 }
@@ -307,6 +308,7 @@ function enemyLoader()
     enemy.x = mapWidth-1;
     enemy.y = mapHeight-1;
     coordinates[enemy.x][enemy.y] = enemy;
+    enemyList.push(enemy);
     redrawCoordinates();
 }
 
@@ -339,7 +341,7 @@ function heroLoader()
     hero.attackBonus = 1;
     hero.color = "blue";	
     hero.currentHP = 10;
-    hero.desc = "Buttlord, Lord of the Glut";
+    hero.desc = "Player";
     hero.image.src = "images/rogue.png";
     hero.maxHP = 10;
     hero.pass = false;	
@@ -380,7 +382,6 @@ function randomBarrier()
 
 function redrawCoordinates() {
     canvasBackground();
-    cons.innerHTML = "";
     for (var i=0; i < mapWidth; i++) {
         for (var j=0; j < mapHeight; j++) {
             if (coordinates[i][j] !== 0) {
@@ -404,6 +405,7 @@ function rollDice(maxDie)
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
+    cons.innerHTML = "";
     var e=window.event || e;
     //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
     console.log("CharCode value: "+e.charCode);
@@ -595,7 +597,11 @@ document.onkeypress=function(e)
             displayInventory();
             break;
     }
-    enemyBehavior(enemy);
+    for(var i = 0; i < enemyList.length; i++)
+    {
+        enemyBehavior(enemyList[i]);
+    }
+    
     redrawCoordinates();
 };
 
