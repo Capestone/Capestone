@@ -107,8 +107,8 @@ function attack(assailant, defender)
     }
         else 
         {
-                cons.innerHTML += "<br />You miss!!";
-                console.log("You miss!!");
+            cons.innerHTML += "<br />You miss!!";
+            console.log("You miss!!");
         }
     console.log(assailant, defender);
     checkDeath(assailant, defender);
@@ -161,27 +161,65 @@ function checkDeath(assailant, defender) {
     }
 }
 
-function enemyBehavior(creature)
+function enemyBehavior(creatureList)
 {
     //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
+    //Move right towards the hero
     if (hero.x > enemy.x)
     {
-        creature.x++;
+        if (coordinates[creatureList.x+1][creatureList.y] === 0) 
+        {
+            coordinates[creatureList.x][creatureList.y] = 0;
+            creatureList.x++;
+            coordinates[creatureList.x][creatureList.y] = creatureList;
+            redrawCoordinates();
+        }
+        else if (coordinates[creatureList.x+1][creatureList.y].currentHP > 0) 
+        {
+            attack(creatureList,coordinates[creatureList.x+1][creatureList.y]);
+        }
     }
-    if (hero.x < enemy.x)
+    //Move left towards the hero
+    if (hero.x < creatureList.x)
     {
-        creature.x--;
+        if (coordinates[creatureList.x-1][creatureList.y] === 0) 
+        {
+            coordinates[creatureList.x][creatureList.y] = 0;
+            creatureList.x--;
+            coordinates[creatureList.x][creatureList.y] = creatureList;
+            redrawCoordinates();
+        } 
     }
-    if (hero.y > enemy.y)
+    //Move down towards the hero
+    if (hero.y > creatureList.y)
     {
-        creature.y++;
+        if (coordinates[creatureList.x][creatureList.y+1] === 0) 
+        {
+            coordinates[creatureList.x][creatureList.y] = 0;
+            creatureList.y++;
+            coordinates[creatureList.x][creatureList.y] = creatureList;
+            redrawCoordinates();
+        } 
+        else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
+        {
+            attack(hero,coordinates[hero.x][hero.y+1]);
+        }
     }
+    //Move up towards the hero
     if (hero.y < enemy.y)
     {
-        creature.y--;
+        if (coordinates[creatureList.x][creatureList.y-1] === 0) 
+        {
+            coordinates[creatureList.x][creatureList.y] = 0;
+            creatureList.y--;
+            coordinates[creatureList.x][creatureList.y] = creatureList;
+            redrawCoordinates();
+        } 
     }
-    //coordinates[enemy.x][enemy.y] = enemy;
+    //coordinates[creatureList.x][creatureList.y] = creatureList;
 }
+
+
 
 function displayControls()
 {
@@ -270,8 +308,6 @@ function enemyLoader()
     enemy.y = mapHeight-1;
     coordinates[enemy.x][enemy.y] = enemy;
     redrawCoordinates();
-
-    //cons.innerHTML = "Can you defeat your enemy?";
 }
 
 function fenceLoader()
@@ -362,122 +398,6 @@ function RNG(maxNum)
 function rollDice(maxDie)
 {
     return Math.floor(Math.random()*maxDie + 1);
-}
-
-// Just a kind of test, working with inventory and advancedish battle behaviors
-// will throw Corellon's arrow if it is in the inventory. I know that doesn't do much
-// dynamically-- i.e. find a spell and use a spell. It makes me think items will need
-// to be their own sort of object, so that armor/weapon/spells/potions can be differentiated.
-// And their quantities too.
-
-function throwArrow() {
-    var indexArrow = hero.inventory.indexOf("Corellon's Arrow");
-    var willSplice = false; // By commenting out willSplice = true, corellon's arrow is infinite
-    var targetX;
-    var targetY;
-    // rather than reiterating conditions separately, I'm setting values to these two vars
-    // that will then be applied to coordinates to search for a target
-    var dirX;
-    var dirY;
-    var foundTarget = false;
-
-    var damage = 0;
-
-    // presently arrow has unlimited range.
-    if (indexArrow !== -1) {
-        cons.innerHTML = "Choose a direction to cast the heavenly, god-slaying bolt."
-        alert();
-        // find coordinates of target
-        document.onkeypress=function(f) {
-            console.log(f);
-            var f=window.event || f
-            keyPressed = f.charCode;
-
-            switch (keyPressed) {
-                // 1 down left
-                case 49:
-                    dirX = -1;
-                    dirY = 1;
-                    break;
-                // 2 down
-                case 50:
-                    dirX = 0;
-                    dirY = 1;
-                    break;
-                // 3 down right
-                case 51:
-                    dirX = 1;
-                    dirY = 1;
-                    break;
-                // 4 left
-                case 52:
-                    dirX = -1;
-                    dirY = 0;
-                    break;
-                // 5 Wait a turn
-                case 53:
-                    cons.innerHTML += "<br/>You wait in anticipation...";
-                    break;
-                // 6 right
-                case 54:
-                    dirX = 1;
-                    dirY = 0;
-                    break;
-                // 7 up left
-                case 55:
-                    dirX = -1;
-                    dirY = -1;
-                    break;
-                // 8 up
-                case 56:
-                    dirX = 0;
-                    dirY = -1;
-                    break;
-                // 9 up right
-                case 57:
-                    dirX = 1;
-                    dirY = -1;
-                    break;
-            }
-        }
-
-        //This looks weird, but it will increment x and y in the direction that we
-        //are asking them to go until one of the exits the map.
-        for (var x=0; (x>=0) && (x<mapWidth); x+=dirX) {
-            for (var y=0; (y>=0) && (y<mapHeight); y+=dirY) {
-                //check to see if it is not empty
-                if (coordinates[x][y] !== 0) {
-                    //check to see if it is a monster, sort of
-                    if (coordinates[x][y].currentHP>0) {
-                            targetX = x;
-                            targetY = y;
-                            foundTarget = true;
-                    }
-                }
-            }
-        }
-
-        if (foundTarget) {
-            for (var i=0; i<5; i++) {
-                damage += rollDice(6);
-            }
-            coordinates[targetX][targetY].currentHP -= damage;
-
-            cons.innerHTML = "You struck " + coordinates[targetX][targetY].desc + " for " + damage + " damage!";
-            cons.innerHTML += "Hei Corellon shar-sheleru!";
-
-            checkDeath(hero, coordinates[targetX][targetY]);
-        } 
-        else 
-        {
-            cons.innerHTML += "<br />There is no target in that direction.";
-        }
-
-    } 
-    else 
-    {
-        cons.innerHTML = "You have not found Corellon's Arrow!";
-    }
 }
 
 //KEYHANDLER GET!!!
@@ -674,7 +594,9 @@ document.onkeypress=function(e)
         case 105:
             displayInventory();
             break;
-	}
+    }
+    enemyBehavior(enemy);
+    redrawCoordinates();
 };
 
 //---------------------------------------------------------------------------------------------------------
@@ -764,3 +686,120 @@ function equipItems()
 
 //btnAction.onclick = function() { console.log(cons); };
 //btnAction.onclick = attack(hero,enemy);
+
+
+
+// Just a kind of test, working with inventory and advancedish battle behaviors
+// will throw Corellon's arrow if it is in the inventory. I know that doesn't do much
+// dynamically-- i.e. find a spell and use a spell. It makes me think items will need
+// to be their own sort of object, so that armor/weapon/spells/potions can be differentiated.
+// And their quantities too.
+
+function throwArrow() {
+    var indexArrow = hero.inventory.indexOf("Corellon's Arrow");
+    var willSplice = false; // By commenting out willSplice = true, corellon's arrow is infinite
+    var targetX;
+    var targetY;
+    // rather than reiterating conditions separately, I'm setting values to these two vars
+    // that will then be applied to coordinates to search for a target
+    var dirX;
+    var dirY;
+    var foundTarget = false;
+
+    var damage = 0;
+
+    // presently arrow has unlimited range.
+    if (indexArrow !== -1) {
+        cons.innerHTML = "Choose a direction to cast the heavenly, god-slaying bolt."
+        alert();
+        // find coordinates of target
+        document.onkeypress=function(f) {
+            console.log(f);
+            var f=window.event || f
+            keyPressed = f.charCode;
+
+            switch (keyPressed) {
+                // 1 down left
+                case 49:
+                    dirX = -1;
+                    dirY = 1;
+                    break;
+                // 2 down
+                case 50:
+                    dirX = 0;
+                    dirY = 1;
+                    break;
+                // 3 down right
+                case 51:
+                    dirX = 1;
+                    dirY = 1;
+                    break;
+                // 4 left
+                case 52:
+                    dirX = -1;
+                    dirY = 0;
+                    break;
+                // 5 Wait a turn
+                case 53:
+                    cons.innerHTML += "<br/>You wait in anticipation...";
+                    break;
+                // 6 right
+                case 54:
+                    dirX = 1;
+                    dirY = 0;
+                    break;
+                // 7 up left
+                case 55:
+                    dirX = -1;
+                    dirY = -1;
+                    break;
+                // 8 up
+                case 56:
+                    dirX = 0;
+                    dirY = -1;
+                    break;
+                // 9 up right
+                case 57:
+                    dirX = 1;
+                    dirY = -1;
+                    break;
+            }
+        }
+
+        //This looks weird, but it will increment x and y in the direction that we
+        //are asking them to go until one of the exits the map.
+        for (var x=0; (x>=0) && (x<mapWidth); x+=dirX) {
+            for (var y=0; (y>=0) && (y<mapHeight); y+=dirY) {
+                //check to see if it is not empty
+                if (coordinates[x][y] !== 0) {
+                    //check to see if it is a monster, sort of
+                    if (coordinates[x][y].currentHP>0) {
+                            targetX = x;
+                            targetY = y;
+                            foundTarget = true;
+                    }
+                }
+            }
+        }
+
+        if (foundTarget) {
+            for (var i=0; i<5; i++) {
+                damage += rollDice(6);
+            }
+            coordinates[targetX][targetY].currentHP -= damage;
+
+            cons.innerHTML = "You struck " + coordinates[targetX][targetY].desc + " for " + damage + " damage!";
+            cons.innerHTML += "Hei Corellon shar-sheleru!";
+
+            checkDeath(hero, coordinates[targetX][targetY]);
+        } 
+        else 
+        {
+            cons.innerHTML += "<br />There is no target in that direction.";
+        }
+    } 
+    else 
+    {
+        cons.innerHTML = "You have not found Corellon's Arrow!";
+    }
+}
