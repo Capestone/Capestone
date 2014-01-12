@@ -92,7 +92,12 @@ class Signup extends DB {
             $stmt->bindParam(':passwordValue', $password, PDO::PARAM_STR); 
             if ( $stmt->execute() ) // if everything was excecuted corectly
             {
-                return true;
+                $heroDBClass = new HeroDB(); // creats new instence of the websiteDB class file
+            
+                if($heroDBClass->defaultEntry())// will call and fill website database with default info..... hopefully
+                {
+                    return true;
+                }
             }
         }
         return false; 

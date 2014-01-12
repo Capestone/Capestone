@@ -31,6 +31,8 @@
         
         $_SESSION["token"] = $token;
         
+        $loginClass = new Login(); // this will be used to get user ID on login
+        
         $username = (isset($_POST["username"]) ? $_POST["username"] : "");
         $password = (isset($_POST["password"]) ? $_POST["password"] : "");
         
@@ -39,6 +41,10 @@
             if ( Validator::loginIsValid($username, $password) ) //check to make sure username and password match in database
             {
                 $_SESSION["isLoggedin"] = true; // they are now logged in
+                
+                $userID = $loginClass->getUserID( $username, $password ); // get the user ID
+                
+                $_SESSION['userID'] = $userID; // fill session with user id to be used on capestone.php
                 
                 header("Location: capestone.php");
             }

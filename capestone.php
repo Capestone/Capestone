@@ -23,6 +23,11 @@
             header("Location:login.php");
         }
         
+        $heroDBClass = new HeroDB(); // class for heroDB
+        
+        $userID = $_SESSION['userID']; // gets userID from session
+        
+        $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
         
         ?>
         
@@ -31,6 +36,12 @@
                 <h1>Capstone Project</h1>
                 
                 <a href ="capestone.php?logout=1" style="color:white; float:right;">Logout</a>
+                
+                <span style="color:white; float:right;">Welcome <?php  // this will display the username at the top in the header
+                                    echo $heroData['userName'];
+                                    echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                    ?>
+                </span>
             </div>   <!-- end div header -->
             
             <div id="nav">  <!--  start nav  -->

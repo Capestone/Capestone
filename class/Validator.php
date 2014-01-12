@@ -25,6 +25,7 @@ class Validator {
        return false; 
     }
     
+    /*
     public static function loginIsValidPost()
     {
         if( array_key_exists("username", $_POST) || array_key_exists("password", $_POST) )
@@ -35,6 +36,7 @@ class Validator {
         $password = $_POST["password"];
         return Validator::loginIsValid($username, $password);
     }
+    */
     
     public static function loginIsValid($username, $password ) {
 
