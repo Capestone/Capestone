@@ -33,6 +33,28 @@ var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
 // Let's give fence some paramaters so we can destroy it!
 var fence = new being("images/brokenFence.png", 0, 0);
 
+console.log(heroData);
+
+function heroLoader()
+{
+    //Gives hero.armorClass and hero.damage
+    randomInventory(hero);
+    hero.armorClass = heroData.armorClass;
+    hero.attackBonus = heroData.attackBonus;
+    hero.currentHP = heroData.currentHP;
+    hero.desc = heroData.description;
+    hero.image.src = heroData.imagePath;
+    hero.maxHP = heroData.maxHP;
+    hero.name = heroData.userName;
+    hero.pass = heroData.pass;
+    hero.x = heroData.x;
+    hero.y = heroData.y;
+    coordinates[hero.x][hero.y] = hero;
+    redrawCoordinates();
+}
+
+console.log(hero);
+
 ////Global variables
 var xSize = 16;
 var ySize = 24;
@@ -66,6 +88,7 @@ for (var i=0; i<mapWidth; i++) {
  * Added a death check that makes defender's x,y in coordinates 0. 
  * */
 
+//Attack function
 function attack(assailant, defender)
 {
     cons.innerHTML += assailant.desc + " attacks " + defender.desc + "!<br/>";
@@ -74,7 +97,7 @@ function attack(assailant, defender)
 
     if (attackDie === 1) //Critical miss
     {
-        cons.innerHTML += "<br/>What a poor excuse for an attack! They widely misses and staggers!!";
+        cons.innerHTML += "<br/>What a poor excuse for an attack! They widely miss and stagger!!";
     } 
 
     else if (attackDie === 20) //Critical Threat
@@ -113,6 +136,8 @@ function attack(assailant, defender)
     
 }
 
+//Check death function
+//I plan on changing this completely
 function checkDeath(assailant, defender) {
     // Death check
     // Should probably be another function that attack calls, which will accomplish this
@@ -154,6 +179,7 @@ function checkDeath(assailant, defender) {
     }
 }
 
+//Enemy Behavior function
 function enemyBehavior(creature)
 {
     //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
@@ -225,7 +251,7 @@ function enemyBehavior(creature)
 }
 
 
-
+//Display Controls function
 function displayControls()
 {
     cons.innerHTML = "Controls <br/>";
@@ -244,6 +270,7 @@ function displayControls()
     cons.innerHTML += "Move toward enemy: Attack enemy<br/>";
 }
 
+//Autoloader function
 function autoLoader()
 {
     canvasBackground();
@@ -255,12 +282,12 @@ function autoLoader()
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
+//Being object
 function being(image, x, y, options) 
 {
     this.image = new Image();
     this.armorClass = 0;
     this.attackBonus = 0;
-    this.color = "";
     this.currentHP = 0;
     this.damage = 0;
     this.desc = "";
@@ -290,7 +317,6 @@ function enemyLoader()
     //Enemy attributes
     enemy.armorClass = 10;
     enemy.attackBonus = 1;
-    enemy.color = "red";
     enemy.currentHP = 10;
     enemy.desc = "Octopod, son of Octothorpe";
     enemy.image.src = "images/octopod.png";
@@ -308,7 +334,6 @@ function fenceLoader()
     //barrier(5);
     fence.armorClass = 1;
     fence.attackBonus = 0;
-    fence.color = "red";
     fence.currentHP = 50;
     fence.desc = "a fence";
     fence.inventory = ["Some wood"];
@@ -323,24 +348,7 @@ function fenceLoader()
 }
 
 
-function heroLoader()
-{
-    //Gives hero.armorClass and hero.damage
-    randomInventory(hero);
 
-    hero.armorClass = 10;
-    hero.attackBonus = 1;
-    hero.color = "blue";	
-    hero.currentHP = 10;
-    hero.desc = "Player";
-    hero.image.src = "images/rogue.png";
-    hero.maxHP = 10;
-    hero.pass = false;	
-    hero.x = 0;
-    hero.y = 0;
-    coordinates[hero.x][hero.y] = hero;
-    redrawCoordinates();
-}
 /*
  * //This function is going to be replaced soon
 function item(image, x, y) 
@@ -372,9 +380,10 @@ function randomBarrier()
         x = RNG(20);
         y = RNG(20);
         coordinates[x][y] = new being("images/stableFence.png", x, y);
-        coordinates[x][y].currentHP = "10";
+        coordinates[x][y].currentHP = "25";
         coordinates[x][y].desc = "stable fence";
     }
+
 
     redrawCoordinates();	
 }

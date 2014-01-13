@@ -71,7 +71,9 @@
         
         </div><!-- end div wrapper -->
         
-        
+        <script>
+            var heroData = <?php echo json_encode($heroData);?>;
+        </script>
         <script type="text/javascript" src="js/game.js"></script>
     </body>
 </html>
