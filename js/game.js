@@ -388,9 +388,9 @@ function randomBarrier()
     {
         x = RNG(20);
         y = RNG(20);
-        coordinates[x][y] = new being("images/brokenFence.png", x, y);
+        coordinates[x][y] = new being("images/bareTree.png", x, y);
         coordinates[x][y].currentHP = "10";
-        coordinates[x][y].desc = "broken fence";
+        coordinates[x][y].desc = "withered tree";
     }
 
     barriers = rollDice(30);
@@ -398,9 +398,9 @@ function randomBarrier()
     {
         x = RNG(20);
         y = RNG(20);
-        coordinates[x][y] = new being("images/stableFence.png", x, y);
+        coordinates[x][y] = new being("images/evergreen.png", x, y);
         coordinates[x][y].currentHP = "25";
-        coordinates[x][y].desc = "stable fence";
+        coordinates[x][y].desc = "evergreen";
     }	
 }
 
