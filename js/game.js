@@ -286,7 +286,13 @@ function autoLoader()
     enemyLoader();
     heroLoader();	
     fenceLoader();
-    redrawCoordinates();
+    startGame();
+}
+
+function startGame()
+{
+    cons.innerHTML = "Welcome to Capestone.";
+    cons.innerHTML = "Press any key to start.";
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
