@@ -289,7 +289,7 @@ function displayControls()
 function autoLoader()
 {
     canvasBackground();
-    //randomBarrier();
+    randomBarrier();
     enemyLoader();
     heroLoader();	
     fenceLoader();
