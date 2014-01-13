@@ -33,13 +33,14 @@ var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
 // Let's give fence some paramaters so we can destroy it!
 var fence = new being("images/brokenFence.png", 0, 0);
 
+console.log("Hero data:");
 console.log(heroData);
-
+console.log("Hero before heroLoader():");
+console.log(hero);
 function heroLoader()
 {
     //Gives hero.armorClass and hero.damage
     randomInventory(hero);
-    hero.armorClass = heroData.armorClass;
     hero.attackBonus = heroData.attackBonus;
     hero.currentHP = heroData.currentHP;
     hero.desc = heroData.description;
@@ -49,11 +50,16 @@ function heroLoader()
     hero.pass = heroData.pass;
     hero.x = heroData.x;
     hero.y = heroData.y;
-    coordinates[hero.x][hero.y] = hero;
+    coordinates[hero.x][hero.y] = heroData;
+    
+    console.log("Before redrawcoordinates:");
+    console.log(hero);
     redrawCoordinates();
+    console.log("After redrawcoordinates:");
+    console.log(hero);
 }
 
-console.log(hero);
+
 
 ////Global variables
 var xSize = 16;
@@ -278,7 +284,6 @@ function autoLoader()
     enemyLoader();
     heroLoader();	
     fenceLoader();
-    
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
