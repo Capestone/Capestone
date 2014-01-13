@@ -422,23 +422,22 @@ function rollDice(maxDie)
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
+    cons.innerHTML = "";
+    var e=window.event || e;
+    //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
+    console.log("CharCode value: "+e.charCode);
+    keyPressed = e.charCode;
+
+    /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
+     * he attacks it. Another way to do it is add an isEnemy true/false properties to being.
+     * The shape of it changed because 1st and foremost we check to see if where he wants to go
+     * is in the array, if it is we check to see if its empy, and if it isn't then we attack it.
+     * This structure avoids all weird undefined runtime errors.
+     * */
+    // S activates throwArrow(); 
     //TODO: Only move monsters if the keypressed is a movement command
     if(hero.currentHP > 0)
     {
-        cons.innerHTML = "";
-        var e=window.event || e;
-        //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
-        console.log("CharCode value: "+e.charCode);
-        keyPressed = e.charCode;
-
-        /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
-         * he attacks it. Another way to do it is add an isEnemy true/false properties to being.
-         * The shape of it changed because 1st and foremost we check to see if where he wants to go
-         * is in the array, if it is we check to see if its empy, and if it isn't then we attack it.
-         * This structure avoids all weird undefined runtime errors.
-         * */
-        // S activates throwArrow(); 
-
         switch (keyPressed)
         {
             //Keyboard S (capital)
@@ -608,10 +607,18 @@ document.onkeypress=function(e)
                 displayInventory();
                 break;
         }
-        for(var i = 0; i < enemyList.length; i++)
+        if (keyPressed == 99 || keyPressed == 101 || keyPressed == 105) 
         {
-            enemyBehavior(enemyList[i]);
+            //Do nothing (don't move monsters)
         }
+        else
+        {
+            for(var i = 0; i < enemyList.length; i++)
+            {
+                enemyBehavior(enemyList[i]);
+            }
+        }
+        
         redrawCoordinates();
     }
     else
