@@ -28,7 +28,7 @@ var cons = document.getElementById("idConsole");
 //image, armorClass, attackBonus, color, currentHP, damage, desc, inventory, maxHP, pass, x, y
 //I think there is a better way to do this. This will get confusing down the line. It's already confusing.
 //Fixed so it's less confusing. Now you just pass the x y values. 
-var hero = new being("images/rogue.png", 0, 0);
+var hero = "";
 var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
 // Let's give fence some paramaters so we can destroy it!
 var fence = new being("images/brokenFence.png", 0, 0);
@@ -39,18 +39,26 @@ console.log("Hero before heroLoader():");
 console.log(hero);
 function heroLoader()
 {
+    hero = new being("images/rogue.png", 0, 0);
     //Gives hero.armorClass and hero.damage
     randomInventory(hero);
-    hero.attackBonus = heroData.attackBonus;
-    hero.currentHP = heroData.currentHP;
+    hero.attackBonus = parseInt(heroData.attackBonus);
+    hero.currentHP = parseInt(heroData.currentHP);
     hero.desc = heroData.description;
     hero.image.src = heroData.imagePath;
-    hero.maxHP = heroData.maxHP;
+    hero.maxHP = parseInt(heroData.maxHP);
     hero.name = heroData.userName;
-    hero.pass = heroData.pass;
-    hero.x = heroData.x;
-    hero.y = heroData.y;
-    coordinates[hero.x][hero.y] = heroData;
+    if (heroData.pass == 0)
+    {
+        hero.pass = false;
+    }
+    else 
+    {
+        hero.pass = true;
+    }
+    hero.x = parseInt(heroData.x);
+    hero.y = parseInt(heroData.y);
+    coordinates[hero.x][hero.y] = hero;
     
     console.log("Before redrawcoordinates:");
     console.log(hero);
@@ -279,6 +287,7 @@ function displayControls()
 //Autoloader function
 function autoLoader()
 {
+    
     canvasBackground();
     randomBarrier();
     enemyLoader();
