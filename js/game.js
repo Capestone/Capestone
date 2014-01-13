@@ -347,9 +347,9 @@ function fenceLoader()
     //barrier(5);
     fence.armorClass = 1;
     fence.attackBonus = 0;
-    fence.currentHP = 50;
+    fence.currentHP = 10;
     fence.desc = "a fence";
-    fence.inventory = ["Some wood"];
+    fence.inventory = ["Corellon's Arrow"];
     fence.maxHP = 50;
     fence.pass = false;
     fence.x = 5;
@@ -739,7 +739,6 @@ function throwArrow() {
     // presently arrow has unlimited range.
     if (indexArrow !== -1) {
         cons.innerHTML = "Choose a direction to cast the heavenly, god-slaying bolt."
-        alert();
         // find coordinates of target
         document.onkeypress=function(f) {
             console.log(f);
