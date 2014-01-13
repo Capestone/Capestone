@@ -194,69 +194,76 @@ function checkDeath(assailant, defender) {
 //Enemy Behavior function
 function enemyBehavior(creature)
 {
-    //Compare the values of hero and enemy and if hero x value is less than enemy value, move left etc
-    //Move right towards the hero
-    if (creature.currentHP > 0)
-    {
+    //If the player is within 10 squares of the enemy and the enemy is still alive...
+    if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
+    {   
+        //Compare the x and y values of hero and enemy and if hero x value is less than enemy x value, move left etc.
+        //Move right towards the hero
         if (hero.x > creature.x)
-        {
-            if (coordinates[creature.x+1][creature.y] === 0) 
             {
-                coordinates[creature.x][creature.y] = 0;
-                creature.x++;
-                coordinates[creature.x][creature.y] = creature;
+                if (coordinates[creature.x+1][creature.y] === 0) 
+                {
+                    coordinates[creature.x][creature.y] = 0;
+                    creature.x++;
+                    coordinates[creature.x][creature.y] = creature;
+                }
+                else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
+                {
+                    attack(creature,coordinates[creature.x+1][creature.y]);
+                }
             }
-            else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
+            //Move left towards the hero
+            if (hero.x < creature.x)
             {
-                attack(creature,coordinates[creature.x+1][creature.y]);
+                if (coordinates[creature.x-1][creature.y] === 0) 
+                {
+                    coordinates[creature.x][creature.y] = 0;
+                    creature.x--;
+                    coordinates[creature.x][creature.y] = creature;
+                } 
+                else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
+                {
+                    attack(creature,coordinates[creature.x-1][creature.y]);
+                }
+            }
+            //Move down towards the hero
+            if (hero.y > creature.y)
+            {
+                if (coordinates[creature.x][creature.y+1] === 0) 
+                {
+                    coordinates[creature.x][creature.y] = 0;
+                    creature.y++;
+                    coordinates[creature.x][creature.y] = creature;
+                } 
+                else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
+                {
+                    attack(creature,coordinates[creature.x][creature.y+1]);
+                }
+            }
+            //Move up towards the hero
+            if (hero.y < creature.y)
+            {
+                if (coordinates[creature.x][creature.y-1] === 0) 
+                {
+                    coordinates[creature.x][creature.y] = 0;
+                    creature.y--;
+                    coordinates[creature.x][creature.y] = creature;
+                }
+                else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
+                {
+                    attack(creature,coordinates[creature.x][creature.y-1]);
+                }
             }
         }
-        //Move left towards the hero
-        if (hero.x < creature.x)
+        //Otherwise, wander around until you find something of interest to attack
+        else if (creature.currentHP > 0)
         {
-            if (coordinates[creature.x-1][creature.y] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.x--;
-                coordinates[creature.x][creature.y] = creature;
-            } 
-            else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x-1][creature.y]);
-            }
-        }
-        //Move down towards the hero
-        if (hero.y > creature.y)
-        {
-            if (coordinates[creature.x][creature.y+1] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.y++;
-                coordinates[creature.x][creature.y] = creature;
-            } 
-            else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x][creature.y+1]);
-            }
-        }
-        //Move up towards the hero
-        if (hero.y < creature.y)
-        {
-            if (coordinates[creature.x][creature.y-1] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.y--;
-                coordinates[creature.x][creature.y] = creature;
-            }
-            else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x][creature.y-1]);
-            }
+            //TODO: Get enemy to move in random directions until it finds something 
         }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
-    }
-    
 }
+    
+
 
 
 //Display Controls function
@@ -292,7 +299,7 @@ function autoLoader()
 function startGame()
 {
     cons.innerHTML = "Welcome to Capestone.";
-    cons.innerHTML = "Press any key to start.";
+    cons.innerHTML = "Press enter to start.";
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
@@ -347,13 +354,13 @@ function fenceLoader()
     //barrier(5);
     fence.armorClass = 1;
     fence.attackBonus = 0;
-    fence.currentHP = 10;
+    fence.currentHP = 100;
     fence.desc = "a fence";
     fence.inventory = ["Corellon's Arrow"];
     fence.maxHP = 50;
     fence.pass = false;
-    fence.x = 5;
-    fence.y = 5;
+    fence.x = 12;
+    fence.y = 12;
     coordinates[fence.x][fence.y] = fence;
     //image, armorClass, attackBonus, color, currentHP, desc, inventory, maxHP, pass, x, y
     //var fence = new being("fence.png", 1, 0, "red", 50, "a fence", "wood", 50, false, -1,-1);
