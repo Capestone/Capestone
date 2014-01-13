@@ -62,7 +62,6 @@ function heroLoader()
     
     console.log("Before redrawcoordinates:");
     console.log(hero);
-    redrawCoordinates();
     console.log("After redrawcoordinates:");
     console.log(hero);
 }
@@ -169,7 +168,6 @@ function checkDeath(assailant, defender) {
 
     if (defender.currentHP <= 0) {
         coordinates[defender.x][defender.y] = 0;
-        redrawCoordinates();
         cons.innerHTML = "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
         //looooooooooooooooooooot
@@ -207,7 +205,6 @@ function enemyBehavior(creature)
                 coordinates[creature.x][creature.y] = 0;
                 creature.x++;
                 coordinates[creature.x][creature.y] = creature;
-                redrawCoordinates();
             }
             else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
             {
@@ -222,7 +219,6 @@ function enemyBehavior(creature)
                 coordinates[creature.x][creature.y] = 0;
                 creature.x--;
                 coordinates[creature.x][creature.y] = creature;
-                redrawCoordinates();
             } 
             else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
             {
@@ -237,7 +233,6 @@ function enemyBehavior(creature)
                 coordinates[creature.x][creature.y] = 0;
                 creature.y++;
                 coordinates[creature.x][creature.y] = creature;
-                redrawCoordinates();
             } 
             else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
             {
@@ -252,7 +247,6 @@ function enemyBehavior(creature)
                 coordinates[creature.x][creature.y] = 0;
                 creature.y--;
                 coordinates[creature.x][creature.y] = creature;
-                redrawCoordinates();
             }
             else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
             {
@@ -287,12 +281,12 @@ function displayControls()
 //Autoloader function
 function autoLoader()
 {
-    
     canvasBackground();
-    randomBarrier();
+    //randomBarrier();
     enemyLoader();
     heroLoader();	
     fenceLoader();
+    redrawCoordinates();
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
@@ -340,7 +334,6 @@ function enemyLoader()
     enemy.y = mapHeight-1;
     coordinates[enemy.x][enemy.y] = enemy;
     enemyList.push(enemy);
-    redrawCoordinates();
 }
 
 function fenceLoader()
@@ -356,7 +349,6 @@ function fenceLoader()
     fence.x = 5;
     fence.y = 5;
     coordinates[fence.x][fence.y] = fence;
-    redrawCoordinates();
     //image, armorClass, attackBonus, color, currentHP, desc, inventory, maxHP, pass, x, y
     //var fence = new being("fence.png", 1, 0, "red", 50, "a fence", "wood", 50, false, -1,-1);
 }
@@ -396,10 +388,7 @@ function randomBarrier()
         coordinates[x][y] = new being("images/stableFence.png", x, y);
         coordinates[x][y].currentHP = "25";
         coordinates[x][y].desc = "stable fence";
-    }
-
-
-    redrawCoordinates();	
+    }	
 }
 
 function redrawCoordinates() {
@@ -427,6 +416,7 @@ function rollDice(maxDie)
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
+    //TODO: Only move monsters if the keypressed is a movement command
     if(hero.currentHP > 0)
     {
         cons.innerHTML = "";
@@ -462,7 +452,6 @@ document.onkeypress=function(e)
                     hero.x--;
                     hero.y++;
                     coordinates[hero.x][hero.y] = hero;
-                    redrawCoordinates();
                 }
                 else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) 
                 {
@@ -480,7 +469,6 @@ document.onkeypress=function(e)
                     coordinates[hero.x][hero.y] = 0;
                     hero.y++;
                     coordinates[hero.x][hero.y] = hero;
-                    redrawCoordinates();
                 } 
                 else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
                 {
@@ -499,7 +487,6 @@ document.onkeypress=function(e)
                     hero.x++;
                     hero.y++;
                     coordinates[hero.x][hero.y] = hero;
-                    redrawCoordinates();
                 }
                 else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) 
                 {
@@ -518,7 +505,6 @@ document.onkeypress=function(e)
                     coordinates[hero.x][hero.y] = 0;
                     hero.x--;
                     coordinates[hero.x][hero.y] = hero;
-                    redrawCoordinates();
                 }
                 else if (coordinates[hero.x-1][hero.y].currentHP > 0) 
                 {
@@ -530,7 +516,6 @@ document.onkeypress=function(e)
             //Numpad 5
             //Wait a turn
             case 53:
-                redrawCoordinates();
                 cons.innerHTML += "You wait in anticipation...";
                 break;
 
@@ -544,7 +529,6 @@ document.onkeypress=function(e)
                         coordinates[hero.x][hero.y] = 0;
                         hero.x++;
                         coordinates[hero.x][hero.y] = hero;
-                        redrawCoordinates();
                     }
                     else if (coordinates[hero.x+1][hero.y].currentHP > 0) 
                     {
@@ -563,7 +547,6 @@ document.onkeypress=function(e)
                         hero.x--;
                         hero.y--;
                         coordinates[hero.x][hero.y] = hero;
-                        redrawCoordinates();
                     }
                     else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) 
                     {
@@ -581,7 +564,6 @@ document.onkeypress=function(e)
                         coordinates[hero.x][hero.y] = 0;
                         hero.y--;
                         coordinates[hero.x][hero.y] = hero;
-                        redrawCoordinates();
                     }
                     else if (coordinates[hero.x][hero.y-1].currentHP > 0) 
                     {
@@ -600,7 +582,6 @@ document.onkeypress=function(e)
                         hero.x++;
                         hero.y--;
                         coordinates[hero.x][hero.y] = hero;
-                        redrawCoordinates();
                     }
                     else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) 
                     {
@@ -625,11 +606,12 @@ document.onkeypress=function(e)
         {
             enemyBehavior(enemyList[i]);
         }
+        redrawCoordinates();
     }
     else
         cons.innerHTML = "You have died...";
     
-    redrawCoordinates();
+    
 };
 
 //---------------------------------------------------------------------------------------------------------
