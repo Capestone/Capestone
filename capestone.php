@@ -48,7 +48,7 @@
                 <div id="buttons">
                     <a class="btn" href="index.php"><b>HOME</b></a>
                     <a class="btn" href="proposal.php"><b>PROPOSAL</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="prototype.php"><b>PROTOTYPE</b></a>
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="#"><b>Link</b></a>	
                     <a class="btn" href="#"><b>Link</b></a>
