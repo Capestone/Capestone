@@ -10,24 +10,16 @@ var canvas = document.getElementById("idCanvas");
 var context = canvas.getContext("2d");
 var cons = document.getElementById("idConsole");
 
-////Object creation
-// -- fence should be addressed later
-//                     image, armorClass, attackBonus, color, currentHP, desc, inventory, maxHP, pass, x, y
 
-/* The real problem with the attack function was that assailant/hero wasn't properly intitialized
- * Though heroLoader assigns values to these properties they were still undefined or NaN in the
- * attack function because hero was getting instantiated without those other values inside the
- * constructor. I think it is best to cut down the arguments on the constructor
- * just to image, and that way everything else can be added on its own--I believe that will work.
- * A problem is with fence, at least. What's the most convenient way to make an object that will
- * occur many times yet need to be distinct from its copies? Perhaps image, maxHP, armorClass
- * should be the only paramaters. currentHp could get maxHp in being() anyway.
- * If you go back to the other version of code and change it yourself you should see the change.
- * */
 
-//image, armorClass, attackBonus, color, currentHP, damage, desc, inventory, maxHP, pass, x, y
-//I think there is a better way to do this. This will get confusing down the line. It's already confusing.
-//Fixed so it's less confusing. Now you just pass the x y values. 
+//TODO: 
+//Random Forest level
+//EQUIP function
+//Wandering monster behavior
+//Enemy behavior case statement for different enemies, default being normal behavior
+//random movement between 1 and 10 1 - 2 do something 3 - 4 do something etc
+//Make sure equip function ADDS to 10 
+var equipMenu = false;
 var hero = "";
 var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
 // Let's give fence some paramaters so we can destroy it!
@@ -195,7 +187,7 @@ function checkDeath(assailant, defender) {
 function enemyBehavior(creature)
 {
     //If the player is within 10 squares of the enemy and the enemy is still alive...
-    if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
+    if ((Math.abs(creature.x - hero.x)) < 3 && ((Math.abs(creature.y - hero.y)) < 3 && creature.currentHP > 0))
     {   
         //Compare the x and y values of hero and enemy and if hero x value is less than enemy x value, move left etc.
         //Move right towards the hero
@@ -298,8 +290,9 @@ function autoLoader()
 
 function startGame()
 {
-    cons.innerHTML = "Welcome to Capestone.";
-    cons.innerHTML = "Press enter to start.";
+    displayControls();
+    cons.innerHTML += "Welcome to Capestone.<br/>";
+    cons.innerHTML += "Press enter to start.";
 }
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
@@ -339,12 +332,12 @@ function enemyLoader()
     enemy.armorClass = 10;
     enemy.attackBonus = 1;
     enemy.currentHP = 10;
-    enemy.desc = "Octopod, son of Octothorpe";
-    enemy.image.src = "images/octopod.png";
+    enemy.desc = "Living Oak";
+    enemy.image.src = "images/livingOak.png";
     enemy.maxHP = 10;
     enemy.pass = "";
-    enemy.x = mapWidth-1;
-    enemy.y = mapHeight-1;
+    enemy.x = RNG(20);
+    enemy.y = RNG(20);
     coordinates[enemy.x][enemy.y] = enemy;
     enemyList.push(enemy);
 }
@@ -443,7 +436,7 @@ document.onkeypress=function(e)
      * */
     // S activates throwArrow(); 
     //TODO: Only move monsters if the keypressed is a movement command
-    if(hero.currentHP > 0)
+    if(hero.currentHP > 0 && equipMenu == false)
     {
         switch (keyPressed)
         {
@@ -613,6 +606,11 @@ document.onkeypress=function(e)
             case 105:
                 displayInventory();
                 break;
+                
+            case 115:
+                saveData();
+                console.log("saving data...");
+                break;
         }
         if (keyPressed == 99 || keyPressed == 101 || keyPressed == 105) 
         {
@@ -701,14 +699,44 @@ function displayInventory()
         cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
     }
     console.log(hero.damage);
-    console.log(hero.ac);
+    console.log(hero.armorClass);
 }
 
 function equipItems()
 {
-    //How can we implement this??? It's going to be tough!
-    cons.innerHTML = "What do you wish to equip?<br/>"
-    displayInventory();
+    equipMenu = true;
+    var e=window.event || e;
+    while (equipMenu)
+    {
+        switch(keyPressed)
+        {
+            case 49:
+                //If number exists in the array...
+                console.log("equip the first item...");
+                break;
+            case 50:
+                console.log("equip the second item...");
+                break;
+            case 51:
+                console.log("equip the third item...");
+                break;
+            case 52:
+                console.log("equip the fourth item...");
+                break;
+            case 53:
+                console.log("equip the fifth item...");
+                break;
+        }
+        keyPressed = e.charCode;
+    }
+    
+    
+    equipMenu = false;
+}
+
+function saveData()
+{
+    var heroData = JSON.parse(hero);
 }
 
 
@@ -729,7 +757,7 @@ function equipItems()
 // dynamically-- i.e. find a spell and use a spell. It makes me think items will need
 // to be their own sort of object, so that armor/weapon/spells/potions can be differentiated.
 // And their quantities too.
-
+/*
 function throwArrow() {
     var indexArrow = hero.inventory.indexOf("Corellon's Arrow");
     var willSplice = false; // By commenting out willSplice = true, corellon's arrow is infinite
@@ -837,3 +865,4 @@ function throwArrow() {
         cons.innerHTML = "You have not found Corellon's Arrow!";
     }
 }
+*/
