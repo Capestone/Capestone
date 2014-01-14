@@ -608,7 +608,7 @@ document.onkeypress=function(e)
                 break;
                 
             case 115:
-                saveData();
+                saveData("save", "true");
                 console.log("saving data...");
                 break;
         }
@@ -704,6 +704,7 @@ function displayInventory()
 
 function equipItems()
 {
+    //fix this
     equipMenu = true;
     var e=window.event || e;
     while (equipMenu)
@@ -734,10 +735,31 @@ function equipItems()
     equipMenu = false;
 }
 
-function saveData()
+function saveData(path, params, method) 
 {
-    var heroData = JSON.parse(hero);
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
 }
+
 
 
 
