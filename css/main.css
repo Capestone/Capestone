@@ -2,7 +2,7 @@
 	position:relative;
 	margin:auto;
 	width:960px;
-	height:900px;
+	height:1000px;
 	padding:10px;
         background-color:black;
 }
@@ -61,7 +61,7 @@
 #container{
 	float:left;
 	width:960px;
-	height:625px;
+	height:725px;
 	margin-top:10px;
 	margin-bottom:15px;
         background-color:white;
@@ -85,7 +85,7 @@
 }
 
 #pdf{
-    height:625px;
+    height:725px;
 }
  /*  --  end main page data  --  */
 
