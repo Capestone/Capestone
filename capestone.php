@@ -28,7 +28,7 @@
         $userID = $_SESSION['userID']; // gets userID from session
         
         $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
-        
+          
         ?>
         
         <div id="wrapper">
