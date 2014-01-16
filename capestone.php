@@ -23,12 +23,41 @@
             header("Location:login.php");
         }
         
+        //get hero data from database
         $heroDBClass = new HeroDB(); // class for heroDB
         
         $userID = $_SESSION['userID']; // gets userID from session
         
         $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
-          
+        
+        // get monster data from database
+        $monsterDBClass = new MonsterDB();
+        
+        $monsterID = "1"; // this is where the moneter ID that will be populated into the level is set
+        
+        $monsterData = $monsterDBClass->getMonsterData($monsterID);
+
+        // get item data from database
+        $itemDBClass = new ItemDB();
+        
+        $itemID = "1"; // this is there the item ID will be populated
+        
+        $itemData = $itemDBClass->getItemData($itemID);
+        
+        //print_r($itemData); // there are no items to test this on yet
+        
+        
+        
+        //this is where i am testing the save ability of the game
+        if ( count($_POST) )
+        {
+            $_SESSION = $_POST;
+            print_r($_POST);
+        } 
+        print_r($_SESSION);
+        
+        
+        
         ?>
         
         <div id="wrapper">
@@ -73,6 +102,8 @@
         
         <script>
             var heroData = <?php echo json_encode($heroData);?>;
+            var monsterData = <?php echo json_encode($monsterData);?>;
+            var itemData = <?php echo json_encode($itemData);?>;
         </script>
         <script type="text/javascript" src="js/game.js"></script>
     </body>
