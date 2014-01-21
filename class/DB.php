@@ -9,7 +9,8 @@ class DB {
         try {
             $this->db = new PDO(Config::DB_DNS, Config::DB_USER, Config::DB_PASSWORD);
         } catch (Exception $ex) {
-           $this->db = null; //this will close the database just in case
+            echo $ex->getMessage(); // display error message
+            $this->db = null; //this will close the database just in case
         }
         return $this->db;        
     }

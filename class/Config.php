@@ -3,7 +3,7 @@
 
 class Config {
     
-    const   DB_DNS = "mysql:host=localhost;port=3306;dbname=capestone",
-            DB_USER  = "root",
-            DB_PASSWORD  = "";
+    const   DB_DNS = "mysql:server=it.neit.edu;port=3306;dbname=capestone_db;charset=utf8",
+            DB_USER  = "capestone",
+            DB_PASSWORD  = "erikstephen";
 }
