@@ -15,7 +15,7 @@ class Signup extends DB {
     public function usernameIsTaken( $username ) {        
         $db = $this->getDB();
         if ( null != $db ) {
-            $stmt = $db->prepare('select username from users where username = :usernameValue limit 1');
+            $stmt = $db->prepare('select userName from Users where userName = :usernameValue limit 1');
             $stmt->bindParam(':usernameValue', $username, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);            
@@ -85,22 +85,47 @@ class Signup extends DB {
         
         $db = $this->getDB();
         $password = sha1($_POST["password"]); // sha1 to encript the password
-        if ( null != $db ) {
-            $stmt = $db->prepare('insert into users set username = :usernameValue, email = :emailValue, password = :passwordValue');
-            $stmt->bindParam(':usernameValue', $_POST["username"], PDO::PARAM_STR);
-            $stmt->bindParam(':emailValue', $_POST["email"], PDO::PARAM_STR);
-            $stmt->bindParam(':passwordValue', $password, PDO::PARAM_STR); 
-            if ( $stmt->execute() ) // if everything was excecuted corectly
-            {
-                $heroDBClass = new HeroDB(); // creats new instence of the heroDB class file
+        try
+        {
             
-                if($heroDBClass->defaultEntry())// will call and fill hero database with default info..... hopefully
+            if ( null != $db ) {
+                $stmt = $db->prepare('insert into Users set userName = :usernameValue, email = :emailValue, password = :passwordValue');
+                $stmt->bindParam(':usernameValue', $_POST["username"], PDO::PARAM_STR);
+                $stmt->bindParam(':emailValue', $_POST["email"], PDO::PARAM_STR);
+                $stmt->bindParam(':passwordValue', $password, PDO::PARAM_STR); 
+                
+                echo "Made it to save Entry after binding<br/>";
+                
+                if ( $stmt->execute() ) // if everything was excecuted corectly
                 {
-                    return true;
+                    
+                    echo "Made it to save Entry before close db<br/>";
+                    
+                    $db = $this->closeDB();
+                    
+                    echo "Made it to save Entry after execute<br/>";
+                    
+                    $heroDBClass = new HeroDB(); // creats new instence of the heroDB class file
+
+                    if($heroDBClass->defaultEntry())// will call and fill hero database with default info..... hopefully
+                    {
+                        
+                        echo "Made it to save Entry after default entry call<br/>";
+                        
+                        return true;
+                    }
                 }
             }
+        
         }
-        return false; 
+        catch ( Exception $ex )
+        {
+            echo $ex->getMessage();
+        }
+        
+        
+        
+        //return false; 
     }
     
     public function getErrors() {
