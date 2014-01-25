@@ -51,7 +51,6 @@ function heroLoader()
     hero.x = parseInt(heroData.x);
     hero.y = parseInt(heroData.y);
     coordinates[hero.x][hero.y] = hero;
-
 }
 
 
@@ -183,7 +182,7 @@ function checkDeath(assailant, defender) {
 function enemyBehavior(creature)
 {
     //If the player is within 10 squares of the enemy and the enemy is still alive...
-    if ((Math.abs(creature.x - hero.x)) < 3 && ((Math.abs(creature.y - hero.y)) < 3 && creature.currentHP > 0))
+    if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
     {   
         //Compare the x and y values of hero and enemy and if hero x value is less than enemy x value, move left etc.
         //Move right towards the hero
@@ -734,17 +733,14 @@ function equipItems()
 //Maybe this works...?
 function saveData() 
 {
-    var form = document.createElement("form");
-    form.setAttribute("method", "post");
-    form.setAttribute("action", "#");
-    
-    var hiddenField = document.createElement("input");
-    
-    hiddenField.setAttribute('heroData', JSON.stringify('hero', hero));
-    form.appendChild(hiddenField);
-    
-    document.body.appendChild(form);
-    form.submit();
+    console.log("SAVING...");
+    //alert(JSON.stringify(hero));
+    $.ajax({url:"class/processAction.php",
+            type:"POST",
+            data:"heroData=" + JSON.stringify(hero),
+            success: function(response) {alert(response);},
+            error: function(){alert("Something went wrong dude");}
+                });
 }
 
 

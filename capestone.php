@@ -12,6 +12,7 @@
         
         <?php
         
+        
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
         {
             header("Location:login.php");
@@ -99,12 +100,13 @@
             </div>  <!--  end footer  -->
         
         </div><!-- end div wrapper -->
-        
+        <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
         <script>
             var heroData = <?php echo json_encode($heroData);?>;
             var monsterData = <?php echo json_encode($monsterData);?>;
             var itemData = <?php echo json_encode($itemData);?>;
         </script>
         <script type="text/javascript" src="js/game.js"></script>
+        
     </body>
 </html>
