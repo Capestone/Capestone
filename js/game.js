@@ -12,8 +12,6 @@
 ////Event handlers
 window.onload = autoLoader;
 
-
-
 ////Canvas and console variables
 var canvas = document.getElementById("idCanvas");
 var context = canvas.getContext("2d");
@@ -28,6 +26,7 @@ var widthPixels = 336;
 var heightPixels = 528;
 var enemyList = new Array();
 var equipMenu = false;
+var timePassed = 0;
 
 ////Object instantiation
 var hero = "";
@@ -286,6 +285,8 @@ function enemyBehavior(creature)
             //TODO: Get enemy to move in random directions until it finds something 
         }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
+    timePassed++;
+    console.log("Turns: " + timePassed);
 }
 
 function enemyLoader()
@@ -659,7 +660,6 @@ document.onkeypress=function(e)
                 enemyBehavior(enemyList[i]);
             }
         }
-        
         redrawCoordinates();
     }
     else
