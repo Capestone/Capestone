@@ -1,17 +1,3 @@
-////Onload event
-window.onload = autoLoader;
-
-////Event handlers
-//This is the prototype button
-var btnAction = document.getElementById("idRandom");
-
-////Canvas and console variables
-var canvas = document.getElementById("idCanvas");
-var context = canvas.getContext("2d");
-var cons = document.getElementById("idConsole");
-
-
-
 //TODO: 
 //Random Forest level
 //EQUIP function
@@ -19,41 +5,17 @@ var cons = document.getElementById("idConsole");
 //Enemy behavior case statement for different enemies, default being normal behavior
 //random movement between 1 and 10 1 - 2 do something 3 - 4 do something etc
 //Make sure equip function ADDS to 10 
-var equipMenu = false;
-var hero = "";
-var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
-// Let's give fence some paramaters so we can destroy it!
-var fence = new being("images/brokenFence.png", 0, 0);
-
-console.log("Hero data:");
-console.log(heroData);
-console.log("Hero before heroLoader():");
-console.log(hero);
-function heroLoader()
-{
-    hero = new being("images/rogue.png", 0, 0);
-    //Gives hero.armorClass and hero.damage
-    randomInventory(hero);
-    hero.attackBonus = parseInt(heroData.attackBonus);
-    hero.currentHP = parseInt(heroData.currentHP);
-    hero.desc = heroData.description;
-    hero.image.src = heroData.imagePath;
-    hero.maxHP = parseInt(heroData.maxHP);
-    hero.name = heroData.userName;
-    if (heroData.pass == 0)
-    {
-        hero.pass = false;
-    }
-    else 
-    {
-        hero.pass = true;
-    }
-    hero.x = parseInt(heroData.x);
-    hero.y = parseInt(heroData.y);
-    coordinates[hero.x][hero.y] = hero;
-}
 
 
+
+
+////Event handlers
+window.onload = autoLoader;
+
+////Canvas and console variables
+var canvas = document.getElementById("idCanvas");
+var context = canvas.getContext("2d");
+var cons = document.getElementById("idConsole");
 
 ////Global variables
 var xSize = 16;
@@ -63,9 +25,13 @@ var mapHeight = 21;
 var widthPixels = 336;
 var heightPixels = 528;
 var enemyList = new Array();
+var equipMenu = false;
+var timePassed = 0;
 
-//We only need this if we are making barriers
-//var numberOfBarriers;
+////Object instantiation
+var hero = "";
+var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
+var fence = new being("images/brokenFence.png", 0, 0);
 
 ////Matrix creation / declaration
 var coordinates = new Array(mapWidth);
@@ -80,13 +46,13 @@ for (var i=0; i<mapWidth; i++) {
     }
 }
 
-////Functions (try to keep these in alphabetical order after object)
-
-/* cons.innerHTML is working. I fiddled with it and made it += with a break. So if you get
- * a crit it will then tell you whether or not it confirms instead of overwriting it quick.
- * Additionally, critical miss needed to come first so that miss messages aren't repeated.
- * Added a death check that makes defender's x,y in coordinates 0. 
- * */
+////Functions (alphabetical)
+function startGame()
+{
+    displayControls();
+    cons.innerHTML += "Welcome to Capestone.<br/>";
+    cons.innerHTML += "Press enter to start.";
+}
 
 //Attack function
 function attack(assailant, defender)
@@ -136,6 +102,40 @@ function attack(assailant, defender)
     
 }
 
+//Autoloader function
+function autoLoader()
+{
+    canvasBackground();
+    randomBarrier();
+    enemyLoader();
+    heroLoader();	
+    fenceLoader();
+    startGame();
+}
+
+//Being object
+function being(image, xValue, yValue, options) 
+{
+    this.image = new Image();
+    this.armorClass = 0;
+    this.attackBonus = 0;
+    this.currentHP = 0;
+    this.damage = 0;
+    this.desc = "";
+    this.image.src = image;
+    this.inventory = new Array();
+    this.maxHP = 0;
+    this.pass = false;
+    this.x = xValue;
+    this.y = yValue;
+}
+
+function canvasBackground()
+{
+    context.fillStyle = "#212121";
+    context.fillRect(0, 0, widthPixels, heightPixels);
+}
+
 //Check death function
 //I plan on changing this completely
 function checkDeath(assailant, defender) {
@@ -176,6 +176,43 @@ function checkDeath(assailant, defender) {
     {
         //return false; //This isn't used either.
     }
+}
+
+//Kind of a useless function right now
+function clearConsole()
+{
+    cons.innerHTML = "";
+}
+
+//Display Controls function
+function displayControls()
+{
+    cons.innerHTML = "Controls <br/>";
+    cons.innerHTML += "C: Display this help file<br/>";
+    cons.innerHTML += "E: Equip Item<br/>";
+    cons.innerHTML += "I: Inventory<br/>";
+    cons.innerHTML += "1: Move Down and Left<br/>";
+    cons.innerHTML += "2: Move Down<br/>";
+    cons.innerHTML += "3: Move Down and Right<br/>";
+    cons.innerHTML += "4: Move Left<br/>";
+    cons.innerHTML += "5: Wait a turn<br/>";
+    cons.innerHTML += "6: Move Right<br/>";
+    cons.innerHTML += "7: Move Up and Left<br/>";
+    cons.innerHTML += "8: Move Up<br/>";
+    cons.innerHTML += "9: Move Up and Right<br/>";
+    cons.innerHTML += "Move toward enemy: Attack enemy<br/>";
+}
+
+function displayInventory()
+{
+    //hero.inventory.sort();
+    cons.innerHTML = "You have the following items:<br/> ";
+    for (i = 0; i < hero.inventory.length; i++)
+    {
+        cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
+    }
+    console.log(hero.damage);
+    console.log(hero.armorClass);
 }
 
 //Enemy Behavior function
@@ -248,76 +285,8 @@ function enemyBehavior(creature)
             //TODO: Get enemy to move in random directions until it finds something 
         }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
-}
-    
-
-
-
-//Display Controls function
-function displayControls()
-{
-    cons.innerHTML = "Controls <br/>";
-    cons.innerHTML += "C: Display this help file<br/>";
-    cons.innerHTML += "E: Equip Item<br/>";
-    cons.innerHTML += "I: Inventory<br/>";
-    cons.innerHTML += "1: Move Down and Left<br/>";
-    cons.innerHTML += "2: Move Down<br/>";
-    cons.innerHTML += "3: Move Down and Right<br/>";
-    cons.innerHTML += "4: Move Left<br/>";
-    cons.innerHTML += "5: Wait a turn<br/>";
-    cons.innerHTML += "6: Move Right<br/>";
-    cons.innerHTML += "7: Move Up and Left<br/>";
-    cons.innerHTML += "8: Move Up<br/>";
-    cons.innerHTML += "9: Move Up and Right<br/>";
-    cons.innerHTML += "Move toward enemy: Attack enemy<br/>";
-}
-
-//Autoloader function
-function autoLoader()
-{
-    canvasBackground();
-    randomBarrier();
-    enemyLoader();
-    heroLoader();	
-    fenceLoader();
-    startGame();
-}
-
-function startGame()
-{
-    displayControls();
-    cons.innerHTML += "Welcome to Capestone.<br/>";
-    cons.innerHTML += "Press enter to start.";
-}
-
-//image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
-//Being object
-function being(image, xValue, yValue, options) 
-{
-    this.image = new Image();
-    this.armorClass = 0;
-    this.attackBonus = 0;
-    this.currentHP = 0;
-    this.damage = 0;
-    this.desc = "";
-    this.image.src = image;
-    this.inventory = new Array();
-    this.maxHP = 0;
-    this.pass = false;
-    this.x = xValue;
-    this.y = yValue;
-}
-
-function canvasBackground()
-{
-    context.fillStyle = "#212121";
-    context.fillRect(0, 0, widthPixels, heightPixels);
-}
-
-//Kind of a useless function right now
-function clearConsole()
-{
-    cons.innerHTML = "";
+    timePassed++;
+    console.log("Turns: " + timePassed);
 }
 
 function enemyLoader()
@@ -337,6 +306,38 @@ function enemyLoader()
     enemyList.push(enemy);
 }
 
+function equipItems()
+{
+    //fix this
+    equipMenu = true;
+    while (equipMenu)
+    {
+        switch(keyPressed)
+        {
+            case 49:
+                //If number exists in the array...
+                console.log("equip the first item...");
+                break;
+            case 50:
+                console.log("equip the second item...");
+                break;
+            case 51:
+                console.log("equip the third item...");
+                break;
+            case 52:
+                console.log("equip the fourth item...");
+                break;
+            case 53:
+                console.log("equip the fifth item...");
+                break;
+        }
+        keyPressed = e.charCode;
+    }
+    
+    
+    equipMenu = false;
+}
+
 function fenceLoader()
 {
     //barrier(5);
@@ -354,20 +355,29 @@ function fenceLoader()
     //var fence = new being("fence.png", 1, 0, "red", 50, "a fence", "wood", 50, false, -1,-1);
 }
 
-
-
-/*
- * //This function is going to be replaced soon
-function item(image, x, y) 
+function heroLoader()
 {
-    this.image = new Image();
-    this.image.src = image;
-    this.damage = 0;
-    this.price = 0;
-    this.x = x;
-    this.y = y;
+    hero = new being("images/rogue.png", 0, 0);
+    //Gives hero.armorClass and hero.damage
+    randomInventory(hero);
+    hero.attackBonus = parseInt(heroData.attackBonus);
+    hero.currentHP = parseInt(heroData.currentHP);
+    hero.desc = heroData.description;
+    hero.image.src = heroData.imagePath;
+    hero.maxHP = parseInt(heroData.maxHP);
+    hero.name = heroData.userName;
+    if (heroData.pass == 0)
+    {
+        hero.pass = false;
+    }
+    else 
+    {
+        hero.pass = true;
+    }
+    hero.x = parseInt(heroData.x);
+    hero.y = parseInt(heroData.y);
+    coordinates[hero.x][hero.y] = hero;
 }
-*/
 
 function randomBarrier()
 {
@@ -392,6 +402,17 @@ function randomBarrier()
     }	
 }
 
+
+function randomInventory(possessor){
+    var weaponIndex = RNG(weaponTable.length);
+    possessor.inventory.push(weaponTable[weaponIndex]);
+    possessor.damage = damageTable[weaponTable[weaponIndex]];
+
+    var armorIndex = RNG(armorTable.length);
+    possessor.inventory.push(armorTable[RNG(armorTable.length)]);
+    possessor.armorClass = acTable[armorTable[armorIndex]];
+}
+
 function redrawCoordinates() {
     canvasBackground();
     for (var i=0; i < mapWidth; i++) {
@@ -411,6 +432,24 @@ function RNG(maxNum)
 function rollDice(maxDie)
 {
     return Math.floor(Math.random()*maxDie + 1);
+}
+
+//This now seems to work!
+function saveData() 
+{
+    var imageData = new Image();
+    imageData = hero.image;
+    delete hero.image;
+    //var stringified = JSON.stringify(hero);
+    $.ajax({url:"processSave.php",
+            type:"POST",
+            data:"heroData=" + JSON.stringify(hero, null, " "),
+            success: function(response) {alert(response);},
+            error: function(){alert("Something went wrong dude");}
+                });
+                
+    hero.image = imageData;
+    console.log(hero);
 }
 
 //KEYHANDLER GET!!!
@@ -621,7 +660,6 @@ document.onkeypress=function(e)
                 enemyBehavior(enemyList[i]);
             }
         }
-        
         redrawCoordinates();
     }
     else
@@ -674,87 +712,7 @@ var acTable = {
     "Full-plate" : 8
 };
 
-
-
-function randomInventory(possessor){
-    var weaponIndex = RNG(weaponTable.length);
-    possessor.inventory.push(weaponTable[weaponIndex]);
-    possessor.damage = damageTable[weaponTable[weaponIndex]];
-
-    var armorIndex = RNG(armorTable.length);
-    possessor.inventory.push(armorTable[RNG(armorTable.length)]);
-    possessor.armorClass = acTable[armorTable[armorIndex]];
-}
-
-
-
-function displayInventory()
-{
-    //hero.inventory.sort();
-    cons.innerHTML = "You have the following items:<br/> ";
-    for (i = 0; i < hero.inventory.length; i++)
-    {
-        cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
-    }
-    console.log(hero.damage);
-    console.log(hero.armorClass);
-}
-
-function equipItems()
-{
-    //fix this
-    equipMenu = true;
-    var e=window.event || e;
-    while (equipMenu)
-    {
-        switch(keyPressed)
-        {
-            case 49:
-                //If number exists in the array...
-                console.log("equip the first item...");
-                break;
-            case 50:
-                console.log("equip the second item...");
-                break;
-            case 51:
-                console.log("equip the third item...");
-                break;
-            case 52:
-                console.log("equip the fourth item...");
-                break;
-            case 53:
-                console.log("equip the fifth item...");
-                break;
-        }
-        keyPressed = e.charCode;
-    }
-    
-    
-    equipMenu = false;
-}
-
-//Maybe this works...?
-function saveData() 
-{
-    var imageData = new Image();
-    imageData = hero.image;
-    delete hero.image;
-    //var stringified = JSON.stringify(hero);
-    $.ajax({url:"processSave.php",
-            type:"POST",
-            data:"heroData=" + JSON.stringify(hero, null, " "),
-            success: function(response) {alert(response);},
-            error: function(){alert("Something went wrong dude");}
-                });
-                
-    hero.image = imageData;
-    console.log(hero);
-}
-
-
-
-
-
+//Possible future code, now deprecated. Needs to change. 
 /* For whatever reason, it appears that btnAction can't complete any function that takes
  * paramaters. I went back to some old code. The button wouldn't not excute randomeBarrier()
  * but it would execture randomBarrier;. To double check, comment out the line below and
