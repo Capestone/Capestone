@@ -12,7 +12,7 @@
         
         <?php
         
-        
+        //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
         {
             header("Location:login.php");
@@ -23,6 +23,7 @@
             session_destroy();
             header("Location:login.php");
         }
+        
         
         //get hero data from database
         $heroDBClass = new HeroDB(); // class for heroDB
@@ -45,7 +46,11 @@
         
         $itemData = $itemDBClass->getItemData($itemID);
         
-        //print_r($itemData); // there are no items to test this on yet
+        //get inventory data from database
+        $inventoryDBClass = new InventoryDB();
+        
+        $inventoryData = $inventoryDBClass->getInventoryData($userID);
+        
         
         
         //testing for save function
