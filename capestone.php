@@ -70,7 +70,7 @@
         echo '<br />';
         var_dump($_SESSION["heroData"]);
         echo '<br />';
-        echo $_SESSION["herodata"];
+        echo $_SESSION["heroData"];
         
         
         
