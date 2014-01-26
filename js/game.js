@@ -735,7 +735,7 @@ function saveData()
 {
     var cache = [];
     //alert(JSON.stringify(hero));
-    $.ajax({url:"processAction.php",
+    $.ajax({url:"processSave.php",
             type:"POST",
             data:"heroData=" + "JSON.stringify(hero)",
             success: function(response) {alert(response);},
