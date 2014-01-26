@@ -292,7 +292,7 @@ function startGame()
 
 //image, armorClass, attackBonus, color, currentHP, desc, color, inventory, maxHP, pass, x, y
 //Being object
-function being(image, x, y, options) 
+function being(image, xValue, yValue, options) 
 {
     this.image = new Image();
     this.armorClass = 0;
@@ -304,8 +304,8 @@ function being(image, x, y, options)
     this.inventory = new Array();
     this.maxHP = 0;
     this.pass = false;
-    this.x = x;
-    this.y = y;
+    this.x = xValue;
+    this.y = yValue;
 }
 
 function canvasBackground()
@@ -607,7 +607,10 @@ document.onkeypress=function(e)
                 console.log("saving data...");
                 break;
         }
-        if (keyPressed == 99 || keyPressed == 101 || keyPressed == 105) 
+        if (keyPressed === 99 
+         || keyPressed === 101 
+         || keyPressed === 105
+         || keyPressed === 115) 
         {
             //Do nothing (don't move monsters)
         }
@@ -733,14 +736,19 @@ function equipItems()
 //Maybe this works...?
 function saveData() 
 {
-    var cache = [];
-    //alert(JSON.stringify(hero));
+    var imageData = new Image();
+    imageData = hero.image;
+    delete hero.image;
+    //var stringified = JSON.stringify(hero);
     $.ajax({url:"processSave.php",
             type:"POST",
-            data:"heroData=" + "JSON.stringify(hero)",
+            data:"heroData=" + JSON.stringify(hero, null, " "),
             success: function(response) {alert(response);},
             error: function(){alert("Something went wrong dude");}
                 });
+                
+    hero.image = imageData;
+    console.log(hero);
 }
 
 
