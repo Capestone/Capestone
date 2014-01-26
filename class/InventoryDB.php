@@ -7,7 +7,7 @@ class InventoryDB extends DB{
         $db = $this->getDB();
         if ( null != $db ) {
             $stmt = $db->prepare('select * from Inventory where userID = :userIDValue');
-            $stmt->bindParam(':itemIDValue', $itemID, PDO::PARAM_STR);
+            $stmt->bindParam(':itemIDValue', $userID, PDO::PARAM_STR);
             
             if ( $stmt->execute() ) // if everything was excecuted corectly
             {
