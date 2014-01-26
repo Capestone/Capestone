@@ -66,12 +66,9 @@
         } 
         print_r($_SESSION);
         echo '<br />';
-        print_r($_SESSION["heroData"]);
-        echo '<br />';
-        var_dump($_SESSION["heroData"]);
-        echo '<br />';
-        echo $_SESSION["heroData"];
+
         
+
         
         
         

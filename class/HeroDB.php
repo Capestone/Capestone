@@ -82,7 +82,9 @@ class HeroDB extends DB{
         return false; 
     }
     
-    public function saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $imagePath, $maxHP, $pass, $userName, $x, $y) {
+    public function saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y) {
+        
+        echo "made it into save hero function";
         
         intval($userID);
         $db = $this->getDB();
@@ -94,11 +96,8 @@ class HeroDB extends DB{
                     . 'currentHP = :currentHPValue, '
                     . 'damage = :damageValue, '
                     . 'description = :descriptionValue, '
-                    . 'imagePath = :imagePathValue '
-                    . 'maxHP = :maxHPValue '
-                    . 'pass = :passValue '
-                    . 'userName = :userNameValue '
-                    . 'x = :xValue '
+                    . 'maxHP = :maxHPValue, '
+                    . 'x = :xValue, '
                     . 'y = :yValue '
                     . 'where userID = :userIDValue;');
             $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_INT);
@@ -107,15 +106,15 @@ class HeroDB extends DB{
             $stmt->bindParam(':currentHPValue', $currentHP, PDO::PARAM_INT);
             $stmt->bindParam(':damageValue', $damage, PDO::PARAM_INT);
             $stmt->bindParam(':descriptionValue', $description, PDO::PARAM_STR);
-            $stmt->bindParam(':imagePathValue', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':maxHPValue', $maxHP, PDO::PARAM_INT);
-            $stmt->bindParam(':passValue', $pass, PDO::PARAM_INT);
-            $stmt->bindParam(':userNameValue', $userName, PDO::PARAM_STR);
             $stmt->bindParam(':xValue', $x, PDO::PARAM_INT);
             $stmt->bindParam(':yValue', $y, PDO::PARAM_INT);
             
+            echo "after binding in save function";
+            
             if ( $stmt->execute() ) // if everything was excecuted corectly
             {
+                echo "after execute in save function";
                 return true;
             }
         }

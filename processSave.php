@@ -5,38 +5,30 @@
 
 if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
 {
-    $heroData = $_POST["heroData"];
+    $heroData = json_decode($_POST["heroData"], true);
 
-    //echo json_decode($heroData);
-    echo $heroData;
-    
     
     // this is where everything is going to be saved into database
     if ( count($_POST) )
     {
-        echo " post was populated on ProcessAction ";
+        //echo " post was populated on ProcessSave ";
         $_SESSION["heroData"] = $heroData;
+
+        $userID = $_SESSION["userID"];
+        $armorClass = $heroData['armorClass'];
+        $attackBonus = $heroData['attackBonus'];
+        $currentHP = $heroData['currentHP'];
+        $damage = $heroData['damage'];
+        $description = $heroData['desc'];
+        $maxHP = $heroData['maxHP'];
+        $x = $heroData['x'];
+        $y = $heroData['y'];
         
-        /*
-        
-        $userID =
-        $armorClass =
-        $attackBonus =
-        $currentHP =
-        $damage =
-        $description =
-        $imagePath =
-        $maxHP =
-        $pass =
-        $userName =
-        $x =
-        $y =
+        print_r($armorClass);
         
         $heroDBClass = new HeroDB();
         
-        $heroDBClass->saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $imagePath, $maxHP, $pass, $userName, $x, $y);
-        
-        */
+        $heroDBClass->saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y);
           
     }
     
