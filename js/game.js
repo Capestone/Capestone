@@ -733,11 +733,11 @@ function equipItems()
 //Maybe this works...?
 function saveData() 
 {
-    console.log("SAVING...");
+    var cache = [];
     //alert(JSON.stringify(hero));
     $.ajax({url:"class/processAction.php",
             type:"POST",
-            data:"heroData=" + JSON.stringify(hero),
+            data:"heroData=" + "JSON.stringify(hero)",
             success: function(response) {alert(response);},
             error: function(){alert("Something went wrong dude");}
                 });

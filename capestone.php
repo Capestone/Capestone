@@ -48,14 +48,25 @@
         //print_r($itemData); // there are no items to test this on yet
         
         
+        //testing for save function
+        
+        echo "post was not populated yet on capestone.php <br />";
         
         //this is where i am testing the save ability of the game
         if ( count($_POST) )
         {
+            echo "post was populated on capestone.php <br />";
             $_SESSION = $_POST;
             print_r($_POST);
         } 
         print_r($_SESSION);
+        echo '<br />';
+        print_r($_SESSION["heroData"]);
+        echo '<br />';
+        var_dump($_SESSION["heroData"]);
+        echo '<br />';
+        echo $_SESSION["herodata"];
+        
         
         
         
