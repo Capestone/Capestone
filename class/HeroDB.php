@@ -82,7 +82,45 @@ class HeroDB extends DB{
         return false; 
     }
     
-    
+    public function saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $imagePath, $maxHP, $pass, $userName, $x, $y) {
+        
+        intval($userID);
+        $db = $this->getDB();
+        if ( null != $db ) {
+            $stmt = $db->prepare('update Hero '
+                    . 'set '
+                    . 'armorClass = :armorClassValue, '
+                    . 'attackBonus = :attackBonusValue, '
+                    . 'currentHP = :currentHPValue, '
+                    . 'damage = :damageValue, '
+                    . 'description = :descriptionValue, '
+                    . 'imagePath = :imagePathValue '
+                    . 'maxHP = :maxHPValue '
+                    . 'pass = :passValue '
+                    . 'userName = :userNameValue '
+                    . 'x = :xValue '
+                    . 'y = :yValue '
+                    . 'where userID = :userIDValue;');
+            $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_INT);
+            $stmt->bindParam(':armorClassValue', $armorClass, PDO::PARAM_INT);
+            $stmt->bindParam(':attackBonusValue', $attackBonus, PDO::PARAM_INT);
+            $stmt->bindParam(':currentHPValue', $currentHP, PDO::PARAM_INT);
+            $stmt->bindParam(':damageValue', $damage, PDO::PARAM_INT);
+            $stmt->bindParam(':descriptionValue', $description, PDO::PARAM_STR);
+            $stmt->bindParam(':imagePathValue', $imagePath, PDO::PARAM_STR);
+            $stmt->bindParam(':maxHPValue', $maxHP, PDO::PARAM_INT);
+            $stmt->bindParam(':passValue', $pass, PDO::PARAM_INT);
+            $stmt->bindParam(':userNameValue', $userName, PDO::PARAM_STR);
+            $stmt->bindParam(':xValue', $x, PDO::PARAM_INT);
+            $stmt->bindParam(':yValue', $y, PDO::PARAM_INT);
+            
+            if ( $stmt->execute() ) // if everything was excecuted corectly
+            {
+                return true;
+            }
+        }
+        return false; 
+    }
     
     
 }
