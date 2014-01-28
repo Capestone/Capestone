@@ -20,10 +20,10 @@ var cons = document.getElementById("idConsole");
 ////Global variables
 var xSize = 16;
 var ySize = 24;
-var mapWidth = 21;
-var mapHeight = 21;
+var mapWidth = 20;
+var mapHeight = 20;
 var widthPixels = 336;
-var heightPixels = 528;
+var heightPixels = 504;
 var enemyList = new Array();
 var equipMenu = false;
 var timePassed = 0;
@@ -35,7 +35,7 @@ var fence = new being("images/brokenFence.png", 0, 0);
 
 ////Matrix creation / declaration
 var coordinates = new Array(mapWidth);
-for (var i =0; i <mapWidth; i++) {
+for (var i = 0; i <mapWidth; i++) {
     coordinates[i] = new Array(mapHeight);			
 }
 
@@ -53,6 +53,173 @@ function startGame()
     cons.innerHTML += "Welcome to Capestone.<br/>";
     cons.innerHTML += "Press enter to start.";
 }
+
+function environment()
+{
+    this.image = new Image();
+    this.armorClass = 0;
+    this.currentHP = 0;
+    this.desc = "";
+    this.inventory = new Array();
+    this.pass = false;
+    this.x = 0;
+    this.y = 0;
+}
+
+function quadrantOneLoader()
+{
+    //dungeon quadrant
+    var x = 10;
+    var y = 0;
+    coordinates[x + 1][y + 1] = new environment();
+    coordinates[x + 1][y + 1].image.src = "images/column.png";
+    coordinates[x + 3][y + 1] = new environment();
+    coordinates[x + 3][y + 1].image.src = "images/column.png";
+    coordinates[x + 1][y + 3] = new environment();
+    coordinates[x + 1][y + 3].image.src = "images/brokenColumn.png";
+    coordinates[x + 3][y + 3] = new environment();
+    coordinates[x + 3][y + 3].image.src = "images/column.png";
+    coordinates[x + 2][y + 2] = new environment();
+    coordinates[x + 2][y + 2].image.src = "images/altar.png";
+    
+    coordinates[x + 1][y + 6] = new environment();
+    coordinates[x + 1][y + 6].image.src = "images/rockWall.png";
+    coordinates[x + 1][y + 8] = new environment();
+    coordinates[x + 1][y + 8].image.src = "images/rockWall.png";
+    coordinates[x + 5][y + 6] = new environment();
+    coordinates[x + 5][y + 6].image.src = "images/rockWall.png";
+    coordinates[x + 5][y + 8] = new environment();
+    coordinates[x + 5][y + 8].image.src = "images/rockWall.png";
+    
+    coordinates[x + 3][y + 7] = new environment();
+    coordinates[x + 3][y + 7].image.src = "images/candelabra.png";
+    
+    for (var i = 5; i < 9; i++)
+    {
+        coordinates[x + i][y + 4] = new environment();
+        coordinates[x + i][y + 4].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 1; i < 6; i++)
+    {
+        coordinates[x + i][y + 5] = new environment();
+        coordinates[x + i][y + 5].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 0; i < 5; i++)
+    {
+        coordinates[x + 9][y + i] = new environment();
+        coordinates[x + 9][y + i].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 1; i < 6; i++)
+    {
+        coordinates[x + i][y + 9] = new environment();
+        coordinates[x + i][y + 9].image.src = "images/rockWall.png";
+    }
+}
+
+function quadrantThreeLoader()
+{
+    var x = 0;
+    var y = 10;
+    for (var i = 1; i <= 6; i++)
+    {
+        coordinates[x + i][y + 1] = new environment();
+        coordinates[x + i][y + 1].image.src = "images/rockWall.png"; 
+    }
+    
+    for (var i = 1; i <= 9; i++)
+    {
+        if (i != 4)
+        {
+            coordinates[x + 6][y + i] = new environment();
+            coordinates[x + 6][y + i].image.src = "images/rockWall.png";
+        }
+        else
+        {
+            coordinates[x + 6][y + 4] = new environment();
+            coordinates[x + 6][y + 4].image.src = "images/vaultDoor.png";
+        }
+    }
+    
+    for (var i = 3; i <= 9; i++)
+    {
+        coordinates[x + 3][y + i] = new environment();
+        coordinates[x + 3][y + i].image.src = "images/rockWall.png";
+    }
+    
+    
+    for (var i = 2; i <= 9; i++)
+    {
+        coordinates[x + 1][y + i] = new environment();
+        coordinates[x + 1][y + i].image.src = "images/rockWall.png";
+    }
+    
+    
+    for (var i = 6; i <= 9; i++)
+    {
+        if (i != 8)
+        {
+            coordinates[x + i][y + 6] = new environment();
+            coordinates[x + i][y + 6].image.src = "images/rockWall.png";
+        }
+        else
+        {
+            coordinates[x + i][y + 6] = new environment();
+            coordinates[x + i][y + 6].image.src = "images/vaultDoor.png";
+        }
+    }
+    
+    for (var i = 6; i <= 9; i++)
+    {
+        coordinates[x + i][y + 9] = new environment();
+        coordinates[x + i][y + 9].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 6; i <= 9; i++)
+    {
+        coordinates[x + i][y + 9] = new environment();
+        coordinates[x + i][y + 9].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 6; i <= 9; i++)
+    {
+        coordinates[x + 9][y + i] = new environment();
+        coordinates[x + 9][y + i].image.src = "images/rockWall.png";
+    }
+    
+    for (var i = 0; i <= 2; i++)
+    {
+        coordinates[x + 7][y + i] = new environment();
+        coordinates[x + 7][y + i].image.src = "images/weaponRack.png";
+    }
+    
+    coordinates[x + 2][y + 9] = new environment();
+    coordinates[x + 2][y + 9].image.src = "images/rockWall.png";
+    
+    coordinates[x + 2][y + 3] = new environment();
+    coordinates[x + 2][y + 3].image.src = "images/vaultDoor.png";
+    
+    coordinates[x + 8][y + 8] = new environment();
+    coordinates[x + 8][y + 8].image.src = "images/closedChest.png";
+}
+
+/*
+rockWall = new Image(); 
+rockWall.src = "images/rockWall.png"; 
+mossyDoor = new Image();
+mossyDoor.src = "images/mossyDoor.png";
+candelabra = new Image();
+candelabra.src = "images/candelabra.png";
+altar = new Image();
+candelabra.src = "images/altar.png";
+column = new Image();
+column.src = "images/column.png";
+brokenColumn = new Image();
+brokenColumn.src = "images/brokenColumn.png";
+*/
+
 
 //Attack function
 function attack(assailant, defender)
@@ -106,10 +273,14 @@ function attack(assailant, defender)
 function autoLoader()
 {
     canvasBackground();
-    randomBarrier();
+    quadrantOneLoader();
+    //quadrantTwoLoader();
+    quadrantThreeLoader();
+    //quadrantFourLoader();
+    //randomBarrier();
     enemyLoader();
     heroLoader();	
-    fenceLoader();
+    //fenceLoader();
     startGame();
 }
 
@@ -161,7 +332,7 @@ function checkDeath(assailant, defender) {
         if (defender.inventory.length > 0) {
             cons.innerHTML += "<br />They received " + defender.inventory + ".";
             //This will now pick up everything in the inventory
-            for (i = 0; i <= defender.inventory.length; i++)
+            for (var i = 0; i <= defender.inventory.length; i++)
             {
                 assailant.inventory.push(defender.inventory.pop());
             }
@@ -207,7 +378,7 @@ function displayInventory()
 {
     //hero.inventory.sort();
     cons.innerHTML = "You have the following items:<br/> ";
-    for (i = 0; i < hero.inventory.length; i++)
+    for (var i = 0; i < hero.inventory.length; i++)
     {
         cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
     }
@@ -401,6 +572,8 @@ function randomBarrier()
         coordinates[x][y].desc = "evergreen";
     }	
 }
+
+
 
 
 function randomInventory(possessor){
@@ -711,6 +884,11 @@ var acTable = {
     "Half-plate" : 7,
     "Full-plate" : 8
 };
+
+
+//Do a new dungeon here
+
+
 
 //Possible future code, now deprecated. Needs to change. 
 /* For whatever reason, it appears that btnAction can't complete any function that takes
