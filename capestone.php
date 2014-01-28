@@ -128,7 +128,7 @@
            
             <div id="container">
                                 
-                <canvas id="idCanvas" width="336" height ="504" class="simpleBorder"></canvas>
+                <canvas id="idCanvas" width="320" height ="480" class="simpleBorder"></canvas>
                 <div id="idConsole" class="console"></div>
                 
             </div> <!-- end div container -->

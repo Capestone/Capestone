@@ -22,8 +22,8 @@ var xSize = 16;
 var ySize = 24;
 var mapWidth = 20;
 var mapHeight = 20;
-var widthPixels = 336;
-var heightPixels = 504;
+var widthPixels = 320;
+var heightPixels = 480;
 var enemyList = new Array();
 var equipMenu = false;
 var timePassed = 0;
@@ -68,9 +68,9 @@ function environment()
 
 function quadrantOneLoader()
 {
-    //dungeon quadrant
-    var x = 10;
-    var y = 0;
+    //dungeon quadrant one
+    var x = 0;
+    var y = 10;
     coordinates[x + 1][y + 1] = new environment();
     coordinates[x + 1][y + 1].image.src = "images/column.png";
     coordinates[x + 3][y + 1] = new environment();
@@ -119,9 +119,83 @@ function quadrantOneLoader()
     }
 }
 
+function quadrantTwoLoader()
+{
+    //dungeon quadrant two
+    var x = 0;
+    var y = 0;
+    
+    for (var i = 0; i < 10; i++)
+    {
+        if (i % 2 === 1 && i != 3)
+        {
+            coordinates[x + i][y + 1] = new environment();
+            coordinates[x + i][y + 1].image.src = "images/column.png";
+        }
+        else if (i % 2 === 1)
+        {
+            coordinates[x + i][y + 1] = new environment();
+            coordinates[x + i][y + 1].image.src = "images/brokenColumn.png";
+        }
+    }
+    
+    for (var i = 0; i < 10; i++)
+    {
+        if (i % 2 === 0 && i !== 8)
+        {
+            coordinates[x + i][y + 3] = new environment();
+            coordinates[x + i][y + 3].image.src = "images/column.png";
+        }
+        else if (i % 2 === 0)
+        {
+            coordinates[x + i][y + 3] = new environment();
+            coordinates[x + i][y + 3].image.src = "images/brokenColumn.png";
+        }
+    }
+    
+    for (var i = 0; i < 10; i++)
+    {
+        if (i % 2 === 0 && i !== 4)
+        {
+            coordinates[x + i][y + 7] = new environment();
+            coordinates[x + i][y + 7].image.src = "images/column.png";
+        }
+        else if (i % 2 === 0)
+        {
+            coordinates[x + i][y + 7] = new environment();
+            coordinates[x + i][y + 7].image.src = "images/brokenColumn.png";
+        }
+    }
+    
+    for (var i = 0; i < 10; i++)
+    {
+        if (i % 2 === 1 && i !== 7)
+        {
+            coordinates[x + i][y + 9] = new environment();
+            coordinates[x + i][y + 9].image.src = "images/column.png";
+        }
+        else if (i % 2 === 1)
+        {
+            coordinates[x + i][y + 9] = new environment();
+            coordinates[x + i][y + 9].image.src = "images/brokenColumn.png";
+        }
+    }
+    
+    coordinates[x + 1][y + 5] = new environment();
+    coordinates[x + 1][y + 5].image.src = "images/stocks.png";
+    
+    coordinates[x + 4][y + 5] = new environment();
+    coordinates[x + 4][y + 5].image.src = "images/candelabra.png";
+    
+    coordinates[x + 7][y + 5] = new environment();
+    coordinates[x + 7][y + 5].image.src = "images/stocks.png";
+    
+}
+
 function quadrantThreeLoader()
 {
-    var x = 0;
+    //dungeon quadrant three
+    var x = 10;
     var y = 10;
     for (var i = 1; i <= 6; i++)
     {
@@ -143,14 +217,13 @@ function quadrantThreeLoader()
         }
     }
     
-    for (var i = 3; i <= 9; i++)
+    for (var i = 2; i <= 9; i++)
     {
-        coordinates[x + 3][y + i] = new environment();
-        coordinates[x + 3][y + i].image.src = "images/rockWall.png";
+        coordinates[x + i][y + 6] = new environment();
+        coordinates[x + i][y + 6].image.src = "images/rockWall.png";
     }
     
-    
-    for (var i = 2; i <= 9; i++)
+    for (var i = 2; i <= 6; i++)
     {
         coordinates[x + 1][y + i] = new environment();
         coordinates[x + 1][y + i].image.src = "images/rockWall.png";
@@ -171,11 +244,6 @@ function quadrantThreeLoader()
         }
     }
     
-    for (var i = 6; i <= 9; i++)
-    {
-        coordinates[x + i][y + 9] = new environment();
-        coordinates[x + i][y + 9].image.src = "images/rockWall.png";
-    }
     
     for (var i = 6; i <= 9; i++)
     {
@@ -189,20 +257,53 @@ function quadrantThreeLoader()
         coordinates[x + 9][y + i].image.src = "images/rockWall.png";
     }
     
-    for (var i = 0; i <= 2; i++)
-    {
-        coordinates[x + 7][y + i] = new environment();
-        coordinates[x + 7][y + i].image.src = "images/weaponRack.png";
-    }
+    coordinates[x + 7][y + 3] = new environment();
+    coordinates[x + 7][y + 3].image.src = "images/weaponRack.png";
     
-    coordinates[x + 2][y + 9] = new environment();
-    coordinates[x + 2][y + 9].image.src = "images/rockWall.png";
-    
-    coordinates[x + 2][y + 3] = new environment();
-    coordinates[x + 2][y + 3].image.src = "images/vaultDoor.png";
+    coordinates[x + 7][y + 5] = new environment();
+    coordinates[x + 7][y + 5].image.src = "images/weaponRack.png";
     
     coordinates[x + 8][y + 8] = new environment();
     coordinates[x + 8][y + 8].image.src = "images/closedChest.png";
+}
+
+function quadrantFourLoader()
+{
+    //dungeon quadrant four
+    var x = 10;
+    var y = 0;
+    for (var i = 1; i <= 8; i++)
+    {
+        if (i !== 4 && i !== 5)
+        {
+            coordinates[x + 3][y + i] = new environment();
+            coordinates[x + 3][y + i].image.src = "images/candelabra.png";
+        }
+    }
+    for (var i = 1; i <= 8; i++)
+    {
+        if (i !== 4 && i !== 5)
+        {
+            coordinates[x + 6][y + i] = new environment();
+            coordinates[x + 6][y + i].image.src = "images/candelabra.png";
+        }
+    }
+    for (var i = 1; i <= 8; i++)
+    {
+        if (i !== 4 && i !== 5)
+        {
+            coordinates[x + i][y + 6] = new environment();
+            coordinates[x + i][y + 6].image.src = "images/candelabra.png";
+        }
+    }
+    for (var i = 1; i <= 8; i++)
+    {
+        if (i !== 4 && i !== 5)
+        {
+            coordinates[x + i][y + 3] = new environment();
+            coordinates[x + i][y + 3].image.src = "images/candelabra.png";
+        }
+    }
 }
 
 /*
@@ -274,10 +375,10 @@ function autoLoader()
 {
     canvasBackground();
     quadrantOneLoader();
-    //quadrantTwoLoader();
+    quadrantTwoLoader();
     quadrantThreeLoader();
-    //quadrantFourLoader();
-    //randomBarrier();
+    quadrantFourLoader();
+    randomBarrier();
     enemyLoader();
     heroLoader();	
     //fenceLoader();
@@ -552,7 +653,7 @@ function heroLoader()
 
 function randomBarrier()
 {
-    var x, y, barriers = rollDice(30);
+    var x, y, barriers = rollDice(15);
     for (var i = 0; i < barriers; i++) 
     {
         x = RNG(20);
@@ -562,7 +663,7 @@ function randomBarrier()
         coordinates[x][y].desc = "withered tree";
     }
 
-    barriers = rollDice(30);
+    barriers = rollDice(15);
     for (var i = 0; i < barriers; i++) 
     {
         x = RNG(20);
@@ -630,7 +731,7 @@ function saveData()
 document.onkeypress=function(e)
 {
     cons.innerHTML = "";
-    var e=window.event || e;
+    e=window.event || e;
     //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
     console.log("CharCode value: "+e.charCode);
     keyPressed = e.charCode;
@@ -832,6 +933,67 @@ document.onkeypress=function(e)
             {
                 enemyBehavior(enemyList[i]);
             }
+        }
+        redrawCoordinates();
+    }
+    else if (equipMenu == true  
+            &&(keyPressed == 48
+            || keyPressed == 49
+            || keyPressed == 50
+            || keyPressed == 51
+            || keyPressed == 52
+            || keyPressed == 53
+            || keyPressed == 54
+            || keyPressed == 55
+            || keyPressed == 56
+            || keyPressed == 57
+            || keyPressed == 58
+            || keyPressed == 59))
+    {
+        switch(keyPressed)
+        {
+            case 48:
+                cons.innerHTML += "You equip item in slot ten";
+                break;
+            case 49:
+                cons.innerHTML += "You equip item in slot one";
+                break;
+            case 50:
+                cons.innerHTML += "You equip item in slot two";
+                break;
+            case 51:
+                cons.innerHTML += "You equip item in slot three";
+                break;
+            case 52:
+                cons.innerHTML += "You equip item in slot four";
+                break;
+            case 53:
+                cons.innerHTML += "You equip item in slot five";
+                break;
+            case 54:
+                cons.innerHTML += "You equip item in slot six";
+                break;
+            case 55:
+                cons.innerHTML += "You equip item in slot seven";
+                break;
+            case 56:
+                cons.innerHTML += "You equip item in slot eight";
+                break;
+            case 57:
+                cons.innerHTML += "You equip item in slot nine";
+                break;
+            case 58:
+                cons.innerHTML += "You equip item in slot ten";
+                break;
+            case 105: 
+                cons.innerHTML += "You fuckin did it bro~!";
+                break;
+        }
+        
+        equipMenu = false;
+        for(var i = 0; i < enemyList.length; i++)
+        {
+            enemyBehavior(enemyList[i]);
         }
         redrawCoordinates();
     }
