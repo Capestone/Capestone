@@ -24,7 +24,7 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
         $x = $heroData['x'];
         $y = $heroData['y'];
         
-        print_r($armorClass);
+        print_r($_SESSION["heroData"]);
         
         $heroDBClass = new HeroDB();
         

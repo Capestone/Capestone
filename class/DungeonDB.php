@@ -6,7 +6,7 @@ class DungeonDB extends DB{
         
         $db = $this->getDB();
         if ( null != $db ) {
-            $stmt = $db->prepare('select * from Dungeon where dungeonID = :dungeonIDValue');
+            $stmt = $db->prepare('select code from Dungeon where dungeonID = :dungeonIDValue');
             $stmt->bindParam(':dungeonIDValue', $dungeonID, PDO::PARAM_STR);
             
             if ( $stmt->execute() ) // if everything was excecuted corectly
