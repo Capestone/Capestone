@@ -46,11 +46,20 @@
         // get item data from database
         $itemDBClass = new ItemDB();
         
-        $itemID = "1"; // this is there the item ID will be populated
+        $itemData = array(); // this is there the item ID will be populated
+        for ($i=0; $i<=19; $i++)
+        {
+            if( $i!=0 )
+            {
+                $itemData[$i] = $itemDBClass->getItemData($i);
+            }
+            else
+            {
+                $itemData[0] = "";
+            }
+        }
         
-        $itemData = $itemDBClass->getItemData($itemID);
-        
-        
+
         //get inventory data from database
         $inventoryDBClass = new InventoryDB();
         
