@@ -12,6 +12,8 @@
         
         <?php
         
+        $maxNumDungeons = 6;
+        
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
         {
@@ -32,6 +34,7 @@
         
         $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
         
+        
         // get monster data from database
         $monsterDBClass = new MonsterDB();
         
@@ -39,6 +42,7 @@
         
         $monsterData = $monsterDBClass->getMonsterData($monsterID);
 
+        
         // get item data from database
         $itemDBClass = new ItemDB();
         
@@ -46,16 +50,29 @@
         
         $itemData = $itemDBClass->getItemData($itemID);
         
+        
         //get inventory data from database
         $inventoryDBClass = new InventoryDB();
         
         $inventoryData = $inventoryDBClass->getInventoryData($userID);
         
         
+        // get dungeon data from database
+        $dungeonDBClass = new DungeonDB(); // instence of dungeon class
+        $dungeonData = array(); // array to hold 4 dungeon quadrents
+        for ($i=0; $i<4; $i++) 
+        {
+            $randomDungeonID = rand(1, $maxNumDungeons); // get a random number from 1 to max number of dungeons
+            $dungeonData[$i] = $dungeonDBClass->getDungeonData($randomDungeonID); // get that data from database and fill it into one of the array indexes
+        }
+        
+        
+        
+        
+        
+        
         
         //testing for save function
-        
-        echo "post was not populated yet on capestone.php <br />";
         
         //this is where i am testing the save ability of the game
         if ( count($_POST) )
@@ -118,6 +135,7 @@
             var heroData = <?php echo json_encode($heroData);?>;
             var monsterData = <?php echo json_encode($monsterData);?>;
             var itemData = <?php echo json_encode($itemData);?>;
+            var dungeonData = <?php echo json_encode($dungeonData);?>;
         </script>
         <script type="text/javascript" src="js/game.js"></script>
         
