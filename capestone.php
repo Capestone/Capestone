@@ -12,7 +12,10 @@
         
         <?php
         
+        // variables to change in database information changes
         $maxNumDungeons = 6;
+        $maxNumMonsters = 10;
+        $maxNumItems = 19;
         
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
@@ -38,16 +41,26 @@
         // get monster data from database
         $monsterDBClass = new MonsterDB();
         
-        $monsterID = "1"; // this is where the moneter ID that will be populated into the level is set
+        $monsterData = array(); 
+        for ($i=0; $i <=$maxNumMonsters ; $i++) // this will get all monsters from the database and fill an array
+        {
+            if( $i!=0 )
+            {
+                $monsterData[$i] = $monsterDBClass->getMonsterData($i);
+            }
+            else
+            {
+                $monsterData[0] = "";
+            }
+            
+        }
         
-        $monsterData = $monsterDBClass->getMonsterData($monsterID);
-
         
         // get item data from database
         $itemDBClass = new ItemDB();
         
-        $itemData = array(); // this is there the item ID will be populated
-        for ($i=0; $i<=19; $i++)
+        $itemData = array(); 
+        for ($i=0; $i<=$maxNumItems; $i++) // get all the items from the database and fill a multi dimentional array
         {
             if( $i!=0 )
             {
@@ -58,6 +71,7 @@
                 $itemData[0] = "";
             }
         }
+        
         
 
         //get inventory data from database
