@@ -14,8 +14,8 @@
         
         // variables to change in database information changes
         $maxNumDungeons = 6;
-        $maxNumMonsters = 10;
-        $maxNumItems = 19;
+        $maxNumMonsters = 2; //10
+        $maxNumItems = 2; //19
         
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
@@ -36,6 +36,8 @@
         $userID = $_SESSION['userID']; // gets userID from session
         
         $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
+        
+        
         
         
         // get monster data from database

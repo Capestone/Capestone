@@ -272,7 +272,7 @@ function quadrantFourLoader()
     //dungeon quadrant four
     var x = 10;
     var y = 0;
-    for (var i = 1; i <= 8; i++)
+     for (var i = 1; i <= 8; i++)
     {
         if (i !== 4 && i !== 5)
         {
