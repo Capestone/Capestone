@@ -55,6 +55,7 @@
             
         }
         
+        //print_r($monsterData);
         
         // get item data from database
         $itemDBClass = new ItemDB();
@@ -72,7 +73,7 @@
             }
         }
         
-        
+        //print_r($itemData);
 
         //get inventory data from database
         $inventoryDBClass = new InventoryDB();
@@ -89,7 +90,7 @@
             $dungeonData[$i] = $dungeonDBClass->getDungeonData($randomDungeonID); // get that data from database and fill it into one of the array indexes
         }
         
-        
+        //print_r($dungeonData);
         
         
         
