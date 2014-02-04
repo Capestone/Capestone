@@ -16,6 +16,8 @@
         $maxNumDungeons = 6;
         $maxNumMonsters = 10; //10
         $maxNumItems = 19; //19
+        $maxNumWeapon = 5; //5
+        $maxNumArmor = 6; //6
         
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
@@ -59,9 +61,10 @@
         
         //print_r($monsterData);
         
+        
         // get item data from database
         $itemDBClass = new ItemDB();
-        
+        /* ---- commented out geting all item data for now until we find that we need it again--------
         $itemData = array(); 
         for ($i=0; $i<=$maxNumItems; $i++) // get all the items from the database and fill a multi dimentional array
         {
@@ -74,7 +77,16 @@
                 $itemData[0] = "";
             }
         }
+        */ 
         
+        $weaponItemData = ""; 
+        $weaponItemData = $itemDBClass->getWeaponItemData();  // this will get all the item data of just the weapons
+        
+        $armorItemData = "";
+        $armorItemData = $itemDBClass->getArmorItemData(); // this will get all the item data of just the armor
+        
+        //print_r($weaponItemData);
+        //print_r($armorItemData);
         //print_r($itemData);
 
         //get inventory data from database
@@ -160,7 +172,9 @@
         <script>
             var heroData = <?php echo json_encode($heroData);?>;
             var monsterData = <?php echo json_encode($monsterData);?>;
-            var itemData = <?php echo json_encode($itemData);?>;
+            /*var itemData = <?php echo json_encode($itemData);?>;*/
+            var weaponData = <?php echo json_encode($weaponItemData);?>;
+            var armorData = <?php echo json_encode($armorItemData);?>;
             var dungeonData = <?php echo json_encode($dungeonData);?>;
         </script>
         <script type="text/javascript" src="js/game.js"></script>

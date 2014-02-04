@@ -277,7 +277,7 @@ function quadrantFourLoader()
     //dungeon quadrant four
     var x = 10;
     var y = 0;
-     for (var i = 1; i <= 8; i++)
+    for (var i = 1; i <= 8; i++)
     {
         if (i !== 4 && i !== 5)
         {
@@ -308,7 +308,7 @@ function quadrantFourLoader()
             coordinates[x + i][y + 3] = new environment();
             coordinates[x + i][y + 3].image.src = "images/candelabra.png";
         }
-    }
+    }   
 }
 
 //Attack function
