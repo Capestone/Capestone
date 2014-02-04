@@ -14,8 +14,8 @@
         
         // variables to change in database information changes
         $maxNumDungeons = 6;
-        $maxNumMonsters = 2; //10
-        $maxNumItems = 2; //19
+        $maxNumMonsters = 10; //10
+        $maxNumItems = 19; //19
         
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in

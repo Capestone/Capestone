@@ -17,6 +17,9 @@ var canvas = document.getElementById("idCanvas");
 var context = canvas.getContext("2d");
 var cons = document.getElementById("idConsole");
 
+var enemyIncrementer = 0;
+//enemyList['enemy' + enemyIncrementer] = new being();
+
 ////Global variables
 var xSize = 16;
 var ySize = 24;
@@ -192,6 +195,8 @@ function quadrantTwoLoader()
     
 }
 
+//console.log(monsterData[rollDice(10)]);
+
 function quadrantThreeLoader()
 {
     //dungeon quadrant three
@@ -306,22 +311,6 @@ function quadrantFourLoader()
     }
 }
 
-/*
-rockWall = new Image(); 
-rockWall.src = "images/rockWall.png"; 
-mossyDoor = new Image();
-mossyDoor.src = "images/mossyDoor.png";
-candelabra = new Image();
-candelabra.src = "images/candelabra.png";
-altar = new Image();
-candelabra.src = "images/altar.png";
-column = new Image();
-column.src = "images/column.png";
-brokenColumn = new Image();
-brokenColumn.src = "images/brokenColumn.png";
-*/
-
-
 //Attack function
 function attack(assailant, defender)
 {
@@ -383,6 +372,8 @@ function autoLoader()
     heroLoader();	
     //fenceLoader();
     startGame();
+    
+    
 }
 
 //Being object
@@ -427,7 +418,7 @@ function checkDeath(assailant, defender) {
 
     if (defender.currentHP <= 0) {
         coordinates[defender.x][defender.y] = 0;
-        cons.innerHTML = "";
+        //cons.innerHTML += "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
         //looooooooooooooooooooot
         if (defender.inventory.length > 0) {
@@ -490,6 +481,8 @@ function displayInventory()
 //Enemy Behavior function
 function enemyBehavior(creature)
 {
+    console.log("The creature:");
+    console.log(creature);
     //If the player is within 10 squares of the enemy and the enemy is still alive...
     if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
     {   
@@ -557,25 +550,32 @@ function enemyBehavior(creature)
             //TODO: Get enemy to move in random directions until it finds something 
         }
     //coordinates[creatureList.x][creatureList.y] = creatureList;
-    timePassed++;
-    console.log("Turns: " + timePassed);
 }
 
 function enemyLoader()
 {	
-    randomInventory(enemy);
+    //randomInventory(enemy);
     //Enemy attributes
-    enemy.armorClass = 10;
-    enemy.attackBonus = 1;
-    enemy.currentHP = 10;
-    enemy.desc = "Living Oak";
-    enemy.image.src = "images/livingOak.png";
-    enemy.maxHP = 10;
-    enemy.pass = "";
-    enemy.x = RNG(20);
-    enemy.y = RNG(20);
-    coordinates[enemy.x][enemy.y] = enemy;
-    enemyList.push(enemy);
+    
+    var randomMonster = monsterData[rollDice(4)];
+    enemyList[enemyIncrementer] = new being();
+    console.log(enemyList);
+    enemyList[enemyIncrementer].armorClass = randomMonster.armorClass;
+    enemyList[enemyIncrementer].attackBonus = randomMonster.attackBonus;
+    enemyList[enemyIncrementer].currentHP = randomMonster.currentHP;
+    enemyList[enemyIncrementer].damage = randomMonster.damage;
+    enemyList[enemyIncrementer].desc = randomMonster.monsterName;
+    enemyList[enemyIncrementer].image.src = randomMonster.imagePath;
+    enemyList[enemyIncrementer].maxHP = randomMonster.maxHP;
+    enemyList[enemyIncrementer].pass = randomMonster.pass;
+    enemyList[enemyIncrementer].x = RNG(20);
+    enemyList[enemyIncrementer].y = RNG(20);
+    coordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
+    //enemyList.push(enemy);
+    //console.log("Here:");
+    //console.log(enemyList);
+    //console.log(enemy);
+    enemyIncrementer++;
 }
 
 function equipItems()
@@ -632,8 +632,8 @@ function heroLoader()
     hero = new being("images/rogue.png", 0, 0);
     //Gives hero.armorClass and hero.damage
     randomInventory(hero);
-    hero.attackBonus = parseInt(heroData.attackBonus);
-    hero.currentHP = parseInt(heroData.currentHP);
+    hero.attackBonus = 10 + parseInt(heroData.attackBonus);
+    hero.currentHP = 20 + parseInt(heroData.currentHP);
     hero.desc = heroData.description;
     hero.image.src = heroData.imagePath;
     hero.maxHP = parseInt(heroData.maxHP);
@@ -730,6 +730,9 @@ function saveData()
 // -- AWWWWWW YEEEEAAAAAH
 document.onkeypress=function(e)
 {
+    timePassed++;
+    console.log("Turns: " + timePassed);
+    
     cons.innerHTML = "";
     e=window.event || e;
     //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
@@ -934,6 +937,12 @@ document.onkeypress=function(e)
                 enemyBehavior(enemyList[i]);
             }
         }
+        
+        if (timePassed % 50 == 0)
+        {
+            enemyLoader();
+        }
+        
         redrawCoordinates();
     }
     else if (equipMenu == true  
@@ -950,6 +959,7 @@ document.onkeypress=function(e)
             || keyPressed == 58
             || keyPressed == 59))
     {
+        displayInventory();
         switch(keyPressed)
         {
             case 48:
@@ -985,9 +995,6 @@ document.onkeypress=function(e)
             case 58:
                 cons.innerHTML += "You equip item in slot ten";
                 break;
-            case 105: 
-                cons.innerHTML += "You fuckin did it bro~!";
-                break;
         }
         
         equipMenu = false;
@@ -999,6 +1006,7 @@ document.onkeypress=function(e)
     }
     else
         cons.innerHTML = "You have died...";
+    
     
     
 };
