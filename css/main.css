@@ -1,3 +1,11 @@
+body{
+        //background-image:url(images/sprite_background.png);
+        //background-color: blue;
+        //background-size:100% 100%;
+        //background-repeat:no-repeat;
+}
+
+
 #wrapper{
 	position:relative;
 	margin:auto;
@@ -5,6 +13,7 @@
 	height:1000px;
 	padding:10px;
         background-color:black;
+        //opacity:0.95;
 }
 
 #header{
@@ -12,6 +21,7 @@
 	width:960px;
 	height:100px;
         background-color:green;
+        color:#ffd700;
 }
 
 /*  --  navigation style  --  */

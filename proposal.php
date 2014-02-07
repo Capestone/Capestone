@@ -7,13 +7,13 @@
         <title>Proposal</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
-    <body>
+    <body style="background-image: url('images/sprite_background.png')">
         <?php
         // put your code here
         ?>
         
         <div id="wrapper">
-            <div id="header">
+            <div id="header" style="background-image: url('images/banner.png')">
                 <h1>Capstone Project</h1>
             </div>   <!-- end div header -->
             
@@ -22,7 +22,7 @@
                     <a class="btn" href="index.php"><b>HOME</b></a>
                     <a class="btn" href="proposal.php"><b>PROPOSAL</b></a>
                     <a class="btn" href="prototype.php"><b>PROTOTYPE</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="techDoc.php"><b>TECH DOC</b></a>
                     <a class="btn" href="#"><b>Link</b></a>	
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="#"><b>Link</b></a>
@@ -31,7 +31,7 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <div id="pdf">
+                <div id="pdf" style="opacity:'1'">
                 <object data="pdf/Erik Lougee & Steve McCormickAS Capstone Project Proposal.pdf" type="application/pdf" width="100%" height="100%"></object>
                 </div>
             </div> <!-- end div container -->

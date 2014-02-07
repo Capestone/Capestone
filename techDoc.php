@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>HOME</title>
+        <title>Technical document</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
     <body style="background-image: url('images/sprite_background.png')">
@@ -31,15 +31,9 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <h4>Stephen McCormick</h4>
-                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
-                <h4>Erik Lougee</h4>
-                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
-                
+                <div id="pdf">
+                <object data="pdf/Technical document.pdf" type="application/pdf" width="100%" height="100%"></object>
+                </div>
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
