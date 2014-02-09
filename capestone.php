@@ -177,6 +177,7 @@
             var armorData = <?php echo json_encode($armorItemData);?>;
             var dungeonData = <?php echo json_encode($dungeonData);?>;
         </script>
+        <script type="text/javascript" src="js/dungeons.js"></script>
         <script type="text/javascript" src="js/game.js"></script>
         
     </body>
