@@ -26,6 +26,7 @@ var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
 var equipMenu = false;
+var pickUpItem = false;
 var timePassed = 0;
 
 var dungeonCode = new Array();
@@ -48,8 +49,6 @@ for (var i=0; i<mapWidth; i++) {
     }
 }
 
-console.log(dungeonData);
-
 ////Functions (alphabetical)
 function startGame()
 {
@@ -70,12 +69,41 @@ function environment()
     this.y = 0;
 }
 
+function item()
+{
+    this.image = new Image();
+    this.action = "";
+    this.armorClass = 0;
+    this.attackBonus = 0;
+    this.damage = 0;
+    this.description = "";
+    this.health = 0;
+    this.itemName = "";
+    this.itemType = "";
+}
+
+function placeWeapon(index, x, y)
+{
+    coordinates[x][y] = new item();
+    coordinates[x][y].image.src = "images/sword.png";
+    coordinates[x][y].action = weaponData[index].action;
+    coordinates[x][y].armorClass = weaponData[index].armorClass;
+    coordinates[x][y].attackBonus = weaponData[index].attackBonus;
+    coordinates[x][y].damage = weaponData[index].damage;
+    coordinates[x][y].description = weaponData[index].description;
+    coordinates[x][y].health = weaponData[index].health;
+    coordinates[x][y].itemName = weaponData[index].itemName;
+    coordinates[x][y].itemType = weaponData[index].itemType;
+}
+
 function getRandomDungeon()
 {
     dungeonCode[RNG(dungeonCode.length)](0, 0);
     dungeonCode[RNG(dungeonCode.length)](10, 0);
     dungeonCode[RNG(dungeonCode.length)](0, 10);
     dungeonCode[RNG(dungeonCode.length)](10, 10);
+    
+    placeWeapon(0, 1, 0);
 }
 
 //Attack function
@@ -131,12 +159,13 @@ function autoLoader()
 {
     canvasBackground();
     dungeonLoader();
+    randomBarrier();
     getRandomDungeon();
     //quadrantOneLoader();
     //quadrantTwoLoader();
     //quadrantThreeLoader();
     //quadrantFourLoader();
-    randomBarrier();
+    
     enemyLoader();
     heroLoader();	
     //fenceLoader();
@@ -241,7 +270,7 @@ function displayInventory()
     cons.innerHTML = "You have the following items:<br/> ";
     for (var i = 0; i < hero.inventory.length; i++)
     {
-        cons.innerHTML += (i+1) + "..." + hero.inventory[i] + "<br/>";
+        cons.innerHTML += (i+1) + "..." + hero.inventory[i].itemName + "<br/>";
     }
     console.log(hero.damage);
     console.log(hero.armorClass);
@@ -346,7 +375,7 @@ function enemyLoader()
     //console.log(enemy);
     enemyIncrementer++;
 }
-
+/*
 function equipItems()
 {
     //fix this
@@ -378,6 +407,7 @@ function equipItems()
     
     equipMenu = false;
 }
+*/
 
 function fenceLoader()
 {
@@ -447,10 +477,11 @@ function randomBarrier()
 
 
 function randomInventory(possessor){
-    var weaponIndex = RNG(weaponTable.length);
-    possessor.inventory.push(weaponTable[weaponIndex]);
-    possessor.damage = damageTable[weaponTable[weaponIndex]];
-
+    console.log(weaponData);
+    var weaponIndex = RNG(weaponData.length);
+    possessor.inventory.push(weaponData[weaponIndex]);
+    possessor.damage = weaponData[weaponIndex].damage;
+    console.log(hero);
     var armorIndex = RNG(armorTable.length);
     possessor.inventory.push(armorTable[RNG(armorTable.length)]);
     possessor.armorClass = acTable[armorTable[armorIndex]];
@@ -514,8 +545,6 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empy, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    // S activates throwArrow(); 
-    //TODO: Only move monsters if the keypressed is a movement command
     if(hero.currentHP > 0 && equipMenu == false)
     {
         switch (keyPressed)
@@ -608,7 +637,12 @@ document.onkeypress=function(e)
             //Numpad 6
             //Move right
             case 54:
-                if (hero.x+1 < mapWidth) 
+                if (anItemIsAt(hero.x+1, hero.y))
+                {
+                    console.log("There's an item there...");
+                    pickUpItem = true;
+                }
+                else if (hero.x+1 < mapWidth) 
                 {
                     if (coordinates[hero.x+1][hero.y] === 0) {
                         coordinates[hero.x][hero.y] = 0;
@@ -680,7 +714,8 @@ document.onkeypress=function(e)
                 break;
 
             case 101:
-                equipItems();
+                displayInventory();
+                equipMenu = true;
                 break;
 
             case 105:
@@ -729,42 +764,51 @@ document.onkeypress=function(e)
             || keyPressed == 59))
     {
         displayInventory();
-        switch(keyPressed)
+        var haveItem = true;
+        if(hero.inventory.length < keyPressed - 48)
         {
-            case 48:
-                cons.innerHTML += "You equip item in slot ten";
-                break;
-            case 49:
-                cons.innerHTML += "You equip item in slot one";
-                break;
-            case 50:
-                cons.innerHTML += "You equip item in slot two";
-                break;
-            case 51:
-                cons.innerHTML += "You equip item in slot three";
-                break;
-            case 52:
-                cons.innerHTML += "You equip item in slot four";
-                break;
-            case 53:
-                cons.innerHTML += "You equip item in slot five";
-                break;
-            case 54:
-                cons.innerHTML += "You equip item in slot six";
-                break;
-            case 55:
-                cons.innerHTML += "You equip item in slot seven";
-                break;
-            case 56:
-                cons.innerHTML += "You equip item in slot eight";
-                break;
-            case 57:
-                cons.innerHTML += "You equip item in slot nine";
-                break;
-            case 58:
-                cons.innerHTML += "You equip item in slot ten";
-                break;
+            haveItem = false;
+            cons.innerHTML += "You don't have an item in that slot!";
         }
+        
+        if (haveItem)
+        {
+           switch(keyPressed)
+            {
+                case 49:
+                    cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
+                    break;
+                case 50:
+                    cons.innerHTML += "You equip item in slot two";
+                    break;
+                case 51:
+                    cons.innerHTML += "You equip item in slot three";
+                    break;
+                case 52:
+                    cons.innerHTML += "You equip item in slot four";
+                    break;
+                case 53:
+                    cons.innerHTML += "You equip item in slot five";
+                    break;
+                case 54:
+                    cons.innerHTML += "You equip item in slot six";
+                    break;
+                case 55:
+                    cons.innerHTML += "You equip item in slot seven";
+                    break;
+                case 56:
+                    cons.innerHTML += "You equip item in slot eight";
+                    break;
+                case 57:
+                    cons.innerHTML += "You equip item in slot nine";
+                    break;
+                case 48:
+                    cons.innerHTML += "You equip item in slot ten";
+                    break;
+            } 
+        }
+        
+        
         
         equipMenu = false;
         for(var i = 0; i < enemyList.length; i++)
@@ -773,12 +817,38 @@ document.onkeypress=function(e)
         }
         redrawCoordinates();
     }
+    else if(pickUpItem)
+    {
+        console.log("Do we make it this far?");
+        switch (keyPressed)
+        {
+            case 89:
+                cons.innerHTML = "You pick it up.";
+                break;
+            case 78:
+                cons.innerHTML += "You leave it there.";
+                break;
+        }
+        
+    }
     else
         cons.innerHTML = "You have died...";
-    
-    
-    
 };
+
+function anItemIsAt(x, y)
+{
+    if (coordinates[x][y].itemName)
+    {
+        cons.innerHTML += "There is a " + coordinates[x][y].itemName + " here.<br/>";
+        cons.innerHTML += "Do you wish to pick it up? Y/N";
+        
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+}
 
 //---------------------------------------------------------------------------------------------------------
 //We should put this in the main code after you check it out, I just wanted to keep it all in the same place
