@@ -99,6 +99,7 @@ function placeWeapon(index, x, y)
 
 function getRandomDungeon()
 {
+    //This is good for now
     var quadrantOne = RNG(dungeonCode.length);
     var quadrantTwo = RNG(dungeonCode.length);
     var quadrantThree = RNG(dungeonCode.length);
