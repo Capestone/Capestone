@@ -120,13 +120,39 @@
         // get dungeon data from database
         $dungeonDBClass = new DungeonDB(); // instence of dungeon class
         $dungeonData = array(); // array to hold 4 dungeon quadrents
-        for ($i=0; $i<4; $i++) 
+        
+        $randDungeon[0] = rand(1, $maxNumDungeons);
+        $randDungeon[1] = rand(1, $maxNumDungeons);
+        $randDungeon[2] = rand(1, $maxNumDungeons);
+        $randDungeon[3] = rand(1, $maxNumDungeons);
+        
+        while( $randDungeon[0] == $randDungeon[1] )
         {
-            $randomDungeonID = rand(1, $maxNumDungeons); // get a random number from 1 to max number of dungeons
-            $dungeonData[$i] = $dungeonDBClass->getDungeonData($randomDungeonID); // get that data from database and fill it into one of the array indexes
+            $randDungeon[1] = rand(1, $maxNumDungeons);
+        }
+        while( $randDungeon[0] == $randDungeon[2] || $randDungeon[1] == $randDungeon[2] )
+        {
+            $randDungeon[2] = rand(1, $maxNumDungeons);
+        }
+        while( $randDungeon[0] == $randDungeon[3] || $randDungeon[1] == $randDungeon[3] || $randDungeon[2] == $randDungeon[3] )
+        {
+            $randDungeon[3] = rand(1, $maxNumDungeons);
         }
         
-        //print_r($dungeonData);
+        for ($i=0; $i<4; $i++) 
+        {
+            $dungeonData[$i] = $dungeonDBClass->getDungeonData($randDungeon[$i]); // get that data from database and fill it into one of the array indexes
+            
+            foreach($dungeonData[$i] as $key => $value)
+            {
+                if($key == "code")
+                {                    
+                    $dungeonCode[$i] = $value;
+                }
+            }
+        }
+        
+        print_r($dungeonCode);
         
         
         
@@ -197,7 +223,7 @@
             /*var itemData = <?php echo json_encode($itemData);?>;*/
             var weaponData = <?php echo json_encode($weaponItemData);?>;
             var armorData = <?php echo json_encode($armorItemData);?>;
-            var dungeonData = <?php echo json_encode($dungeonData);?>;
+            var dungeonCode = <?php echo json_encode($dungeonCode);?>;
             var inventoryItems = <?php echo json_encode($inventoryItems);?>;
         </script>
         <script type="text/javascript" src="js/dungeons.js"></script>
