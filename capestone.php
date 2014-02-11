@@ -152,7 +152,18 @@
             }
         }
         
-        print_r($dungeonCode);
+        print_r($dungeonCode[0]);
+        echo"<br/>";
+        echo"<br/>";
+        print_r($dungeonCode[1]);
+        echo"<br/>";
+        echo"<br/>";
+        print_r($dungeonCode[2]);
+        echo"<br/>";
+        echo"<br/>";
+        print_r($dungeonCode[3]);
+        echo"<br/>";
+        echo"<br/>";
         
         
         
