@@ -15,7 +15,7 @@
         // variables to change in database information changes
         $maxNumDungeons = 6;
         $maxNumMonsters = 10; //10
-        $maxNumItems = 19; //19
+        //$maxNumItems = 19; //19
         $maxNumWeapon = 5; //5
         $maxNumArmor = 6; //6
         
@@ -94,6 +94,28 @@
         
         $inventoryData = $inventoryDBClass->getInventoryData($userID);
         
+        $inventoryItems = array();
+        
+        for( $i = 0; !empty($inventoryData[$i]); $i++ )
+        {
+            
+            //print_r($inventoryData[$i]);
+            echo "<br/>";
+
+            foreach($inventoryData[$i] as $key => $value)
+            {
+                if($key == "itemID")
+                {                    
+                    $inventoryItems[$i] = $itemDBClass->getItemData($value);
+                }
+            }
+        }
+        
+        //print_r($inventoryItems);
+        
+        //$inventoryItems = $itemDBClass->getItemData($itemID)
+        
+        
         
         // get dungeon data from database
         $dungeonDBClass = new DungeonDB(); // instence of dungeon class
@@ -111,7 +133,7 @@
         
         
         //testing for save function
-        
+        /*
         //this is where i am testing the save ability of the game
         if ( count($_POST) )
         {
@@ -121,7 +143,7 @@
         } 
         print_r($_SESSION);
         echo '<br />';
-
+        */
         
 
         
@@ -135,7 +157,7 @@
                 
                 <a href ="capestone.php?logout=1" style="color:white; float:right;">Logout</a>
                 
-                <span style="color:white; float:right;">Welcome <?php  // this will display the username at the top in the header
+                <span style="color:#ffd700; float:right; font-size:18px">Welcome <?php  // this will display the username at the top in the header
                                     echo $heroData['userName'];
                                     echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                                     ?>
@@ -176,6 +198,7 @@
             var weaponData = <?php echo json_encode($weaponItemData);?>;
             var armorData = <?php echo json_encode($armorItemData);?>;
             var dungeonData = <?php echo json_encode($dungeonData);?>;
+            var inventoryItems = <?php echo json_encode($inventoryItems);?>;
         </script>
         <script type="text/javascript" src="js/dungeons.js"></script>
         <script type="text/javascript" src="js/game.js"></script>

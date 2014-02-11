@@ -33,11 +33,39 @@ class InventoryDB extends DB{
             }
         }
         return false; 
-        
-        
-        
     }
     
+    public function defaultInventory()
+    {
+        $heroDBClass = new HeroDB();
+        
+        echo "Made it to default inventory<br/>";
+        
+        $userID = $heroDBClass->getUserID(); // get the user ID from the users table
+        
+        $dbh = $this->getDB();
+        if ( null != $dbh ) {
+            
+            echo "Made it to default inventory before prepare <br/>";
+                       
+            $stmt = $dbh->prepare("insert into Inventory set userID = :userIDValue, itemID = 5; insert into Inventory set userID = :userIDValue, itemID = 6;");
+            $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_INT);
+            
+            echo "Made it to default inventory after binding<br/>";
+            
+            if ( $stmt->execute() ) // if everything was excecuted corectly
+            {
+                
+                echo "Made it to default inventory after execute <br/>";
+                
+                return true;
+            }
+            
+            echo "you are now after execute without the return true in default inventory<br/>";
+            
+        }
+        return false;
+    }
     
     
     

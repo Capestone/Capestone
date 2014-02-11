@@ -109,10 +109,14 @@ class Signup extends DB {
 
                     if($heroDBClass->defaultEntry())// will call and fill hero database with default info..... hopefully
                     {
-                        
+                        $db = $this->closeDB();
+                        $inventoryDBClass = new InventoryDB();
                         echo "Made it to save Entry after default entry call<br/>";
-                        
-                        return true;
+                        if($inventoryDBClass->defaultInventory())
+                        {
+                            echo "Made it into inventory default entry<br/>";
+                            return true;
+                        }
                     }
                 }
             }
