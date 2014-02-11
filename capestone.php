@@ -121,10 +121,10 @@
         $dungeonDBClass = new DungeonDB(); // instence of dungeon class
         $dungeonData = array(); // array to hold 4 dungeon quadrents
         
-        $randDungeon[0] = rand(1, $maxNumDungeons);
-        $randDungeon[1] = rand(1, $maxNumDungeons);
-        $randDungeon[2] = rand(1, $maxNumDungeons);
-        $randDungeon[3] = rand(1, $maxNumDungeons);
+        $randDungeon[0] = 1;
+        $randDungeon[1] = 2;
+        $randDungeon[2] = 3;
+        $randDungeon[3] = 4;
         
         while( $randDungeon[0] == $randDungeon[1] )
         {
@@ -234,7 +234,7 @@
             /*var itemData = <?php echo json_encode($itemData);?>;*/
             var weaponData = <?php echo json_encode($weaponItemData);?>;
             var armorData = <?php echo json_encode($armorItemData);?>;
-            var dungeonCode = <?php echo json_encode($dungeonCode);?>;
+            
             var inventoryItems = <?php echo json_encode($inventoryItems);?>;
         </script>
         <script type="text/javascript" src="js/dungeons.js"></script>

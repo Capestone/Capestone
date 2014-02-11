@@ -13,7 +13,7 @@ window.onload = autoLoader;
 var canvas = document.getElementById("idCanvas");
 var context = canvas.getContext("2d");
 var cons = document.getElementById("idConsole");
-
+var dungeonCode = new Array();
 var enemyIncrementer = 0;
 //enemyList['enemy' + enemyIncrementer] = new being();
 
@@ -96,16 +96,36 @@ function placeWeapon(index, x, y)
     coordinates[x][y].itemType = weaponData[index].itemType;
 }
 
+
 function getRandomDungeon()
 {
+    var quadrantOne = RNG(dungeonCode.length);
+    var quadrantTwo = RNG(dungeonCode.length);
+    var quadrantThree = RNG(dungeonCode.length);
+    var quadrantFour = RNG(dungeonCode.length);
     
-    console.log(dungeonCode[0](0, 0));
+    while (quadrantOne == quadrantTwo)
+    {
+        quadrantTwo = RNG(dungeonCode.length);
+    }
+    
+    while (quadrantOne == quadrantThree || quadrantTwo == quadrantThree)
+    {
+        quadrantThree = RNG(dungeonCode.length);
+    }
+    
+    while (quadrantOne == quadrantFour || quadrantTwo == quadrantFour || quadrantThree == quadrantFour)
+    {
+        quadrantFour = RNG(dungeonCode.length);
+    }
     
     //PHP Handles the randomization
-    dungeonCode[0](0, 0);
-    dungeonCode[1](10, 0);
-    dungeonCode[2](0, 10);
-    dungeonCode[3](10, 10);
+    dungeonCode[quadrantOne](0, 0);
+    dungeonCode[quadrantTwo](10, 0);
+    dungeonCode[quadrantThree](0, 10);
+    dungeonCode[quadrantFour](10, 10);
+    
+    
     
     placeWeapon(0, 1, 0);
 }
@@ -162,7 +182,7 @@ function attack(assailant, defender)
 function autoLoader()
 {
     canvasBackground();
-    //dungeonLoader();
+    dungeonLoader();
     //randomBarrier();
     getRandomDungeon();
     enemyLoader();
