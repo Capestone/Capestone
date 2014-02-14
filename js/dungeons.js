@@ -140,6 +140,7 @@ function dungeonLoader()
             {
                 coordinates[x + 6][y + 4] = new environment();
                 coordinates[x + 6][y + 4].image.src = "images/vaultDoor.png";
+                coordinates[x + 6][y + 4].type = "door";
             }
         }
 
@@ -167,6 +168,7 @@ function dungeonLoader()
             {
                 coordinates[x + i][y + 6] = new environment();
                 coordinates[x + i][y + 6].image.src = "images/vaultDoor.png";
+                coordinates[x + i][y + 6].type = "door";
             }
         }
 
@@ -336,6 +338,7 @@ function dungeonLoader()
             {
                 coordinates[x + 5][y + i] = new environment();
                 coordinates[x + 5][y + i].image.src = "images/mossyDoor.png";
+                coordinates[x + 5][y + i].pass = true;
             }
         }
         coordinates[x + 7][y + 5] = new environment();
@@ -735,6 +738,7 @@ function dungeonLoader()
             {
                 coordinates[x + i][y + 4] = new environment();
                 coordinates[x + i][y + 4].image.src = "images/mossyDoor.png";
+                coordinates[x + i][y + 4].pass = true;
             }
         }
         for (var i = 0; i <= 9; i++)

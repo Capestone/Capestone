@@ -49,6 +49,19 @@ for (var i=0; i<mapWidth; i++) {
     }
 }
 
+var actorCoordinates = new Array(mapWidth);
+for (var i = 0; i <mapWidth; i++) {
+    actorCoordinates[i] = new Array(mapHeight);          
+}
+
+//sets array to 0 which is not an object
+for (var i=0; i<mapWidth; i++) {
+    for (var j=0; j<mapHeight; j++) {
+        actorCoordinates[i][j] = 0;
+    }
+}
+
+
 ////Functions (alphabetical)
 function startGame()
 {
@@ -65,6 +78,7 @@ function environment()
     this.desc = "";
     this.inventory = new Array();
     this.pass = false;
+    this.type = "";
     this.x = 0;
     this.y = 0;
 }
@@ -96,7 +110,6 @@ function placeWeapon(index, x, y)
     coordinates[x][y].itemType = weaponData[index].itemType;
 }
 
-
 function getRandomDungeon()
 {
     //This is good for now
@@ -121,14 +134,15 @@ function getRandomDungeon()
     }
     
     //PHP Handles the randomization
-    dungeonCode[quadrantOne](0, 0);
+    dungeonCode[2](0,0);
+    //dungeonCode[quadrantOne](0, 0);
     dungeonCode[quadrantTwo](10, 0);
     dungeonCode[quadrantThree](0, 10);
     dungeonCode[quadrantFour](10, 10);
     
     
     
-    placeWeapon(0, 1, 0);
+    //placeWeapon(0, 1, 0);
 }
 
 //Attack function
@@ -209,12 +223,52 @@ function being(image, xValue, yValue, options)
     this.pass = false;
     this.x = xValue;
     this.y = yValue;
+
+    this.move = function(x, y)
+    {
+
+        //To check if environment is populated...
+        if ((coordinates[x][y] == 0 || coordinates[x][y].pass == true) && actorCoordinates[x][y] == 0)
+        {
+            actorCoordinates[this.x][this.y] = 0;
+            this.x = x;
+            this.y = y;
+            actorCoordinates[this.x][this.y] = this;
+        } 
+        //To check if monster or player is there
+        else if (actorCoordinates[x][y].currentHP > 0)
+        {
+            attack(this, actorCoordinates[x][y]);
+        }
+        //to check if it's a door
+        else if (coordinates[x][y].type == 'door')
+        {
+            openDoor();
+        }
+        else
+        {
+            if (this.image.src == "images/rogue.png")
+            {
+                cons.innerHTML += "Something blocks your way.";
+            }
+        }
+        
+        //also we could add an else if for items or whatever
+    };
+}
+
+
+function openDoor()
+{
+    cons.innerHTML += "There is a door here. Do you wish to open it?";
 }
 
 function canvasBackground()
 {
     context.fillStyle = "#212121";
     context.fillRect(0, 0, widthPixels, heightPixels);
+
+    //context.globalCompositeOperation = "source-over";
 }
 
 //Check death function
@@ -235,8 +289,8 @@ function checkDeath(assailant, defender) {
     // Also adds opponent's inventory
 
     if (defender.currentHP <= 0) {
-        coordinates[defender.x][defender.y] = 0;
-        //cons.innerHTML += "";
+        actorCoordinates[defender.x][defender.y] = 0;
+        enemyList[defender.index].image.src = "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
         //looooooooooooooooooooot
         if (defender.inventory.length > 0) {
@@ -301,65 +355,58 @@ function enemyBehavior(creature)
 {
     console.log("The creature:");
     console.log(creature);
+    /*
+    this.move = function(x, y)
+    {
+
+        //To check if environment is populated...
+        if (coordinates[x][y] == 0 || coordinates[x][y].pass == true)
+        {
+            actorCoordinates[this.x][this.y] = 0;
+            this.x = x;
+            this.y = y;
+            actorCoordinates[this.x][this.y] = this;
+        } 
+        //To check if monster is there
+        else if (actorCoordinates[x][y].currentHP > 0)
+        {
+            attack(this, actorCoordinates[x][y]);
+        }
+        else
+        {
+            if (this.image.src == "images/rogue.png")
+            {
+                cons.innerHTML += "Something blocks your way.";
+            }
+        }
+        
+        //also we could add an else if for items or whatever
+    };
+    */
     //If the player is within 10 squares of the enemy and the enemy is still alive...
+    //
     if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
     {   
         //Compare the x and y values of hero and enemy and if hero x value is less than enemy x value, move left etc.
         //Move right towards the hero
         if (hero.x > creature.x)
         {
-            if (coordinates[creature.x+1][creature.y] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.x++;
-                coordinates[creature.x][creature.y] = creature;
-            }
-            else if (coordinates[creature.x+1][creature.y].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x+1][creature.y]);
-            }
+            creature.move(creature.x+1, creature.y);
         }
         //Move left towards the hero
         if (hero.x < creature.x)
         {
-            if (coordinates[creature.x-1][creature.y] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.x--;
-                coordinates[creature.x][creature.y] = creature;
-            } 
-            else if (coordinates[creature.x-1][creature.y].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x-1][creature.y]);
-            }
+            creature.move(creature.x-1, creature.y);
         }
         //Move down towards the hero
         if (hero.y > creature.y)
         {
-            if (coordinates[creature.x][creature.y+1] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.y++;
-                coordinates[creature.x][creature.y] = creature;
-            } 
-            else if (coordinates[creature.x][creature.y+1].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x][creature.y+1]);
-            }
+            creature.move(creature.x, creature.y+1);
         }
         //Move up towards the hero
         if (hero.y < creature.y)
         {
-            if (coordinates[creature.x][creature.y-1] === 0) 
-            {
-                coordinates[creature.x][creature.y] = 0;
-                creature.y--;
-                coordinates[creature.x][creature.y] = creature;
-            }
-            else if (coordinates[creature.x][creature.y-1].currentHP > 0) 
-            {
-                attack(creature,coordinates[creature.x][creature.y-1]);
-            }
+            creature.move(creature.x, creature.y-1);
         }
     }
     //Otherwise, wander around until you find something of interest to attack
@@ -375,7 +422,6 @@ function enemyLoader()
     //Enemy attributes
     var randomMonster = monsterData[rollDice(4)];
     enemyList[enemyIncrementer] = new being();
-    console.log(enemyList);
     enemyList[enemyIncrementer].armorClass = randomMonster.armorClass;
     enemyList[enemyIncrementer].attackBonus = randomMonster.attackBonus;
     enemyList[enemyIncrementer].currentHP = randomMonster.currentHP;
@@ -386,7 +432,9 @@ function enemyLoader()
     enemyList[enemyIncrementer].pass = randomMonster.pass;
     enemyList[enemyIncrementer].x = RNG(20);
     enemyList[enemyIncrementer].y = RNG(20);
-    coordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
+    enemyList[enemyIncrementer].index = enemyIncrementer;
+
+    actorCoordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
     enemyIncrementer++;
 }
 /*
@@ -455,153 +503,13 @@ function heroLoader()
     {
         hero.pass = false;
     }
-    else 
+    else
     {
         hero.pass = true;
     }
     hero.x = parseInt(heroData.x);
     hero.y = parseInt(heroData.y);
-    coordinates[hero.x][hero.y] = hero;
-    
-    hero.moveDownAndLeft = function() 
-    {
-        if ((hero.x-1 >= 0) && (hero.y+1 <= mapHeight) )
-        {
-            if (coordinates[hero.x-1][hero.y+1] === 0) 
-            {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x--;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x-1][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x-1][hero.y+1]);
-            }
-        }
-    }
-    
-    hero.moveDown = function()
-    {
-        if (hero.y+1 < mapHeight) 
-        {
-            if (coordinates[hero.x][hero.y+1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-            } 
-            else if (coordinates[hero.x][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x][hero.y+1]);
-            }
-        }
-    }
-    
-    hero.moveDownAndRight = function()
-    {
-        if ((hero.x+1<mapWidth) && (hero.y+1<mapHeight)) 
-        {
-            if (coordinates[hero.x+1][hero.y+1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x++;
-                hero.y++;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x+1][hero.y+1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x+1][hero.y+1]);
-            }
-        }    
-    }
-    
-    hero.moveLeft = function()
-    {
-        if (hero.x-1>=0) 
-        {
-            if (coordinates[hero.x-1][hero.y] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x--;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x-1][hero.y].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x-1][hero.y]);
-            }
-        }
-    }
-    
-    hero.moveRight = function()
-    {
-        xLocation = hero.x+1;
-        yLocation = hero.y;
-        if (anItemIsAt(xLocation, yLocation))
-        {
-            itemOnGround = true;
-        }
-        else if (hero.x+1 < mapWidth) 
-        {
-            if (coordinates[hero.x+1][hero.y] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x++;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x+1][hero.y].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x+1][hero.y]);
-            }
-        }
-    }
-        
-    hero.moveUpAndLeft = function()
-    {
-        if ((hero.x-1>=0) && (hero.y-1>=0))
-        {
-            if (coordinates[hero.x-1][hero.y-1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x--;
-                hero.y--;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x-1][hero.y-1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x-1][hero.y-1]);
-            }
-        }
-    }
-    
-    
-    hero.moveUp = function()
-    {
-        if (hero.y-1>=0) 
-        {
-            if (coordinates[hero.x][hero.y-1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.y--;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x][hero.y-1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x][hero.y-1]);
-            }
-        }
-    }
-    
-    hero.moveUpAndRight = function()
-    {
-        if ((hero.x+1<mapWidth) && (hero.y-1>=0))
-        {
-            if (coordinates[hero.x+1][hero.y-1] === 0) {
-                coordinates[hero.x][hero.y] = 0;
-                hero.x++;
-                hero.y--;
-                coordinates[hero.x][hero.y] = hero;
-            }
-            else if (coordinates[hero.x+1][hero.y-1].currentHP > 0) 
-            {
-                attack(hero,coordinates[hero.x+1][hero.y-1]);
-            }
-        } 
-    }
+    //coordinates[hero.x][hero.y] = hero;
 }
 
 function randomBarrier()
@@ -647,6 +555,13 @@ function redrawCoordinates() {
         for (var j=0; j < mapHeight; j++) {
             if (coordinates[i][j] !== 0) {
                 context.drawImage(coordinates[i][j].image, i*xSize, j*ySize);
+                
+                context.drawImage(hero.image, hero.x*xSize, hero.y*ySize);
+                for (var k = 0; k < enemyList.length; k++)
+                {
+                    context.drawImage(enemyList[k].image, enemyList[k].x*xSize, enemyList[k].y*ySize);
+                }
+                
             }
         }
     }  
@@ -692,7 +607,6 @@ document.onkeypress=function(e)
     //Displays the key code you are trying to use, this is for debugging and also to determine what's what when you program functionality.
     console.log("CharCode value: "+e.charCode);
     keyPressed = e.charCode;
-
     /* Added a check to see if the space hero would move into has currentHp > 0, and if it does
      * he attacks it. Another way to do it is add an isEnemy true/false properties to being.
      * The shape of it changed because 1st and foremost we check to see if where he wants to go
@@ -718,22 +632,22 @@ document.onkeypress=function(e)
 
             //Move down and left - Numpad 1
             case 49:
-                hero.moveDownAndLeft();
+                hero.move(hero.x-1, hero.y+1);
                 break;
 
             //Move down - Numpad 2
             case 50:
-                hero.moveDown();
+                hero.move(hero.x, hero.y+1);
                 break;
 
             //Move down and right - Numpad 3
             case 51:
-                hero.moveDownAndRight();
+                hero.move(hero.x+1, hero.y+1);
                 break;
 
             //Move left - Numpad 4
             case 52:
-                hero.moveLeft();
+                hero.move(hero.x-1, hero.y);
                 break;
 
             //Wait a turn - Numpad 5
@@ -743,22 +657,22 @@ document.onkeypress=function(e)
 
             //Move right - Numpad 6
             case 54:
-                hero.moveRight();
+                hero.move(hero.x+1, hero.y);
                 break;
 
             //Move up and left - Numpad 7
             case 55:
-                hero.moveUpAndLeft();
+                hero.move(hero.x-1, hero.y-1);
                 break;
 
             //Move up - Numpad 8
             case 56:
-                hero.moveUp();
+                hero.move(hero.x, hero.y-1);
                 break;
 
             //Move up and right - Numpad 9
             case 57:
-                hero.moveUpAndRight();
+                hero.move(hero.x+1, hero.y-1);
                 break;
             
             //Only for testing... - a
