@@ -27,8 +27,14 @@ var heightPixels = 480;
 var enemyList = new Array();
 var equipMenu = false;
 var itemOnGround = false;
+var chest = false;
 var timePassed = 0;
 var xLocation, yLocation;
+var chestCheck = new checkMatter();
+var doorCheck = new checkMatter();
+var itemLocationX = 0;
+var itemLocationY = 0;
+
 
 
 ////Object instantiation
@@ -61,6 +67,12 @@ for (var i=0; i<mapWidth; i++) {
     }
 }
 
+function checkMatter()
+{
+    this.booleanValue = false;
+    this.x = 0;
+    this.y = 0;
+}
 
 ////Functions (alphabetical)
 function startGame()
@@ -74,11 +86,11 @@ function environment()
 {
     this.image = new Image();
     this.armorClass = 0;
+    this.booleanValue = false;
     this.currentHP = 0;
     this.desc = "";
     this.inventory = new Array();
     this.pass = false;
-    this.type = "";
     this.x = 0;
     this.y = 0;
 }
@@ -94,6 +106,7 @@ function item()
     this.health = 0;
     this.itemName = "";
     this.itemType = "";
+    this.type = "";
 }
 
 function placeWeapon(index, x, y)
@@ -133,16 +146,14 @@ function getRandomDungeon()
         quadrantFour = RNG(dungeonCode.length);
     }
     
-    //PHP Handles the randomization
-    dungeonCode[2](0,0);
-    //dungeonCode[quadrantOne](0, 0);
+    dungeonCode[quadrantOne](0,0);
     dungeonCode[quadrantTwo](10, 0);
     dungeonCode[quadrantThree](0, 10);
     dungeonCode[quadrantFour](10, 10);
     
     
     
-    //placeWeapon(0, 1, 0);
+    placeWeapon(0, 1, 0);
 }
 
 //Attack function
@@ -183,12 +194,11 @@ function attack(assailant, defender)
         cons.innerHTML += "<br />They did " + damageDie + " damage.";
         defender.currentHP -= damageDie;
     }
-        else 
-        {
-            cons.innerHTML += "<br />They missed!!";
-        }
+    else 
+    {
+        cons.innerHTML += "<br />They missed!!";
+    }
     cons.innerHTML += "<br/>";
-    console.log(assailant, defender);
     checkDeath(assailant, defender);
     
 }
@@ -221,9 +231,11 @@ function being(image, xValue, yValue, options)
     this.inventory = new Array();
     this.maxHP = 0;
     this.pass = false;
+    this.type = "";
     this.x = xValue;
     this.y = yValue;
 
+    //Pass it where you WANT to move
     this.move = function(x, y)
     {
 
@@ -243,25 +255,50 @@ function being(image, xValue, yValue, options)
         //to check if it's a door
         else if (coordinates[x][y].type == 'door')
         {
-            openDoor();
+            if (this.type == "hero")
+            {
+                cons.innerHTML += "There is a door here. Do you wish to open it?";
+                doorCheck.booleanValue = true;
+                doorCheck.x = x;
+                doorCheck.y = y;
+            }
+            else
+            {
+                cons.innerHTML += "The " + this.desc + " opens the door...";
+                coordinates[x][y].image.src = "images/openVaultDoor.png";
+                coordinates[x][y].pass = true;
+            }
         }
+        else if (coordinates[x][y].itemName == 'treasure chest')
+        {
+            if (this.type == "hero")
+            {
+                cons.innerHTML += "There is a treasure chest here. Do you wish to open it?"
+                chestCheck.booleanValue = true;
+                chestCheck.x = x;
+                chestCheck.y = y;
+            }
+        }
+        // == 'Weapon' || coordinates[x][y].itemType == 'Armor' || coordinates[x][y].itemType == 'Potion'
+        else if (anItemIsAt(x, y))
+        {
+            itemOnGround = true;
+            itemLocationX = x;
+            itemLocationY = y;
+        }
+        //Otherwise...
         else
         {
-            if (this.image.src == "images/rogue.png")
+            if (this.image.type == "hero")
             {
                 cons.innerHTML += "Something blocks your way.";
             }
         }
         
         //also we could add an else if for items or whatever
-    };
+    }
 }
 
-
-function openDoor()
-{
-    cons.innerHTML += "There is a door here. Do you wish to open it?";
-}
 
 function canvasBackground()
 {
@@ -287,8 +324,13 @@ function checkDeath(assailant, defender) {
     // of scaling values for its properties. Now I'm going crazy. Let's maybe talk about this.
 
     // Also adds opponent's inventory
-
-    if (defender.currentHP <= 0) {
+    if (defender.type == 'hero' && defender.currentHP <= 0)
+    {
+        defender.image.src = "";
+        cons.innerHTML += "The hero has been struck down by " + assailant.desc + ". All hope is lost." ;
+        redrawCoordinates();
+    }
+    else if (defender.currentHP <= 0) {
         actorCoordinates[defender.x][defender.y] = 0;
         enemyList[defender.index].image.src = "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
@@ -306,7 +348,7 @@ function checkDeath(assailant, defender) {
             cons.innerHTML += "<br />But they found nothing.";
         }
         //return true; //This isn't used yet.
-    } 
+    }
     else 
     {
         //return false; //This isn't used either.
@@ -346,15 +388,11 @@ function displayInventory()
     {
         cons.innerHTML += (i+1) + "..." + hero.inventory[i].itemName + "<br/>";
     }
-    console.log(hero.damage);
-    console.log(hero.armorClass);
 }
 
 //Enemy Behavior function
 function enemyBehavior(creature)
 {
-    console.log("The creature:");
-    console.log(creature);
     /*
     this.move = function(x, y)
     {
@@ -507,6 +545,7 @@ function heroLoader()
     {
         hero.pass = true;
     }
+    hero.type = "hero";
     hero.x = parseInt(heroData.x);
     hero.y = parseInt(heroData.y);
     //coordinates[hero.x][hero.y] = hero;
@@ -538,12 +577,11 @@ function randomBarrier()
 
 
 
-function randomInventory(possessor){
-    console.log(weaponData);
+function randomInventory(possessor)
+{
     var weaponIndex = RNG(weaponData.length);
     possessor.inventory.push(weaponData[weaponIndex]);
     possessor.damage = weaponData[weaponIndex].damage;
-    console.log(hero);
     var armorIndex = RNG(armorTable.length);
     possessor.inventory.push(armorTable[RNG(armorTable.length)]);
     possessor.armorClass = acTable[armorTable[armorIndex]];
@@ -592,7 +630,6 @@ function saveData()
                 });
                 
     hero.image = imageData;
-    console.log(hero);
 }
 
 //KEYHANDLER GET!!!
@@ -600,7 +637,6 @@ function saveData()
 document.onkeypress=function(e)
 {
     timePassed++;
-    console.log("Turns: " + timePassed);
     
     cons.innerHTML = "";
     e=window.event || e;
@@ -613,8 +649,7 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-        
-    if(hero.currentHP > 0 && equipMenu == false && itemOnGround == false)
+    if(hero.currentHP > 0 && !equipMenu&& !itemOnGround && !doorCheck.booleanValue && !chestCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -706,7 +741,6 @@ document.onkeypress=function(e)
             //Save Data - s
             case 115:
                 saveData();
-                console.log("saving data...");
                 break;
         }
         if (keyPressed === 99 || keyPressed === 101 || keyPressed === 105|| keyPressed === 115) 
@@ -722,6 +756,16 @@ document.onkeypress=function(e)
         }
         redrawCoordinates();
     }
+    else if (doorCheck.booleanValue == true)
+    {
+        openDoor(keyPressed);
+        redrawCoordinates();
+    }
+    else if (chestCheck.booleanValue == true)
+    {
+        openChest(keyPressed);
+        redrawCoordinates();
+    }
     else if (equipMenu == true &&
             (keyPressed == 48 || keyPressed == 49 || keyPressed == 50 || keyPressed == 51 || 
              keyPressed == 52 || keyPressed == 53 || keyPressed == 54 || keyPressed == 55 || 
@@ -729,12 +773,51 @@ document.onkeypress=function(e)
     {
         equipItem(keyPressed);
     }
-    else if(itemOnGround && (keyPressed == 89 || keyPressed == 78))
+    else if (itemOnGround && (keyPressed == 89 || keyPressed == 78 || keyPressed == 121 || keyPressed == 110 ))
     {
         pickUpItem(keyPressed);
     }
     else
         cons.innerHTML = "You have died...";
+}
+
+function openChest(keyPressed)
+{
+    switch(keyPressed)
+    {
+        case 89:
+        case 121:
+            cons.innerHTML += "You open the chest.";
+            coordinates[chestCheck.x][chestCheck.y].image.src = "images/openChest.png";
+            break;
+        case 110:
+        case 78:
+            cons.innerHTML += "You leave it closed.";
+            break;
+
+    }
+    chestCheck.booleanValue = false;
+    redrawCoordinates();
+}
+
+function openDoor(keyPressed)
+{
+    switch(keyPressed)
+    {
+        case 89:
+        case 121:
+            cons.innerHTML += "You open the door.";
+            coordinates[doorCheck.x][doorCheck.y].image.src = "images/openVaultDoor.png";
+            coordinates[doorCheck.x][doorCheck.y].pass = true;
+            break;
+        case 110:
+        case 78:
+            cons.innerHTML += "You leave it closed.";
+            break;
+    }
+
+    doorCheck.booleanValue = false;
+    redrawCoordinates();
 };
 
 function pickUpItem(keyPressed)
@@ -742,30 +825,33 @@ function pickUpItem(keyPressed)
     switch (keyPressed)
     {
         case 89:
+        case 121:
             if (hero.inventory.length < 9)
             {
-                cons.innerHTML = "You pick up the " + coordinates[xLocation][yLocation].itemName;
-                hero.inventory.push(coordinates[xLocation][yLocation]);
-                coordinates[xLocation][yLocation] = 0;
+                cons.innerHTML = "You obtain the " + coordinates[itemLocationX][itemLocationY].itemName + ".";
+                hero.inventory.push(coordinates[itemLocationX][itemLocationY]);
+                coordinates[itemLocationX][itemLocationY] = 0;
+                redrawCoordinates();
             }
             else
             {
-                cons.innerHTML += "You're carrying too much to pick up the " + coordinates[xLocation][yLocation].itemName + "!";
+                cons.innerHTML += "You're carrying too much to pick up the " + coordinates[itemLocationX][itemLocationY].itemName + "!";
             }
             break;
         case 78:
+        case 110:
             cons.innerHTML += "You leave it there.";
             break;
     }
     itemOnGround = false;
-}
+};
 
 function anItemIsAt(x, y)
 {
     if (coordinates[x][y].itemName)
     {
         cons.innerHTML += "There is a " + coordinates[x][y].itemName + " here.<br/>";
-        cons.innerHTML += "Do you wish to pick it up? Y/N";
+        cons.innerHTML += "Do you wish to pick it up?";
         
         return true;
     }

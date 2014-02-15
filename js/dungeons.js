@@ -193,6 +193,7 @@ function dungeonLoader()
 
         coordinates[x + 8][y + 8] = new environment();
         coordinates[x + 8][y + 8].image.src = "images/closedChest.png";
+        coordinates[x + 8][y + 8].itemName = "treasure chest";
     }
     
     dungeonCode[3] = function(x, y)
@@ -260,6 +261,7 @@ function dungeonLoader()
             {
                 coordinates[x + i][y + 8] = new environment();
                 coordinates[x + i][y + 8].image.src = "images/vaultDoor.png";
+                coordinates[x + i][y + 8].type = "door";
             }
         }
 
@@ -343,6 +345,7 @@ function dungeonLoader()
         }
         coordinates[x + 7][y + 5] = new environment();
         coordinates[x + 7][y + 5].image.src = "images/closedChest.png";
+        coordinates[x + 7][y + 5].itemName = "treasure chest";
     }
     
     dungeonCode[6] = function(x, y)
@@ -649,7 +652,8 @@ function dungeonLoader()
             else if ( i==4 )
             {
                 coordinates[x + 2][y + i] = new environment();
-                coordinates[x + 2][y + i].image.src = "images/vaultDoor.png";          
+                coordinates[x + 2][y + i].image.src = "images/vaultDoor.png"; 
+                coordinates[x + 2][y + i].type = "door";         
             }
             else
             {
@@ -683,6 +687,7 @@ function dungeonLoader()
             {
                 coordinates[x + 8][y + i] = new environment();
                 coordinates[x + 8][y + i].image.src = "images/closedChest.png";
+                coordinates[x + 8][y + i].itemName = "treasure chest";
             }
         }
 
@@ -755,6 +760,7 @@ function dungeonLoader()
 
         coordinates[x + 6][y + 3] = new environment();
         coordinates[x + 6][y + 3].image.src = "images/closedChest.png";
+        coordinates[x + 6][y + 3].itemName = "treasure chest";
 
     }
     
@@ -844,6 +850,8 @@ function dungeonLoader()
             {
                 coordinates[x + 3][y + i] = new environment();
                 coordinates[x + 3][y + i].image.src = "images/vaultDoor.png";
+                coordinates[x + 3][y + i].type = "door";
+
             }
             else
             {
@@ -867,6 +875,7 @@ function dungeonLoader()
 
         coordinates[x + 1][y + 4] = new environment();
         coordinates[x + 1][y + 4].image.src = "images/closedChest.png";
+        coordinates[x + 1][y + 4].itemName = "treasure chest";
     }
     
     dungeonCode[14] = function(x, y)
