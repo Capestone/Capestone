@@ -919,6 +919,4 @@ function dungeonLoader()
             }
         }
     }
-    
-    console.log(dungeonCode.length);
 }

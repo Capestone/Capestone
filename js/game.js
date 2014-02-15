@@ -25,13 +25,15 @@ var mapHeight = 20;
 var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
-var equipMenu = false;
-var itemOnGround = false;
+
+
 var chest = false;
 var timePassed = 0;
 var xLocation, yLocation;
-var chestCheck = new checkMatter();
-var doorCheck = new checkMatter();
+var itemOnGround = new interactive();
+var equipMenu = new interactive();
+var chestCheck = new interactive();
+var doorCheck = new interactive();
 var itemLocationX = 0;
 var itemLocationY = 0;
 
@@ -67,7 +69,7 @@ for (var i=0; i<mapWidth; i++) {
     }
 }
 
-function checkMatter()
+function interactive()
 {
     this.booleanValue = false;
     this.x = 0;
@@ -226,6 +228,10 @@ function being(image, xValue, yValue, options)
     this.attackBonus = 0;
     this.currentHP = 0;
     this.damage = 0;
+    this.equippedArmorClass = 0;
+    this.equippedAttackBonus = 0;
+    this.equippedDamage = 0;
+    this.equippedHealth = 0;
     this.desc = "";
     this.image.src = image;
     this.inventory = new Array();
@@ -282,9 +288,9 @@ function being(image, xValue, yValue, options)
         // == 'Weapon' || coordinates[x][y].itemType == 'Armor' || coordinates[x][y].itemType == 'Potion'
         else if (anItemIsAt(x, y))
         {
-            itemOnGround = true;
-            itemLocationX = x;
-            itemLocationY = y;
+            itemOnGround.booleanValue = true;
+            itemOnGround.x = x;
+            itemOnGround.y = y;
         }
         //Otherwise...
         else
@@ -393,36 +399,6 @@ function displayInventory()
 //Enemy Behavior function
 function enemyBehavior(creature)
 {
-    /*
-    this.move = function(x, y)
-    {
-
-        //To check if environment is populated...
-        if (coordinates[x][y] == 0 || coordinates[x][y].pass == true)
-        {
-            actorCoordinates[this.x][this.y] = 0;
-            this.x = x;
-            this.y = y;
-            actorCoordinates[this.x][this.y] = this;
-        } 
-        //To check if monster is there
-        else if (actorCoordinates[x][y].currentHP > 0)
-        {
-            attack(this, actorCoordinates[x][y]);
-        }
-        else
-        {
-            if (this.image.src == "images/rogue.png")
-            {
-                cons.innerHTML += "Something blocks your way.";
-            }
-        }
-        
-        //also we could add an else if for items or whatever
-    };
-    */
-    //If the player is within 10 squares of the enemy and the enemy is still alive...
-    //
     if ((Math.abs(creature.x - hero.x)) < 10 && ((Math.abs(creature.y - hero.y)) < 10 && creature.currentHP > 0))
     {   
         //Compare the x and y values of hero and enemy and if hero x value is less than enemy x value, move left etc.
@@ -534,6 +510,15 @@ function heroLoader()
     hero.attackBonus = 10 + parseInt(heroData.attackBonus);
     hero.currentHP = 20 + parseInt(heroData.currentHP);
     hero.desc = heroData.description;
+
+    for (var i = 0; i < inventoryItems.length; i++)
+    {
+        hero.equippedAttackBonus = inventoryItems[i].attackBonus;
+        hero.equippedArmorClass = inventoryItems[i].armorClass;
+        hero.equippedDamage = inventoryItems[i].damage;
+        hero.equippedHealth = inventoryItems[i].health;
+    }
+    
     hero.image.src = heroData.imagePath;
     hero.maxHP = parseInt(heroData.maxHP);
     hero.name = heroData.userName;
@@ -649,7 +634,7 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    if(hero.currentHP > 0 && !equipMenu&& !itemOnGround && !doorCheck.booleanValue && !chestCheck.booleanValue)
+    if(hero.currentHP > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -730,7 +715,7 @@ document.onkeypress=function(e)
             //Equip Item - e
             case 101:
                 displayInventory();
-                equipMenu = true;
+                equipMenu.booleanValue = true;
                 break;
             
             //Display Inventory - i
@@ -756,28 +741,40 @@ document.onkeypress=function(e)
         }
         redrawCoordinates();
     }
-    else if (doorCheck.booleanValue == true)
+    else if (doorCheck.booleanValue)
     {
-        openDoor(keyPressed);
+            openDoor(keyPressed);
+        
         redrawCoordinates();
     }
-    else if (chestCheck.booleanValue == true)
+    else if (chestCheck.booleanValue)
     {
-        openChest(keyPressed);
+        while (chestCheck.booleanValue)
+        {
+            openChest(keyPressed);
+        }
         redrawCoordinates();
     }
-    else if (equipMenu == true &&
+    else if (equipMenu.booleanValue &&
             (keyPressed == 48 || keyPressed == 49 || keyPressed == 50 || keyPressed == 51 || 
              keyPressed == 52 || keyPressed == 53 || keyPressed == 54 || keyPressed == 55 || 
              keyPressed == 56 || keyPressed == 57 || keyPressed == 58 || keyPressed == 59 ))
     {
-        equipItem(keyPressed);
+        while (equipMenu.booleanValue)
+        {
+            equipItem(keyPressed);
+        }
+        
     }
-    else if (itemOnGround && (keyPressed == 89 || keyPressed == 78 || keyPressed == 121 || keyPressed == 110 ))
+    else if (itemOnGround.booleanValue && (keyPressed == 89 || keyPressed == 78 || keyPressed == 121 || keyPressed == 110 ))
     {
-        pickUpItem(keyPressed);
+        while (itemOnGround.booleanValue)
+        {
+            pickUpItem(keyPressed);
+        }
+        
     }
-    else
+    else if (hero.currentHP < 0)
         cons.innerHTML = "You have died...";
 }
 
@@ -789,6 +786,7 @@ function openChest(keyPressed)
         case 121:
             cons.innerHTML += "You open the chest.";
             coordinates[chestCheck.x][chestCheck.y].image.src = "images/openChest.png";
+            redrawCoordinates();
             break;
         case 110:
         case 78:
@@ -797,7 +795,7 @@ function openChest(keyPressed)
 
     }
     chestCheck.booleanValue = false;
-    redrawCoordinates();
+    
 }
 
 function openDoor(keyPressed)
@@ -809,6 +807,7 @@ function openDoor(keyPressed)
             cons.innerHTML += "You open the door.";
             coordinates[doorCheck.x][doorCheck.y].image.src = "images/openVaultDoor.png";
             coordinates[doorCheck.x][doorCheck.y].pass = true;
+            redrawCoordinates();
             break;
         case 110:
         case 78:
@@ -817,10 +816,10 @@ function openDoor(keyPressed)
     }
 
     doorCheck.booleanValue = false;
-    redrawCoordinates();
+    
 };
 
-function pickUpItem(keyPressed)
+function pickUpItem(keyPressed, x, y)
 {
     switch (keyPressed)
     {
@@ -828,14 +827,14 @@ function pickUpItem(keyPressed)
         case 121:
             if (hero.inventory.length < 9)
             {
-                cons.innerHTML = "You obtain the " + coordinates[itemLocationX][itemLocationY].itemName + ".";
-                hero.inventory.push(coordinates[itemLocationX][itemLocationY]);
-                coordinates[itemLocationX][itemLocationY] = 0;
+                cons.innerHTML = "You obtain the " + coordinates[itemOnGround.x][itemOnGround.y].itemName + ".";
+                hero.inventory.push(coordinates[itemOnGround.x][itemOnGround.y]);
+                coordinates[itemOnGround.x][itemOnGround.y] = 0;
                 redrawCoordinates();
             }
             else
             {
-                cons.innerHTML += "You're carrying too much to pick up the " + coordinates[itemLocationX][itemLocationY].itemName + "!";
+                cons.innerHTML += "You're carrying too much to pick up the " + coordinates[itemOnGround.x][itemOnGround.y].itemName + "!";
             }
             break;
         case 78:
@@ -843,8 +842,8 @@ function pickUpItem(keyPressed)
             cons.innerHTML += "You leave it there.";
             break;
     }
-    itemOnGround = false;
-};
+    itemOnGround.booleanValue = false;
+}
 
 function anItemIsAt(x, y)
 {
@@ -878,44 +877,62 @@ function equipItem(keyPressed)
         {
             case 49:
                 cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
+                updateStats(0);
                 break;
             case 50:
                 cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
+                updateStats(1);
                 break;
             case 51:
                 cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
+                updateStats(2);
                 break;
             case 52:
                 cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
+                updateStats(3);
                 break;
             case 53:
                 cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
+                updateStats(4);
                 break;
             case 54:
                 cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
+                updateStats(5);
                 break;
             case 55:
                 cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
+                updateStats(6);
                 break;
             case 56:
                 cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
+                updateStats(7);
                 break;
             case 57:
                 cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
+                updateStats(8);
                 break;
             default:
                 cons.innerHTML += "Never mind...";
                 break;
         } 
+
     }
 
-    equipMenu = false;
+    equipMenu.booleanValue = false;
     
     for(var i = 0; i < enemyList.length; i++)
     {
         enemyBehavior(enemyList[i]);
     }
     redrawCoordinates();
+}
+
+function updateStats(index)
+{
+    hero.equippedArmorClass = hero.inventory[index].armorClass;
+    hero.equippedAttackBonus = hero.inventory[index].attackBonus;
+    hero.equippedDamage = hero.inventory[index].damage;
+    hero.equippedHealth = hero.inventory[index].health;
 }
 
 var armorTable = [
