@@ -101,6 +101,15 @@
                     </form>
                 </div>
                 
+                <div id="announcements">
+                    <h3>ANNOUNCEMENTS</h3>
+                    <ul>
+                        <li>put notice here</li>
+                        <li>put notice here</li>
+                        <li>put notice here</li>
+                    </ul>
+                        
+                </div>
                 
             </div> <!-- end div container -->
             
