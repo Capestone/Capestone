@@ -152,6 +152,9 @@
             }
         }
         /*
+        print_r($dungeonData);
+        echo"<br/>";
+        echo"<br/>";
         print_r($dungeonCode[0]);
         echo"<br/>";
         echo"<br/>";
@@ -219,10 +222,25 @@
                 <canvas id="idCanvas" width="320" height ="480" class="simpleBorder"></canvas>
                 <div id="idConsole" class="console"></div>
                 
+                <!-- player info section -->
+                <div id="infoSection">
+                    <p id="description" class="playerInfo">description</p>
+                    <br />
+                    <p class="playerInfo">HP: </p><p id="currentHP" class="playerInfo">20</p><p class="playerInfo">/</p><p id="maxHP" class="playerInfo">20</p>
+                    <br />
+                    <p class="playerInfo">Armor Class: </p><p id="armorClass" class="playerInfo">20</p>
+                    <br />
+                    <p class="playerInfo">Attack Bonus: </p><p id="attackBonus" class="playerInfo">20</p>
+                    <br />
+                    <p class="playerInfo">Damage: </p><p id="damage" class="playerInfo">20</p>
+                    <br />
+                    <p class="playerInfo">Dungeon lvl: </p><p id="dungeonLvl" class="playerInfo">20</p>
+                </div>
+                
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                    <p class="info">Terms of use | site map | contact</p>
+                    <p class="info">Terms of Use | Site Map | Contact</p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         

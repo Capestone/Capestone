@@ -86,7 +86,7 @@
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                    <p class="info">Terms of use | site map | contact</p>
+                    <p class="info">Terms of Use | Site Map | Contact</p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         
