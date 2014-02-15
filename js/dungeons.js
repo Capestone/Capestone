@@ -699,7 +699,7 @@ function dungeonLoader()
    
     }
     
-    dungeonCode[10] = function(x, y)
+    dungeonCode[11] = function(x, y)
     {
         for (var i = 2; i <= 7; i++)
         {
@@ -764,7 +764,7 @@ function dungeonLoader()
 
     }
     
-    dungeonCode[11] = function(x, y)
+    dungeonCode[12] = function(x, y)
     {
         for (var i = 0; i <= 7; i++)
         {
@@ -798,7 +798,7 @@ function dungeonLoader()
         coordinates[x + 6][y + 5].image.src = "images/column.png";
     }
     
-    dungeonCode[12] = function(x, y)
+    dungeonCode[13] = function(x, y)
     {
         for (var i = 2; i <= 7; i++)
         {
@@ -832,7 +832,7 @@ function dungeonLoader()
 
     }
     
-    dungeonCode[13] = function(x, y)
+    dungeonCode[14] = function(x, y)
     {
         for (var i = 7; i <= 9; i++)
         {
@@ -878,7 +878,7 @@ function dungeonLoader()
         coordinates[x + 1][y + 4].itemName = "treasure chest";
     }
     
-    dungeonCode[14] = function(x, y)
+    dungeonCode[15] = function(x, y)
     {
         for (var i = 1; i <= 7; i++)
         {
