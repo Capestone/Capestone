@@ -31,19 +31,20 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <h4>Stephen McCormick</h4>
-                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
-                <h4>Erik Lougee</h4>
-                <p> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                <h3>STEPHEN MCCORMICK</h3>
+                <p class="creatorInfo"> The primary duty for Stephen McCormick was web development. Stephen was tasked with creating and maintaining the website content and appeal. 
+                    Style and keeping game details up to date were also a part of this. He was also in charge of PHP and other server side code for signing up, 
+                    logging in, and retrieving data from the database to be used in the game. Stephen also, on occasion, assisted Erik Lougee in JavaScript development and troubleshooting. 
+                    He also took part in level design and implementation. There was a joint effort between Stephen and Erik when integrating PHP and JavaScript with AJAX. </p>
+                <h3>ERIK LOUGEE</h3>
+                <p class="creatorInfo"> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
                     blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
                     blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
                 
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                    <p class="info">Terms of Use | Site Map | Contact</p>
+                <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         

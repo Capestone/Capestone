@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Technical document</title>
+        <title>SITE MAP</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
     <body style="background-image: url('images/sprite_background.png')">
@@ -31,13 +31,25 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <div id="pdf">
-                <object data="pdf/Technical document.pdf" type="application/pdf" width="100%" height="100%"></object>
-                </div>
+                <a href="index.php">HOME</a> <br />
+                <a href="proposal.php">PROPOSAL</a> <br />
+                <a href="prototype.php">PROTOTYPE</a> <br />
+                <a href="techDoc.php">TECH DOC</a> <br />
+                <a href="#"><b>Link</b></a> <br />	
+                <a href="#"><b>Link</b></a> <br />
+                <a href="#"><b>Link</b></a> <br />
+                <p class="playerInfo">GAME</p> <br />
+                <a href="signup.php" style="margin-left:3em">SIGN UP</a> <br />
+                <a href="login.php" style="margin-left:3em">LOGIN</a> <br />
+                <a href="capestone.php" style="margin-left:3em">GAME PAGE</a> <br />
+                <a href="termsOfUse.php">TERMS OF USE</a> <br />
+                <a href="siteMap.php">SITE MAP</a> <br />
+                <a href="contact.php">CONTACT</a> <br />
+                
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                    <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
+                <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         

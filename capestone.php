@@ -13,7 +13,7 @@
         <?php
         
         // variables to change in database information changes
-        $maxNumDungeons = 6;
+        //$maxNumDungeons = 6;
         $maxNumMonsters = 10; //10
         //$maxNumItems = 19; //19
         $maxNumWeapon = 5; //5
@@ -116,7 +116,7 @@
         //$inventoryItems = $itemDBClass->getItemData($itemID)
         
         
-        
+        /*
         // get dungeon data from database
         $dungeonDBClass = new DungeonDB(); // instence of dungeon class
         $dungeonData = array(); // array to hold 4 dungeon quadrents
@@ -151,6 +151,9 @@
                 }
             }
         }
+         */
+         
+         
         /*
         print_r($dungeonData);
         echo"<br/>";
@@ -195,9 +198,9 @@
             <div id="header" style="background-image: url('images/banner.png')">
                 <h1>Capstone Project</h1>
                 
-                <a href ="capestone.php?logout=1" style="color:white; float:right;">Logout</a>
+                <a href ="capestone.php?logout=1" style="color:white; float:right; background-color:#212121">Logout</a>
                 
-                <span style="color:#ffd700; float:right; font-size:18px">Welcome <?php  // this will display the username at the top in the header
+                <span style="color:#ffd700; float:right; font-size:18px; background-color:#212121">Welcome <?php  // this will display the username at the top in the header
                                     echo $heroData['userName'];
                                     echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                                     ?>
@@ -240,7 +243,7 @@
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                    <p class="info">Terms of Use | Site Map | Contact</p>
+                    <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         
