@@ -111,7 +111,7 @@
             }
         }
         
-        //print_r($inventoryItems);
+        print_r($inventoryItems);
         
         //$inventoryItems = $itemDBClass->getItemData($itemID)
         
