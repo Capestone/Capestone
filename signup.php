@@ -13,6 +13,9 @@
         
         if(count($_POST))
         {
+
+            $_POST = array_map('strip_tags', $_POST); // this is a start for preventing tags in any entry field for signing up
+            
             $signupClass = new Signup(); // creats new instence of the Signup class file
             
             if($signupClass->entryIsValid()) // will call all the checking to make sure it is a valid signup form
