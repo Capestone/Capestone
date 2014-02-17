@@ -7,6 +7,24 @@
 //Make sure equip function ADDS to 10 
 //home
 
+function updateHTMLStats()
+{
+    var currentHP = parseInt(hero.currentHP) + parseInt(hero.equippedHealth);
+    var maxHP = parseInt(hero.maxHP) + parseInt(hero.equippedHealth);
+    var armorClass = parseInt(hero.armorClass) + parseInt(hero.equippedArmorClass); 
+    var attackBonus = parseInt(hero.attackBonus) + parseInt(hero.equippedAttackBonus);
+    var damage = parseInt(hero.damage) + parseInt(hero.equippedDamage);
+    
+    
+    descriptionID.innerHTML = hero.desc;
+    currentHPID.innerHTML = currentHP;
+    maxHPID.innerHTML = maxHP;
+    armorClassID.innerHTML = armorClass;
+    attackBonusID.innerHTML = attackBonus;
+    damageID.innerHTML = damage;
+    dungeonLevelID.innerHTML = dungeonLevel; 
+}
+
 ////Event handlers
 window.onload = autoLoader;
 ////Canvas and console variables
@@ -17,6 +35,15 @@ var dungeonCode = new Array();
 var enemyIncrementer = 0;
 //enemyList['enemy' + enemyIncrementer] = new being();
 
+//Hero statistic variables, for the user to see
+var descriptionID = document.getElementById("description");
+var currentHPID = document.getElementById("currentHP");
+var maxHPID = document.getElementById("maxHP");
+var armorClassID = document.getElementById("armorClass");
+var attackBonusID = document.getElementById("attackBonus");
+var damageID = document.getElementById("damage");
+var dungeonLevelID = document.getElementById("dungeonLvl"); 
+
 ////Global variables
 var xSize = 16;
 var ySize = 24;
@@ -25,8 +52,8 @@ var mapHeight = 20;
 var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
-
-
+var dungeonLevel = 1;
+var monstersOnThisLevel = new Array();
 var chest = false;
 var timePassed = 0;
 var xLocation, yLocation;
@@ -163,8 +190,7 @@ function attack(assailant, defender)
 {
     cons.innerHTML += assailant.desc + " attacks " + defender.desc + "!<br/>";
     attackDie = rollDice(20);
-    cons.innerHTML += "They rolled a " + attackDie + ".";
-
+    cons.innerHTML += "They rolled " + attackDie + ".";
     if (attackDie === 1) //Critical miss
     {
         cons.innerHTML += "<br/>What a poor excuse for an attack! They widely miss and stagger!!";
@@ -177,14 +203,14 @@ function attack(assailant, defender)
         if (attackDie >= defender.armorClass)
         {
             cons.innerHTML += "<br/>Oho! They scored an excellent hit!!";
-            damageDie = rollDice(assailant.damage) * 2;
+            damageDie = rollDice(assailant.damage + assailant.equippedDamage) * 2;
             cons.innerHTML += "<br/>They did " + damageDie + " damage!!";
             defender.currentHP -= damageDie;
         } 
         else 
         {
             cons.innerHTML += "<br/>But it did not confirm.";
-            damageDie = rollDice(assailant.damage);
+            damageDie = rollDice(assailant.damage + assailant.equippedDamage);
             cons.innerHTML += "<br/>They hit for " + damageDie + " damage.";
             defender.currentHP -= damageDie;
         }	  
@@ -192,7 +218,7 @@ function attack(assailant, defender)
     else if (attackDie + assailant.attackBonus >= defender.armorClass)
     {
         cons.innerHTML += "<br/>They scored a hit!";
-        damageDie = rollDice(assailant.damage);
+        damageDie = rollDice(assailant.damage + assailant.equippedDamage);
         cons.innerHTML += "<br />They did " + damageDie + " damage.";
         defender.currentHP -= damageDie;
     }
@@ -212,13 +238,14 @@ function autoLoader()
     dungeonLoader();
     //randomBarrier();
     getRandomDungeon();
+    updateMonsterArray();
     enemyLoader();
-    heroLoader();	
+    heroLoader();
+    updateHTMLStats();
     //fenceLoader();
     startGame();
-    
-    
 }
+
 
 //Being object
 function being(image, xValue, yValue, options) 
@@ -431,22 +458,39 @@ function enemyBehavior(creature)
     //coordinates[creatureList.x][creatureList.y] = creatureList;
 }
 
+function updateMonsterArray()
+{
+    for (var i = 0; i < monsterData.length; i++)
+    {
+        if (monsterData[i]['dungeonLevel'] == dungeonLevel)
+        {
+            monstersOnThisLevel.push(monsterData[i]);
+        }
+    }
+}
+
 function enemyLoader()
 {	
     //Enemy attributes
-    var randomMonster = monsterData[rollDice(4)];
+    //console.log(monstersOnThisLevel.length);
+    var randomMonster = monstersOnThisLevel[RNG(monstersOnThisLevel.length)];
     enemyList[enemyIncrementer] = new being();
-    enemyList[enemyIncrementer].armorClass = randomMonster.armorClass;
-    enemyList[enemyIncrementer].attackBonus = randomMonster.attackBonus;
-    enemyList[enemyIncrementer].currentHP = randomMonster.currentHP;
-    enemyList[enemyIncrementer].damage = randomMonster.damage;
+    enemyList[enemyIncrementer].armorClass = parseInt(randomMonster.armorClass);
+    enemyList[enemyIncrementer].equippedArmorClass = 0;
+    enemyList[enemyIncrementer].attackBonus = parseInt(randomMonster.attackBonus);
+    enemyList[enemyIncrementer].equippedAttackBonus = 0;
+    enemyList[enemyIncrementer].currentHP = parseInt(randomMonster.currentHP);
+    enemyList[enemyIncrementer].damage = parseInt(randomMonster.damage);
     enemyList[enemyIncrementer].desc = randomMonster.monsterName;
     enemyList[enemyIncrementer].image.src = randomMonster.imagePath;
-    enemyList[enemyIncrementer].maxHP = randomMonster.maxHP;
+    enemyList[enemyIncrementer].maxHP = parseInt(randomMonster.maxHP);
     enemyList[enemyIncrementer].pass = randomMonster.pass;
+    enemyList[enemyIncrementer].index = enemyIncrementer;
+    
+    //Going to need to change this so the monster doesn't get added on top of a tile
+    //Just need to check the matrix first
     enemyList[enemyIncrementer].x = RNG(20);
     enemyList[enemyIncrementer].y = RNG(20);
-    enemyList[enemyIncrementer].index = enemyIncrementer;
 
     actorCoordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
     enemyIncrementer++;
@@ -506,18 +550,26 @@ function heroLoader()
 {
     hero = new being("images/rogue.png", 0, 0);
     //Gives hero.armorClass and hero.damage
-    randomInventory(hero);
-    hero.attackBonus = 10 + parseInt(heroData.attackBonus);
-    hero.currentHP = 20 + parseInt(heroData.currentHP);
+    //randomInventory(hero);
+   
+    hero.armorClass = parseInt(heroData.armorClass);
+    hero.attackBonus = parseInt(heroData.attackBonus);
+    hero.currentHP = parseInt(heroData.currentHP);
     hero.desc = heroData.description;
-
+    
     for (var i = 0; i < inventoryItems.length; i++)
     {
         hero.equippedAttackBonus = inventoryItems[i].attackBonus;
         hero.equippedArmorClass = inventoryItems[i].armorClass;
         hero.equippedDamage = inventoryItems[i].damage;
         hero.equippedHealth = inventoryItems[i].health;
+        
+        //This just makes it display correctly, instead of an Object it's now an item
+        var currentItem = new item();
+        currentItem = inventoryItems[i];
+        hero.inventory.push(currentItem);
     }
+    
     
     hero.image.src = heroData.imagePath;
     hero.maxHP = parseInt(heroData.maxHP);
@@ -572,7 +624,8 @@ function randomInventory(possessor)
     possessor.armorClass = acTable[armorTable[armorIndex]];
 }
 
-function redrawCoordinates() {
+function redrawCoordinates() 
+{
     canvasBackground();
     for (var i=0; i < mapWidth; i++) {
         for (var j=0; j < mapHeight; j++) {
@@ -588,6 +641,7 @@ function redrawCoordinates() {
             }
         }
     }  
+    updateHTMLStats();
 }
 
 function RNG(maxNum)
@@ -640,6 +694,20 @@ document.onkeypress=function(e)
         if (timePassed % 50 == 0)
         {
             enemyLoader();
+        }
+        
+        //Gives the hero regenerative health every 25 turns
+        if (timePassed % 25 == 0)
+        {
+            if (hero.currentHP < hero.maxHP)
+            {
+                hero.currentHP += RNG(3);
+            }
+            if (hero.currentHP > hero.maxHP)
+            {
+                hero.currentHP = hero.maxHP;
+            }
+            
         }
         
         switch (keyPressed)
@@ -864,7 +932,7 @@ function equipItem(keyPressed)
 {
     displayInventory();
     var haveItem = true;
-
+    
     if(hero.inventory.length < keyPressed - 48)
     {
         haveItem = false;
@@ -877,39 +945,39 @@ function equipItem(keyPressed)
         {
             case 49:
                 cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
-                updateStats(0);
+                updateStats(hero, 0);
                 break;
             case 50:
                 cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
-                updateStats(1);
+                updateStats(hero, 1);
                 break;
             case 51:
                 cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
-                updateStats(2);
+                updateStats(hero, 2);
                 break;
             case 52:
                 cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
-                updateStats(3);
+                updateStats(hero, 3);
                 break;
             case 53:
                 cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
-                updateStats(4);
+                updateStats(hero, 4);
                 break;
             case 54:
                 cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
-                updateStats(5);
+                updateStats(hero, 5);
                 break;
             case 55:
                 cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
-                updateStats(6);
+                updateStats(hero, 6);
                 break;
             case 56:
                 cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
-                updateStats(7);
+                updateStats(hero, 7);
                 break;
             case 57:
                 cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
-                updateStats(8);
+                updateStats(hero, 8);
                 break;
             default:
                 cons.innerHTML += "Never mind...";
@@ -927,12 +995,40 @@ function equipItem(keyPressed)
     redrawCoordinates();
 }
 
-function updateStats(index)
+function updateStats(equipper, index)
 {
-    hero.equippedArmorClass = hero.inventory[index].armorClass;
-    hero.equippedAttackBonus = hero.inventory[index].attackBonus;
-    hero.equippedDamage = hero.inventory[index].damage;
-    hero.equippedHealth = hero.inventory[index].health;
+    //I need a variable in the object that tells me if it's equipped or not for this to work
+    /*
+    if (equipper == hero)
+    {
+        hero.inventory[index];
+        
+        for (var i = 0; i < equipper.inventory.length; i++)
+        {
+            console.log(equipper.inventory[index].equipped);
+            if (equipper.inventory[index].equipped == 1)
+            {
+                equipper.equippedArmorClass += equipper.inventory[index].armorClass;
+                equipper.equippedAttackBonus += equipper.inventory[index].attackBonus;
+                equipper.equippedDamage += equipper.inventory[index].damage;
+                equipper.equippedHealth += equipper.inventory[index].health;
+            }
+        }
+    }
+    else
+    {
+        equipper.equippedArmorClass = equipper.inventory[index].armorClass;
+        equipper.equippedAttackBonus = equipper.inventory[index].attackBonus;
+        equipper.equippedDamage = equipper.inventory[index].damage;
+        equipper.equippedHealth = equipper.inventory[index].health;
+    }
+    */
+    
+    equipper.equippedArmorClass = equipper.inventory[index].armorClass;
+    equipper.equippedAttackBonus = equipper.inventory[index].attackBonus;
+    equipper.equippedDamage = equipper.inventory[index].damage;
+    equipper.equippedHealth = equipper.inventory[index].health;
+    
 }
 
 var armorTable = [
