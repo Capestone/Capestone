@@ -194,6 +194,7 @@ function dungeonLoader()
         coordinates[x + 8][y + 8] = new environment();
         coordinates[x + 8][y + 8].image.src = "images/closedChest.png";
         coordinates[x + 8][y + 8].itemName = "treasure chest";
+        coordinates[x + 8][y + 8].inventory.push(getRandomItem());
     }
     
     dungeonCode[3] = function(x, y)
@@ -346,6 +347,7 @@ function dungeonLoader()
         coordinates[x + 7][y + 5] = new environment();
         coordinates[x + 7][y + 5].image.src = "images/closedChest.png";
         coordinates[x + 7][y + 5].itemName = "treasure chest";
+        coordinates[x + 7][y + 5].inventory.push(getRandomItem());
     }
     
     dungeonCode[6] = function(x, y)
@@ -688,6 +690,7 @@ function dungeonLoader()
                 coordinates[x + 8][y + i] = new environment();
                 coordinates[x + 8][y + i].image.src = "images/closedChest.png";
                 coordinates[x + 8][y + i].itemName = "treasure chest";
+                coordinates[x + 8][y + i].inventory.push(getRandomItem());
             }
         }
 
@@ -761,6 +764,7 @@ function dungeonLoader()
         coordinates[x + 6][y + 3] = new environment();
         coordinates[x + 6][y + 3].image.src = "images/closedChest.png";
         coordinates[x + 6][y + 3].itemName = "treasure chest";
+        coordinates[x + 6][y + 3].inventory.push(getRandomItem());
 
     }
     
@@ -876,6 +880,8 @@ function dungeonLoader()
         coordinates[x + 1][y + 4] = new environment();
         coordinates[x + 1][y + 4].image.src = "images/closedChest.png";
         coordinates[x + 1][y + 4].itemName = "treasure chest";
+        coordinates[x + 1][y + 4].inventory.push(getRandomItem());
+        console.log(coordinates[x + 1][y + 4].inventory[0]);
     }
     
     dungeonCode[15] = function(x, y)
@@ -919,4 +925,13 @@ function dungeonLoader()
             }
         }
     }
+}
+
+function getRandomItem()
+{
+    var chestItem = new item();
+    chestItem = itemData[4];
+    console.log(chestItem);
+    console.log(itemData);
+    return chestItem;
 }

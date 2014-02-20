@@ -61,10 +61,9 @@ var itemOnGround = new interactive();
 var equipMenu = new interactive();
 var chestCheck = new interactive();
 var doorCheck = new interactive();
+var chestItemCheck = new interactive();
 var itemLocationX = 0;
 var itemLocationY = 0;
-
-
 
 ////Object instantiation
 var hero = "";
@@ -98,6 +97,7 @@ for (var i=0; i<mapWidth; i++) {
 
 function interactive()
 {
+    this.action = false;
     this.booleanValue = false;
     this.x = 0;
     this.y = 0;
@@ -119,6 +119,7 @@ function environment()
     this.currentHP = 0;
     this.desc = "";
     this.inventory = new Array();
+    this.open = false;
     this.pass = false;
     this.x = 0;
     this.y = 0;
@@ -138,6 +139,31 @@ function item()
     this.type = "";
 }
 
+function updateItemData()
+{
+    
+    
+    for (var i = 0; i < itemData.length; i++)
+    {
+        var cache = new item();
+        cache.action = itemData[i]['action'];
+        cache.armorClass = itemData[i]['armorClass'];
+        cache.attackBonus = itemData[i]['attackBonus'];
+        cache.damage = itemData[i]['damage'];
+        cache.description = itemData[i]['description'];
+        cache.health = itemData[i]['health'];
+        cache.itemName = itemData[i]['itemName'];
+        cache.itemType = itemData[i]['itemType'];
+        cache.type = itemData[i]['type'];
+        itemData[i] = cache;
+        
+        
+        console.log(itemData[i]);
+        console.log(cache);
+    }
+}
+
+/*
 function placeWeapon(index, x, y)
 {
     coordinates[x][y] = new item();
@@ -151,6 +177,7 @@ function placeWeapon(index, x, y)
     coordinates[x][y].itemName = weaponData[index].itemName;
     coordinates[x][y].itemType = weaponData[index].itemType;
 }
+*/
 
 function getRandomDungeon()
 {
@@ -182,7 +209,7 @@ function getRandomDungeon()
     
     
     
-    placeWeapon(0, 1, 0);
+    //placeWeapon(0, 1, 0);
 }
 
 //Attack function
@@ -199,8 +226,8 @@ function attack(assailant, defender)
     else if (attackDie === 20) //Critical Threat
     {
         cons.innerHTML += "<br/>A critical threat!";
-        attackDie = rollDice(20) + assailant.attackBonus;
-        if (attackDie >= defender.armorClass)
+        attackDie = rollDice(20) + assailant.attackBonus + assailant.equippedAttackBonus;
+        if (attackDie >= defender.armorClass + defender.equippedArmorClass)
         {
             cons.innerHTML += "<br/>Oho! They scored an excellent hit!!";
             damageDie = rollDice(assailant.damage + assailant.equippedDamage) * 2;
@@ -215,7 +242,7 @@ function attack(assailant, defender)
             defender.currentHP -= damageDie;
         }	  
     } 
-    else if (attackDie + assailant.attackBonus >= defender.armorClass)
+    else if (attackDie + assailant.attackBonus + assailant.equippedAttackBonus >= defender.armorClass + defender.equippedArmorClass)
     {
         cons.innerHTML += "<br/>They scored a hit!";
         damageDie = rollDice(assailant.damage + assailant.equippedDamage);
@@ -231,9 +258,11 @@ function attack(assailant, defender)
     
 }
 
+
 //Autoloader function
 function autoLoader()
 {
+    updateItemData();
     canvasBackground();
     dungeonLoader();
     //randomBarrier();
@@ -281,7 +310,7 @@ function being(image, xValue, yValue, options)
             actorCoordinates[this.x][this.y] = this;
         } 
         //To check if monster or player is there
-        else if (actorCoordinates[x][y].currentHP > 0)
+        else if ((actorCoordinates[x][y].currentHP + actorCoordinates[x][y].equippedHealth) > 0)
         {
             attack(this, actorCoordinates[x][y]);
         }
@@ -304,12 +333,13 @@ function being(image, xValue, yValue, options)
         }
         else if (coordinates[x][y].itemName == 'treasure chest')
         {
-            if (this.type == "hero")
+            if (this.type == "hero" && coordinates[x][y].open == false)
             {
                 cons.innerHTML += "There is a treasure chest here. Do you wish to open it?"
                 chestCheck.booleanValue = true;
                 chestCheck.x = x;
                 chestCheck.y = y;
+                coordinates[x][y].open = true;
             }
         }
         // == 'Weapon' || coordinates[x][y].itemType == 'Armor' || coordinates[x][y].itemType == 'Potion'
@@ -318,6 +348,11 @@ function being(image, xValue, yValue, options)
             itemOnGround.booleanValue = true;
             itemOnGround.x = x;
             itemOnGround.y = y;
+        }
+        //this doesn't work yet
+        else if (chestItemCheck.booleanValue)
+        {
+            cons.innerHTML += "Do you wish to pick it up?";
         }
         //Otherwise...
         else
@@ -331,6 +366,7 @@ function being(image, xValue, yValue, options)
         //also we could add an else if for items or whatever
     }
 }
+
 
 
 function canvasBackground()
@@ -357,13 +393,13 @@ function checkDeath(assailant, defender) {
     // of scaling values for its properties. Now I'm going crazy. Let's maybe talk about this.
 
     // Also adds opponent's inventory
-    if (defender.type == 'hero' && defender.currentHP <= 0)
+    if (defender.type == 'hero' && (defender.currentHP + defender.equippedHealth) <= 0)
     {
         defender.image.src = "";
         cons.innerHTML += "The hero has been struck down by " + assailant.desc + ". All hope is lost." ;
         redrawCoordinates();
     }
-    else if (defender.currentHP <= 0) {
+    else if ((defender.currentHP + defender.equippedHealth) <= 0) {
         actorCoordinates[defender.x][defender.y] = 0;
         enemyList[defender.index].image.src = "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
@@ -474,7 +510,7 @@ function enemyLoader()
     //Enemy attributes
     //console.log(monstersOnThisLevel.length);
     var randomMonster = monstersOnThisLevel[RNG(monstersOnThisLevel.length)];
-    enemyList[enemyIncrementer] = new being();
+    enemyList[enemyIncrementer] = new being(randomMonster.imagePath);
     enemyList[enemyIncrementer].armorClass = parseInt(randomMonster.armorClass);
     enemyList[enemyIncrementer].equippedArmorClass = 0;
     enemyList[enemyIncrementer].attackBonus = parseInt(randomMonster.attackBonus);
@@ -482,7 +518,7 @@ function enemyLoader()
     enemyList[enemyIncrementer].currentHP = parseInt(randomMonster.currentHP);
     enemyList[enemyIncrementer].damage = parseInt(randomMonster.damage);
     enemyList[enemyIncrementer].desc = randomMonster.monsterName;
-    enemyList[enemyIncrementer].image.src = randomMonster.imagePath;
+    //enemyList[enemyIncrementer].image.src = randomMonster.imagePath;
     enemyList[enemyIncrementer].maxHP = parseInt(randomMonster.maxHP);
     enemyList[enemyIncrementer].pass = randomMonster.pass;
     enemyList[enemyIncrementer].index = enemyIncrementer;
@@ -556,19 +592,28 @@ function heroLoader()
     hero.attackBonus = parseInt(heroData.attackBonus);
     hero.currentHP = parseInt(heroData.currentHP);
     hero.desc = heroData.description;
-    
+    hero.damage = heroData.damage;
+    var addArmorClass = 0, addAttackBonus = 0, addDamage = 0, addHealth = 0;
     for (var i = 0; i < inventoryItems.length; i++)
     {
-        hero.equippedAttackBonus = inventoryItems[i].attackBonus;
-        hero.equippedArmorClass = inventoryItems[i].armorClass;
-        hero.equippedDamage = inventoryItems[i].damage;
-        hero.equippedHealth = inventoryItems[i].health;
+        if (inventoryItems[i].equipped == 1)
+        {
+            addArmorClass += parseInt(inventoryItems[i].armorClass);
+            addAttackBonus += parseInt(inventoryItems[i].attackBonus);
+            addDamage += parseInt(inventoryItems[i].damage);
+            addHealth += parseInt(inventoryItems[i].health);
+        }
         
         //This just makes it display correctly, instead of an Object it's now an item
         var currentItem = new item();
         currentItem = inventoryItems[i];
         hero.inventory.push(currentItem);
     }
+    
+    hero.equippedAttackBonus = addAttackBonus;
+    hero.equippedArmorClass = addArmorClass;
+    hero.equippedDamage = addDamage;
+    hero.equippedHealth = addHealth;
     
     
     hero.image.src = heroData.imagePath;
@@ -613,7 +658,7 @@ function randomBarrier()
 
 
 
-
+/*
 function randomInventory(possessor)
 {
     var weaponIndex = RNG(weaponData.length);
@@ -623,6 +668,7 @@ function randomInventory(possessor)
     possessor.inventory.push(armorTable[RNG(armorTable.length)]);
     possessor.armorClass = acTable[armorTable[armorIndex]];
 }
+*/
 
 function redrawCoordinates() 
 {
@@ -669,6 +715,7 @@ function saveData()
                 });
                 
     hero.image = imageData;
+    redrawCoordinates();
 }
 
 //KEYHANDLER GET!!!
@@ -688,7 +735,7 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    if(hero.currentHP > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue)
+    if(hero.currentHP + hero.equippedHealth > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -823,6 +870,13 @@ document.onkeypress=function(e)
         }
         redrawCoordinates();
     }
+    else if (chestItemCheck.booleanValue)
+    {
+        while (chestItemCheck.booleanValue)
+        {
+            getChestItem(keyPressed);
+        }
+    }
     else if (equipMenu.booleanValue &&
             (keyPressed == 48 || keyPressed == 49 || keyPressed == 50 || keyPressed == 51 || 
              keyPressed == 52 || keyPressed == 53 || keyPressed == 54 || keyPressed == 55 || 
@@ -840,9 +894,8 @@ document.onkeypress=function(e)
         {
             pickUpItem(keyPressed);
         }
-        
     }
-    else if (hero.currentHP < 0)
+    else if (parseInt(hero.currentHP + hero.equippedHealth) <= 0)
         cons.innerHTML = "You have died...";
 }
 
@@ -852,8 +905,13 @@ function openChest(keyPressed)
     {
         case 89:
         case 121:
-            cons.innerHTML += "You open the chest.";
+            cons.innerHTML += "You open the chest.<br/>";
             coordinates[chestCheck.x][chestCheck.y].image.src = "images/openChest.png";
+
+            cons.innerHTML += "Inside is a " + coordinates[chestCheck.x][chestCheck.y].inventory[0].itemName + ".<br/>";
+            chestItemCheck.booleanValue = true;
+            chestItemCheck.x = chestCheck.x;
+            chestItemCheck.y = chestCheck.y;
             redrawCoordinates();
             break;
         case 110:
@@ -864,6 +922,24 @@ function openChest(keyPressed)
     }
     chestCheck.booleanValue = false;
     
+}
+
+function getChestItem(keyPressed)
+{
+    switch(keyPressed)
+    {
+        case 89:
+        case 121:
+            cons.innerHTML += "You pick up the " + coordinates[chestItemCheck.x][chestItemCheck.y].description;
+            hero.inventory.push(coordinates[chestItemCheck.x][chestItemCheck.y]);
+            coordinates[chestItemCheck.x][chestItemCheck.y] = 0;
+            break;
+        case 110:
+        case 78:
+
+            break;
+    }
+    chestItemCheck.booleanValue = false;
 }
 
 function openDoor(keyPressed)
@@ -945,38 +1021,47 @@ function equipItem(keyPressed)
         {
             case 49:
                 cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
+                equipCheck(0);
                 updateStats(hero, 0);
                 break;
             case 50:
                 cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
+                equipCheck(1);
                 updateStats(hero, 1);
                 break;
             case 51:
                 cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
+                equipCheck(2);
                 updateStats(hero, 2);
                 break;
             case 52:
                 cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
+                equipCheck(3);
                 updateStats(hero, 3);
                 break;
             case 53:
                 cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
+                equipCheck(4);
                 updateStats(hero, 4);
                 break;
             case 54:
                 cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
+                equipCheck(5);
                 updateStats(hero, 5);
                 break;
             case 55:
                 cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
+                equipCheck(6);
                 updateStats(hero, 6);
                 break;
             case 56:
                 cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
+                equipCheck(7);
                 updateStats(hero, 7);
                 break;
             case 57:
                 cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
+                equipCheck(8);
                 updateStats(hero, 8);
                 break;
             default:
@@ -995,39 +1080,59 @@ function equipItem(keyPressed)
     redrawCoordinates();
 }
 
+function equipCheck(index)
+{
+    for(var i = 0; i< hero.inventory.length; i++)
+    {
+        if(hero.inventory[index].itemType == hero.inventory[i].itemType )
+        {
+            hero.inventory[i].equipped=0;
+        }
+    }
+    hero.inventory[index].equipped = 1;
+}
+
 function updateStats(equipper, index)
 {
     //I need a variable in the object that tells me if it's equipped or not for this to work
-    /*
+    var addArmorClass = 0, addAttackBonus = 0, addDamage = 0, addHealth = 0;
     if (equipper == hero)
     {
-        hero.inventory[index];
-        
+        //hero.inventory[index].itemType == "Weapon"
+        hero.equippedArmorClass = 0;
+        hero.equippedAttackBonus = 0;
+        hero.equippedDamage = 0;
+        hero.equippedHealth = 0;
         for (var i = 0; i < equipper.inventory.length; i++)
         {
-            console.log(equipper.inventory[index].equipped);
-            if (equipper.inventory[index].equipped == 1)
+            if (equipper.inventory[i].equipped == 1)
             {
-                equipper.equippedArmorClass += equipper.inventory[index].armorClass;
-                equipper.equippedAttackBonus += equipper.inventory[index].attackBonus;
-                equipper.equippedDamage += equipper.inventory[index].damage;
-                equipper.equippedHealth += equipper.inventory[index].health;
+                addArmorClass += parseInt(equipper.inventory[i].armorClass);
+                addAttackBonus += parseInt(equipper.inventory[i].attackBonus);
+                addDamage += parseInt(equipper.inventory[i].damage);
+                addHealth += parseInt(equipper.inventory[i].health);
             }
         }
+        
+        equipper.equippedArmorClass = addArmorClass;
+        equipper.equippedAttackBonus = addAttackBonus;
+        equipper.equippedDamage = addDamage;
+        equipper.equippedHealth = addHealth;
     }
     else
     {
-        equipper.equippedArmorClass = equipper.inventory[index].armorClass;
-        equipper.equippedAttackBonus = equipper.inventory[index].attackBonus;
-        equipper.equippedDamage = equipper.inventory[index].damage;
-        equipper.equippedHealth = equipper.inventory[index].health;
+        equipper.equippedArmorClass = equipper.inventory[i].armorClass;
+        equipper.equippedAttackBonus = equipper.inventory[i].attackBonus;
+        equipper.equippedDamage = equipper.inventory[i].damage;
+        equipper.equippedHealth = equipper.inventory[i].health;
     }
-    */
-    
+    console.log(hero);
+    /*
     equipper.equippedArmorClass = equipper.inventory[index].armorClass;
     equipper.equippedAttackBonus = equipper.inventory[index].attackBonus;
     equipper.equippedDamage = equipper.inventory[index].damage;
     equipper.equippedHealth = equipper.inventory[index].health;
+    */
     
 }
 

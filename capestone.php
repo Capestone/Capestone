@@ -14,10 +14,10 @@
         
         // variables to change in database information changes
         //$maxNumDungeons = 6;
-        $maxNumMonsters = 10; //10
-        //$maxNumItems = 19; //19
-        $maxNumWeapon = 5; //5
-        $maxNumArmor = 6; //6
+        //$maxNumMonsters = 10; //10
+        //$maxNumItems = 1; //19
+        //$maxNumWeapon = 5; //5
+        //$maxNumArmor = 6; //6
         
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
@@ -44,7 +44,7 @@
         
         // get monster data from database
         $monsterDBClass = new MonsterDB();
-        
+        /*
         $monsterData = array(); 
         for ($i=0; $i <=$maxNumMonsters ; $i++) // this will get all monsters from the database and fill an array
         {
@@ -58,17 +58,18 @@
             }
             
         }
-        
+        */
+        $monsterData = $monsterDBClass->getMonsterData();
         //print_r($monsterData);
         
         
         // get item data from database
         $itemDBClass = new ItemDB();
-        /* ---- commented out geting all item data for now until we find that we need it again--------
+        /* ---- commented out geting all item data for now until we find that we need it again-------- 
         $itemData = array(); 
         for ($i=0; $i<=$maxNumItems; $i++) // get all the items from the database and fill a multi dimentional array
         {
-            if( $i!=0 )
+            if( $i != 0 )
             {
                 $itemData[$i] = $itemDBClass->getItemData($i);
             }
@@ -77,13 +78,17 @@
                 $itemData[0] = "";
             }
         }
-        */ 
+        */
         
-        $weaponItemData = ""; 
-        $weaponItemData = $itemDBClass->getWeaponItemData();  // this will get all the item data of just the weapons
+        $itemData = $itemDBClass->getItemData();
+        //print_r($itemData);
         
-        $armorItemData = "";
-        $armorItemData = $itemDBClass->getArmorItemData(); // this will get all the item data of just the armor
+        
+        //$weaponItemData = ""; 
+        //$weaponItemData = $itemDBClass->getWeaponItemData();  // this will get all the item data of just the weapons
+        
+        //$armorItemData = "";
+        //$armorItemData = $itemDBClass->getArmorItemData(); // this will get all the item data of just the armor
         
         //print_r($weaponItemData);
         //print_r($armorItemData);
@@ -100,13 +105,22 @@
         {
             
             //print_r($inventoryData[$i]);
-            echo "<br/>";
+            //echo "<br/>";
 
             foreach($inventoryData[$i] as $key => $value)
             {
                 if($key == "itemID")
                 {                    
-                    $inventoryItems[$i] = $itemDBClass->getItemData($value);
+                    $inventoryItems[$i] = $itemDBClass->getInventoryItemData($value);     
+                }
+                
+                if($key == "equipped" && $value == "1")
+                {                    
+                    $inventoryItems[$i]["equipped"] = 1;
+                }
+                else
+                {
+                     $inventoryItems[$i]["equipped"] = 0;
                 }
             }
         }
@@ -252,9 +266,9 @@
         <script>
             var heroData = <?php echo json_encode($heroData);?>;
             var monsterData = <?php echo json_encode($monsterData);?>;
-            /*var itemData = <?php echo json_encode($itemData);?>;*/
-            var weaponData = <?php echo json_encode($weaponItemData);?>;
-            var armorData = <?php echo json_encode($armorItemData);?>;
+            var itemData = <?php echo json_encode($itemData);?>;
+            /*var weaponData = <?php echo json_encode($weaponItemData);?>;*/
+            /*var armorData = <?php echo json_encode($armorItemData);?>;*/
             
             var inventoryItems = <?php echo json_encode($inventoryItems);?>;
         </script>

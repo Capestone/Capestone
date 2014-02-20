@@ -13,7 +13,7 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
     {
         //echo " post was populated on ProcessSave ";
         $_SESSION["heroData"] = $heroData;
-
+        
         $userID = $_SESSION["userID"];
         $armorClass = $heroData['armorClass'];
         $attackBonus = $heroData['attackBonus'];
