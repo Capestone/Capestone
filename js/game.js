@@ -341,6 +341,10 @@ function being(image, xValue, yValue, options)
                 chestCheck.y = y;
                 coordinates[x][y].open = true;
             }
+            if (this.type == "hero" && coordinates[x][y].open && chestItemCheck.booleanValue)
+            {
+                cons.innerHTML += "Do you want to pick it up?";
+            }
         }
         // == 'Weapon' || coordinates[x][y].itemType == 'Armor' || coordinates[x][y].itemType == 'Potion'
         else if (anItemIsAt(x, y))
@@ -348,11 +352,6 @@ function being(image, xValue, yValue, options)
             itemOnGround.booleanValue = true;
             itemOnGround.x = x;
             itemOnGround.y = y;
-        }
-        //this doesn't work yet
-        else if (chestItemCheck.booleanValue)
-        {
-            cons.innerHTML += "Do you wish to pick it up?";
         }
         //Otherwise...
         else
@@ -735,7 +734,7 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    if(hero.currentHP + hero.equippedHealth > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue)
+    if(hero.currentHP + hero.equippedHealth > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue && !chestItemCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -910,8 +909,6 @@ function openChest(keyPressed)
 
             cons.innerHTML += "Inside is a " + coordinates[chestCheck.x][chestCheck.y].inventory[0].itemName + ".<br/>";
             chestItemCheck.booleanValue = true;
-            chestItemCheck.x = chestCheck.x;
-            chestItemCheck.y = chestCheck.y;
             redrawCoordinates();
             break;
         case 110:
@@ -930,16 +927,17 @@ function getChestItem(keyPressed)
     {
         case 89:
         case 121:
-            cons.innerHTML += "You pick up the " + coordinates[chestItemCheck.x][chestItemCheck.y].description;
-            hero.inventory.push(coordinates[chestItemCheck.x][chestItemCheck.y]);
-            coordinates[chestItemCheck.x][chestItemCheck.y] = 0;
+            cons.innerHTML += "You pick up the " + coordinates[chestCheck.x][chestCheck.y].inventory[0].description;
+            hero.inventory.push(coordinates[chestCheck.x][chestCheck.y].inventory[0]);
+            coordinates[chestCheck.x][chestCheck.y] = 0;
+            chestItemCheck.booleanValue = false;
             break;
         case 110:
         case 78:
-
+            cons.innerHTML += "You leave it in the chest.";
             break;
     }
-    chestItemCheck.booleanValue = false;
+    
 }
 
 function openDoor(keyPressed)
