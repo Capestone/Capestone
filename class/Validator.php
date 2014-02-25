@@ -24,20 +24,7 @@ class Validator {
        }        
        return false; 
     }
-    
-    /*
-    public static function loginIsValidPost()
-    {
-        if( array_key_exists("username", $_POST) || array_key_exists("password", $_POST) )
-        {
-            return false;
-        }
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-        return Validator::loginIsValid($username, $password);
-    }
-    */
-    
+        
     public static function loginIsValid($username, $password ) {
 
       if ( !Validator::usernameIsValid($username) || !Validator::passwordIsValid($password) )

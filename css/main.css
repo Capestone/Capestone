@@ -109,6 +109,16 @@ body{
     height:240px;
 }
 
+#controlSection{
+    float:right;
+    background-color:#212121;
+    color:red;
+    font-family:"Courier New";
+    font-size:15px;
+    width:635px;
+    height:240px;
+}
+
 .playerInfo{
     margin:0px;
     padding:0px;

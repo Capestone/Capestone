@@ -11,7 +11,6 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
     // this is where everything is going to be saved into database
     if ( count($_POST) )
     {
-        //echo " post was populated on ProcessSave ";
         $_SESSION["heroData"] = $heroData;
         
         $userID = $_SESSION["userID"];
@@ -24,12 +23,29 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
         $x = $heroData['x'];
         $y = $heroData['y'];
         
-        print_r($_SESSION["heroData"]);
-        
+        //print_r($_SESSION["heroData"]);
         $heroDBClass = new HeroDB();
         
         $heroDBClass->saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y);
-          
+        
+        $inventoryDBClass = new InventoryDB();
+        
+        $inventory = $heroData['inventory'];
+        
+        //print_r($inventory);
+        
+        $totalInventory = count($inventory);
+        
+        $inventoryDBClass->clearInventory($userID);
+        
+        for( $i=0; $i<$totalInventory; $i++ )
+        {
+            $itemID = $inventory[$i]['itemID'];
+            $equipped = $inventory[$i]['equipped'];
+            $inventoryDBClass->saveInventory($userID, $itemID, $equipped);
+        }
+        
+         
     }
     
     

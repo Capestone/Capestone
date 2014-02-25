@@ -12,13 +12,6 @@
         
         <?php
         
-        // variables to change in database information changes
-        //$maxNumDungeons = 6;
-        //$maxNumMonsters = 10; //10
-        //$maxNumItems = 1; //19
-        //$maxNumWeapon = 5; //5
-        //$maxNumArmor = 6; //6
-        
         //make sure user is logged in or is trying to log out
         if( !isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] != true ) // this will make sure the user is logged in
         {
@@ -39,60 +32,15 @@
         
         $heroData = $heroDBClass->getHeroData($userID); // get all data for user from hero table
         
-        
-        
-        
         // get monster data from database
         $monsterDBClass = new MonsterDB();
-        /*
-        $monsterData = array(); 
-        for ($i=0; $i <=$maxNumMonsters ; $i++) // this will get all monsters from the database and fill an array
-        {
-            if( $i!=0 )
-            {
-                $monsterData[$i] = $monsterDBClass->getMonsterData($i);
-            }
-            else
-            {
-                $monsterData[0] = "";
-            }
-            
-        }
-        */
-        $monsterData = $monsterDBClass->getMonsterData();
-        //print_r($monsterData);
-        
+
+        $monsterData = $monsterDBClass->getMonsterData();        
         
         // get item data from database
         $itemDBClass = new ItemDB();
-        /* ---- commented out geting all item data for now until we find that we need it again-------- 
-        $itemData = array(); 
-        for ($i=0; $i<=$maxNumItems; $i++) // get all the items from the database and fill a multi dimentional array
-        {
-            if( $i != 0 )
-            {
-                $itemData[$i] = $itemDBClass->getItemData($i);
-            }
-            else
-            {
-                $itemData[0] = "";
-            }
-        }
-        */
-        
+
         $itemData = $itemDBClass->getItemData();
-        //print_r($itemData);
-        
-        
-        //$weaponItemData = ""; 
-        //$weaponItemData = $itemDBClass->getWeaponItemData();  // this will get all the item data of just the weapons
-        
-        //$armorItemData = "";
-        //$armorItemData = $itemDBClass->getArmorItemData(); // this will get all the item data of just the armor
-        
-        //print_r($weaponItemData);
-        //print_r($armorItemData);
-        //print_r($itemData);
 
         //get inventory data from database
         $inventoryDBClass = new InventoryDB();
@@ -104,9 +52,6 @@
         for( $i = 0; !empty($inventoryData[$i]); $i++ )
         {
             
-            //print_r($inventoryData[$i]);
-            //echo "<br/>";
-
             foreach($inventoryData[$i] as $key => $value)
             {
                 if($key == "itemID")
@@ -124,88 +69,7 @@
                 }
             }
         }
-        
-        print_r($inventoryItems);
-        
-        //$inventoryItems = $itemDBClass->getItemData($itemID)
-        
-        
-        /*
-        // get dungeon data from database
-        $dungeonDBClass = new DungeonDB(); // instence of dungeon class
-        $dungeonData = array(); // array to hold 4 dungeon quadrents
-        
-        $randDungeon[0] = 1;
-        $randDungeon[1] = 2;
-        $randDungeon[2] = 3;
-        $randDungeon[3] = 4;
-        
-        while( $randDungeon[0] == $randDungeon[1] )
-        {
-            $randDungeon[1] = rand(1, $maxNumDungeons);
-        }
-        while( $randDungeon[0] == $randDungeon[2] || $randDungeon[1] == $randDungeon[2] )
-        {
-            $randDungeon[2] = rand(1, $maxNumDungeons);
-        }
-        while( $randDungeon[0] == $randDungeon[3] || $randDungeon[1] == $randDungeon[3] || $randDungeon[2] == $randDungeon[3] )
-        {
-            $randDungeon[3] = rand(1, $maxNumDungeons);
-        }
-        
-        for ($i=0; $i<4; $i++) 
-        {
-            $dungeonData[$i] = $dungeonDBClass->getDungeonData($randDungeon[$i]); // get that data from database and fill it into one of the array indexes
-            
-            foreach($dungeonData[$i] as $key => $value)
-            {
-                if($key == "code")
-                {                    
-                    $dungeonCode[$i] = $value;
-                }
-            }
-        }
-         */
-         
-         
-        /*
-        print_r($dungeonData);
-        echo"<br/>";
-        echo"<br/>";
-        print_r($dungeonCode[0]);
-        echo"<br/>";
-        echo"<br/>";
-        print_r($dungeonCode[1]);
-        echo"<br/>";
-        echo"<br/>";
-        print_r($dungeonCode[2]);
-        echo"<br/>";
-        echo"<br/>";
-        print_r($dungeonCode[3]);
-        echo"<br/>";
-        echo"<br/>";
-        */
-        
-        
-        
-        
-        //testing for save function
-        /*
-        //this is where i am testing the save ability of the game
-        if ( count($_POST) )
-        {
-            echo "post was populated on capestone.php <br />";
-            $_SESSION = $_POST;
-            print_r($_POST);
-        } 
-        print_r($_SESSION);
-        echo '<br />';
-        */
-        
-
-        
-        
-        
+    
         ?>
         
         <div id="wrapper">
@@ -227,7 +91,7 @@
                     <a class="btn" href="proposal.php"><b>PROPOSAL</b></a>
                     <a class="btn" href="prototype.php"><b>PROTOTYPE</b></a>
                     <a class="btn" href="techDoc.php"><b>TECH DOC</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>	
+                    <a class="btn" href="erd.php"><b>ERD</b></a>	
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="login.php"><b>GAME</b></a>
@@ -254,6 +118,10 @@
                     <p class="playerInfo">Dungeon lvl: </p><p id="dungeonLvl" class="playerInfo">20</p>
                 </div>
                 
+                <div id="controlSection">
+                    <img src="images/game controls.png" alt="game controls" height="240" width="635">
+                </div>
+                
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
@@ -267,9 +135,6 @@
             var heroData = <?php echo json_encode($heroData);?>;
             var monsterData = <?php echo json_encode($monsterData);?>;
             var itemData = <?php echo json_encode($itemData);?>;
-            /*var weaponData = <?php echo json_encode($weaponItemData);?>;*/
-            /*var armorData = <?php echo json_encode($armorItemData);?>;*/
-            
             var inventoryItems = <?php echo json_encode($inventoryItems);?>;
         </script>
         <script type="text/javascript" src="js/dungeons.js"></script>

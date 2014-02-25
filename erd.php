@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>CONTACT</title>
+        <title>Entity-Relationship Diagram</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
     <body style="background-image: url('images/sprite_background.png')">
@@ -31,15 +31,13 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <h3>STEPHEN MCCORMICK</h3>
-                <p class="creatorInfo"> Email: Stephen.McCormick01@gmail.com </p>
-                <h3>ERIK LOUGEE</h3>
-                <p class="creatorInfo"> Email: ErikLougee@gmail.com </p>
-                
+                <div id="pdf">
+                <object data="pdf/database ERD.pdf" type="application/pdf" width="100%" height="100%"></object>
+                </div>
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->
-                <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
+                    <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
             </div>  <!--  end footer  -->
         

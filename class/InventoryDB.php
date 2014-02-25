@@ -17,15 +17,33 @@ class InventoryDB extends DB{
         }  
     }
     
-    public function saveInventory($userID, $itemID)
+    public function clearInventory($userID)
+    {
+        $db = $this->getDB();
+        if ( null != $db ) {
+            $stmt = $db->prepare('delete from Inventory where userID = :userIDValue');
+            $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_STR);
+            
+            if ( $stmt->execute() ) // if everything was excecuted corectly
+            {
+                return true;
+            }
+        } 
+        return false;
+    }
+    
+    public function saveInventory($userID, $itemID, $equipped)
     {
         intval($userID);
         intval($itemID);
+        intval($equipped);
+        
         $db = $this->getDB();
         if ( null != $db ) {
-            $stmt = $db->prepare('insert into Inventory set userID = :userIDValue, itemID = :itemIDValue;');
+            $stmt = $db->prepare('insert into Inventory set userID = :userIDValue, itemID = :itemIDValue, equipped = :equippedValue;');
             $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_INT);
             $stmt->bindParam(':itemIDValue', $itemID, PDO::PARAM_INT);
+            $stmt->bindParam(':equippedValue', $equipped, PDO::PARAM_INT);
             
             if ( $stmt->execute() ) // if everything was excecuted corectly
             {

@@ -47,7 +47,7 @@
                     <a class="btn" href="proposal.php"><b>PROPOSAL</b></a>
                     <a class="btn" href="prototype.php"><b>PROTOTYPE</b></a>
                     <a class="btn" href="techDoc.php"><b>TECH DOC</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>	
+                    <a class="btn" href="erd.php"><b>ERD</b></a>	
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="#"><b>Link</b></a>
                     <a class="btn" href="login.php"><b>GAME</b></a>
