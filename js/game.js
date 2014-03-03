@@ -158,8 +158,6 @@ function updateItemData()
         itemData[i] = cache;
         
         
-        console.log(itemData[i]);
-        console.log(cache);
     }
 }
 
@@ -335,15 +333,17 @@ function being(image, xValue, yValue, options)
         {
             if (this.type == "hero" && coordinates[x][y].open == false)
             {
-                cons.innerHTML += "There is a treasure chest here. Do you wish to open it?"
+                cons.innerHTML += "There is a treasure chest here. <br/>Do you wish to open it? Y/N"
                 chestCheck.booleanValue = true;
                 chestCheck.x = x;
                 chestCheck.y = y;
                 coordinates[x][y].open = true;
             }
-            if (this.type == "hero" && coordinates[x][y].open && chestItemCheck.booleanValue)
+            else if (this.type == "hero" && coordinates[x][y].open && chestItemCheck.booleanValue == false && coordinates[x][y].inventory[0])
             {
+                cons.innerHTML += "There is a " + coordinates[x][y].inventory[0].itemName + " inside the chest.<br/>";
                 cons.innerHTML += "Do you want to pick it up?";
+                chestItemCheck.booleanValue = true;
             }
         }
         // == 'Weapon' || coordinates[x][y].itemType == 'Armor' || coordinates[x][y].itemType == 'Potion'
@@ -356,7 +356,7 @@ function being(image, xValue, yValue, options)
         //Otherwise...
         else
         {
-            if (this.image.type == "hero")
+            if (this.type == "hero")
             {
                 cons.innerHTML += "Something blocks your way.";
             }
@@ -857,24 +857,18 @@ document.onkeypress=function(e)
     }
     else if (doorCheck.booleanValue)
     {
-            openDoor(keyPressed);
+        openDoor(keyPressed);
         
         redrawCoordinates();
     }
     else if (chestCheck.booleanValue)
     {
-        while (chestCheck.booleanValue)
-        {
-            openChest(keyPressed);
-        }
+        openChest(keyPressed);
         redrawCoordinates();
     }
     else if (chestItemCheck.booleanValue)
     {
-        while (chestItemCheck.booleanValue)
-        {
-            getChestItem(keyPressed);
-        }
+        getChestItem(keyPressed);
     }
     else if (equipMenu.booleanValue &&
             (keyPressed == 48 || keyPressed == 49 || keyPressed == 50 || keyPressed == 51 || 
@@ -885,7 +879,6 @@ document.onkeypress=function(e)
         {
             equipItem(keyPressed);
         }
-        
     }
     else if (itemOnGround.booleanValue && (keyPressed == 89 || keyPressed == 78 || keyPressed == 121 || keyPressed == 110 ))
     {
@@ -900,6 +893,7 @@ document.onkeypress=function(e)
 
 function openChest(keyPressed)
 {
+    console.log(keyPressed);
     switch(keyPressed)
     {
         case 89:
@@ -908,12 +902,15 @@ function openChest(keyPressed)
             coordinates[chestCheck.x][chestCheck.y].image.src = "images/openChest.png";
 
             cons.innerHTML += "Inside is a " + coordinates[chestCheck.x][chestCheck.y].inventory[0].itemName + ".<br/>";
+            cons.innerHTML += "Do you want to pick it up: Y/N.<br/>";
             chestItemCheck.booleanValue = true;
             redrawCoordinates();
             break;
         case 110:
         case 78:
             cons.innerHTML += "You leave it closed.";
+            chestItemCheck.booleanValue = false;
+            coordinates[chestCheck.x][chestCheck.y].open=false;
             break;
 
     }
@@ -927,16 +924,17 @@ function getChestItem(keyPressed)
     {
         case 89:
         case 121:
-            cons.innerHTML += "You pick up the " + coordinates[chestCheck.x][chestCheck.y].inventory[0].description;
+            cons.innerHTML += "You pick up the " + coordinates[chestCheck.x][chestCheck.y].inventory[0].itemName + ".";
             hero.inventory.push(coordinates[chestCheck.x][chestCheck.y].inventory[0]);
-            coordinates[chestCheck.x][chestCheck.y] = 0;
-            chestItemCheck.booleanValue = false;
+            coordinates[chestCheck.x][chestCheck.y].inventory[0] = 0;
+            
             break;
         case 110:
         case 78:
             cons.innerHTML += "You leave it in the chest.";
             break;
     }
+    chestItemCheck.booleanValue = false;
     
 }
 
@@ -1124,7 +1122,6 @@ function updateStats(equipper, index)
         equipper.equippedDamage = equipper.inventory[i].damage;
         equipper.equippedHealth = equipper.inventory[i].health;
     }
-    console.log(hero);
     /*
     equipper.equippedArmorClass = equipper.inventory[index].armorClass;
     equipper.equippedAttackBonus = equipper.inventory[index].attackBonus;

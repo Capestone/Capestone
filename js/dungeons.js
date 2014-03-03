@@ -930,8 +930,6 @@ function dungeonLoader()
 function getRandomItem()
 {
     var chestItem = new item();
-    chestItem = itemData[4];
-    console.log(chestItem);
-    console.log(itemData);
+    chestItem = itemData[5];
     return chestItem;
 }
