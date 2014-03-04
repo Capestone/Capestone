@@ -67,7 +67,7 @@ var itemLocationY = 0;
 
 ////Object instantiation
 var hero = "";
-var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1);
+var enemy = new being("images/octopod.png", mapWidth-1, mapHeight-1); //----dont need this----
 var fence = new being("images/brokenFence.png", 0, 0);
 
 ////Matrix creation / declaration
@@ -317,7 +317,7 @@ function being(image, xValue, yValue, options)
         {
             if (this.type == "hero")
             {
-                cons.innerHTML += "There is a door here. Do you wish to open it?";
+                cons.innerHTML += "There is a door here. Do you wish to open it? Y/N";
                 doorCheck.booleanValue = true;
                 doorCheck.x = x;
                 doorCheck.y = y;
@@ -342,7 +342,7 @@ function being(image, xValue, yValue, options)
             else if (this.type == "hero" && coordinates[x][y].open && chestItemCheck.booleanValue == false && coordinates[x][y].inventory[0])
             {
                 cons.innerHTML += "There is a " + coordinates[x][y].inventory[0].itemName + " inside the chest.<br/>";
-                cons.innerHTML += "Do you want to pick it up?";
+                cons.innerHTML += "Do you want to pick it up? Y/N";
                 chestItemCheck.booleanValue = true;
             }
         }
@@ -564,6 +564,7 @@ function equipItems()
 }
 */
 
+// --------remove this --------------
 function fenceLoader()
 {
     //barrier(5);
@@ -710,7 +711,7 @@ function saveData()
             type:"POST",
             data:"heroData=" + JSON.stringify(hero, null, " "),
             success: function(response) {alert(response);},
-            error: function(){alert("Something went wrong dude");}
+            error: function(){alert("Something went wrong dude");} // keep this forever!!!!
                 });
                 
     hero.image = imageData;
@@ -902,7 +903,7 @@ function openChest(keyPressed)
             coordinates[chestCheck.x][chestCheck.y].image.src = "images/openChest.png";
 
             cons.innerHTML += "Inside is a " + coordinates[chestCheck.x][chestCheck.y].inventory[0].itemName + ".<br/>";
-            cons.innerHTML += "Do you want to pick it up: Y/N.<br/>";
+            cons.innerHTML += "Do you want to pick it up? Y/N<br/>";
             chestItemCheck.booleanValue = true;
             redrawCoordinates();
             break;
@@ -990,7 +991,7 @@ function anItemIsAt(x, y)
     if (coordinates[x][y].itemName)
     {
         cons.innerHTML += "There is a " + coordinates[x][y].itemName + " here.<br/>";
-        cons.innerHTML += "Do you wish to pick it up?";
+        cons.innerHTML += "Do you wish to pick it up? Y/N";
         
         return true;
     }
@@ -1131,6 +1132,8 @@ function updateStats(equipper, index)
     
 }
 
+
+//------- we can probebly remove these too-------
 var armorTable = [
     "Studded Leather",
     "Scalemail",
@@ -1139,7 +1142,7 @@ var armorTable = [
     "Half-plate",
     "Full-plate"
 ];
-
+//------- we can probebly remove these too-------
 var acTable = {
     "Studded Leather" : 3,
     "Scalemail" : 4,
