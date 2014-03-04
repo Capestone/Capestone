@@ -31,22 +31,26 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
         
         $inventoryDBClass = new InventoryDB();
         
-        $inventory = $heroData['inventory'];
+        $itemIDs = $heroData['itemIDs'];
+        $equipped = $heroData['equipped'];
         
-        //print_r($inventory);
+        echo'item ID are: ';
+        print_r($itemIDs);
+        echo'equipped values are: ';
+        print_r($equipped);
         
-        $totalInventory = count($inventory);
+        $totalInventory = count($itemIDs);
         
         $inventoryDBClass->clearInventory($userID);
         
         for( $i=0; $i<$totalInventory; $i++ )
         {
-            $itemID = $inventory[$i]['itemID'];
-            $equipped = $inventory[$i]['equipped'];
-            $inventoryDBClass->saveInventory($userID, $itemID, $equipped);
+            $NewitemID = $itemIDs[$i];
+            $Newequipped = $equipped[$i];
+            $inventoryDBClass->saveInventory($userID, $NewitemID, $Newequipped);
         }
         
-        //echo "it worked"; 
+        echo "it worked"; 
     }
     
     

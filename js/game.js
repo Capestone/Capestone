@@ -54,7 +54,7 @@ var mapHeight = 20;
 var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
-var dungeonLevel = 1;
+var dungeonLevel = 1; ////---------------right here you hard code it to 1 so so right now saving it will always be 2 or 0 even if it is already 2 or 0 on load------
 var monstersOnThisLevel = new Array();
 var chest = false;
 var timePassed = 0;
@@ -169,6 +169,7 @@ function item()
     this.itemName = "";
     this.itemType = "";
     this.type = "";
+    this.equipped = 0; // ----this was causing that undifined because picked up items never get the equipped value unless we equip them----
 }
 
 function updateItemData()
@@ -756,11 +757,6 @@ function rollDice(maxDie)
     return Math.floor(Math.random()*maxDie + 1);
 }
 
-function devoItemData()
-{
-    
-}
-
 //This now seems to work!
 function saveData() 
 {
@@ -778,27 +774,13 @@ function saveData()
     for (var i = 0; i < hero.inventory.length; i++)
     {
         itemIDs.push(hero.inventory[i].itemID);
-        if (hero.inventory[i].equipped)
-        {
-            equipped.push(hero.inventory[i].equipped);
-        }
+        equipped.push(hero.inventory[i].equipped); // we want equipped no matter what
     }
+    //console.log(itemIDs);
+    //console.log(equipped);
     hero.itemIDs = itemIDs;
     hero.equipped = equipped;
-    /*
-    var cached = new Array();
-    
-    for(var i = 0; i < hero.inventory.length; i++)
-        {
-            cached[i]['itemID'] = "";
-            cached[i]['equipped'] = "";
-            console.log(hero.inventory[i]);
-            cached[i]['itemID'] = hero.inventory[i]['itemID'];
-            cached[i]['equipped'] = hero.inventory[i]['equipped'];
-        }
-    hero.inventory = cached;
-    */
-    
+    hero.dungeonLevel = dungeonLevel; //need this to save in hero table 
     
     //var imageData = new Image();
     //var move = hero.move;
@@ -817,7 +799,7 @@ function saveData()
     hero.image = imageData;
     redrawCoordinates();
     
-    window.location.reload(true);
+    //window.location.reload(true);  // this is what is causing the error i think because the php isnt finished like we thought it would
 }
 
 //KEYHANDLER GET!!!
