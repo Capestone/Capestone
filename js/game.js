@@ -165,6 +165,7 @@ function item()
     this.damage = 0;
     this.description = "";
     this.health = 0;
+    this.itemID = "";
     this.itemName = "";
     this.itemType = "";
     this.type = "";
@@ -183,15 +184,15 @@ function updateItemData()
         cache.damage = itemData[i]['damage'];
         cache.description = itemData[i]['description'];
         cache.health = itemData[i]['health'];
+        cache.itemID = itemData[i]['itemID'];
         cache.itemName = itemData[i]['itemName'];
         cache.itemType = itemData[i]['itemType'];
         cache.type = itemData[i]['type'];
         cache.probability = itemData[i]['probability'];
         itemData[i] = cache;
-        
-        
     }
 }
+
 
 /*
 function placeWeapon(index, x, y)
@@ -755,6 +756,11 @@ function rollDice(maxDie)
     return Math.floor(Math.random()*maxDie + 1);
 }
 
+function devoItemData()
+{
+    
+}
+
 //This now seems to work!
 function saveData() 
 {
@@ -766,9 +772,40 @@ function saveData()
     {
         dungeonLevel++;
     }
-    var imageData = new Image();
+    
+    var itemIDs = new Array();
+    var equipped = new Array();
+    for (var i = 0; i < hero.inventory.length; i++)
+    {
+        itemIDs.push(hero.inventory[i].itemID);
+        if (hero.inventory[i].equipped)
+        {
+            equipped.push(hero.inventory[i].equipped);
+        }
+    }
+    hero.itemIDs = itemIDs;
+    hero.equipped = equipped;
+    /*
+    var cached = new Array();
+    
+    for(var i = 0; i < hero.inventory.length; i++)
+        {
+            cached[i]['itemID'] = "";
+            cached[i]['equipped'] = "";
+            console.log(hero.inventory[i]);
+            cached[i]['itemID'] = hero.inventory[i]['itemID'];
+            cached[i]['equipped'] = hero.inventory[i]['equipped'];
+        }
+    hero.inventory = cached;
+    */
+    
+    
+    //var imageData = new Image();
+    //var move = hero.move;
+    //delete hero.move;
     imageData = hero.image;
     delete hero.image;
+    delete hero.inventory;
     //var stringified = JSON.stringify(hero);
     $.ajax({url:"processSave.php",
             type:"POST",
@@ -776,11 +813,11 @@ function saveData()
             success: function(response) {alert(response);},
             error: function(){alert("Something went wrong dude");} // keep this forever!!!!
                 });
-                
+    //hero.move = move;
     hero.image = imageData;
     redrawCoordinates();
     
-    window.location.reload();
+    window.location.reload(true);
 }
 
 //KEYHANDLER GET!!!
@@ -883,9 +920,7 @@ document.onkeypress=function(e)
             
             //Only for testing... - a
             case 97:
-                hero.inventory.push("AWESOME THING");
-                console.log("HERO INVENTORY LENGTH: " + hero.inventory.length);
-                
+                console.log(hero);
                 break;
             
             //Display Controls - c
