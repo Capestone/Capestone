@@ -116,6 +116,7 @@ function startGame()
     cons.innerHTML += "Press enter to start.";
 }
 
+
 function placeStairs()
 {
     console.log(dungeonLevel);
@@ -136,11 +137,8 @@ function placeStairs()
         stairsDown.y = RNG(20);
         coordinates[stairsDown.x][stairsDown.y] = stairsDown;
     }
-    
-    
-    
-    
 }
+
 
 function environment()
 {
@@ -305,7 +303,7 @@ function autoLoader()
     heroLoader();
     updateHTMLStats();
     //fenceLoader();
-    placeStairs();
+    //placeStairs(); ---------------------------commented this out for production server-----------
     startGame();
 }
 
@@ -928,7 +926,7 @@ document.onkeypress=function(e)
                 
             //Save Data - s
             case 115:
-                saveData();
+                //saveData(); ---------------------------commented this out for production server------------------
                 break;
         }
         if (keyPressed === 99 || keyPressed === 101 || keyPressed === 105|| keyPressed === 115) 
