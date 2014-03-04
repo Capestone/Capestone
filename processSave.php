@@ -22,11 +22,12 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
         $maxHP = $heroData['maxHP'];
         $x = $heroData['x'];
         $y = $heroData['y'];
+        $dungeonLevel = $heroData['dungeonLevel'];
         
         //print_r($_SESSION["heroData"]);
         $heroDBClass = new HeroDB();
         
-        $heroDBClass->saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y);
+        $heroDBClass->saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y, $dungeonLevel);
         
         $inventoryDBClass = new InventoryDB();
         

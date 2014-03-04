@@ -70,7 +70,7 @@ class HeroDB extends DB{
         return false; 
     }
     
-    public function saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y) {
+    public function saveHero($userID, $armorClass, $attackBonus, $currentHP, $damage, $description, $maxHP, $x, $y, $dungeonLevel) {
         
         intval($userID);
         $db = $this->getDB();
@@ -84,7 +84,8 @@ class HeroDB extends DB{
                     . 'description = :descriptionValue, '
                     . 'maxHP = :maxHPValue, '
                     . 'x = :xValue, '
-                    . 'y = :yValue '
+                    . 'y = :yValue, '
+                    . 'dungeonLevel = :dungeonLevelValue '
                     . 'where userID = :userIDValue;');
             $stmt->bindParam(':userIDValue', $userID, PDO::PARAM_INT);
             $stmt->bindParam(':armorClassValue', $armorClass, PDO::PARAM_INT);
@@ -95,6 +96,7 @@ class HeroDB extends DB{
             $stmt->bindParam(':maxHPValue', $maxHP, PDO::PARAM_INT);
             $stmt->bindParam(':xValue', $x, PDO::PARAM_INT);
             $stmt->bindParam(':yValue', $y, PDO::PARAM_INT);
+            $stmt->bindParam(':dungeonLevelValue', $dungeonLevel, PDO::PARAM_INT);
 
             if ( $stmt->execute() ) // if everything was excecuted corectly
             {
