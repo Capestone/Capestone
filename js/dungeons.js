@@ -881,7 +881,6 @@ function dungeonLoader()
         coordinates[x + 1][y + 4].image.src = "images/closedChest.png";
         coordinates[x + 1][y + 4].itemName = "treasure chest";
         coordinates[x + 1][y + 4].inventory.push(getRandomItem());
-        console.log(coordinates[x + 1][y + 4].inventory[0]);
     }
     
     dungeonCode[15] = function(x, y)
@@ -927,9 +926,29 @@ function dungeonLoader()
     }
 }
 
+//probability roll 1 - 100
+/* take all items with that number or less populate new array with these items
+ * random item on that
+ * 
+ * 
+ */
+
 function getRandomItem()
 {
     var chestItem = new item();
-    chestItem = itemData[5];
+    var probabilityRoll = rollDice(100);
+    var tempItems = new Array();
+    
+    console.log("Probability: " + probabilityRoll);
+    for (var i = 0; i < itemData.length; i++)
+    {
+        //console.log(itemData[i].probability);
+        if (itemData[i].probability >= probabilityRoll)
+        {
+            tempItems.push(itemData[i]);
+        }
+    }
+    
+    chestItem = tempItems[RNG(tempItems.length)];
     return chestItem;
 }

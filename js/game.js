@@ -1,11 +1,13 @@
-//TODO: 
-//Random Forest level
-//EQUIP function
-//Wandering monster behavior
-//Enemy behavior case statement for different enemies, default being normal behavior
-//random movement between 1 and 10 1 - 2 do something 3 - 4 do something etc
-//Make sure equip function ADDS to 10 
-//home
+//TODO:
+/*
+ * NEED: Collision detection on load AND monster population
+ * NEED: Stairs
+ * NEED: Final Level
+ * WOULD LIKE: Drop items
+ * WOULD LIKE: drink potions
+ */
+
+
 
 function updateHTMLStats()
 {
@@ -62,6 +64,9 @@ var equipMenu = new interactive();
 var chestCheck = new interactive();
 var doorCheck = new interactive();
 var chestItemCheck = new interactive();
+var stairsUp = new environment();
+var stairsDown = new environment();
+var stairsCheck = new interactive();
 var itemLocationX = 0;
 var itemLocationY = 0;
 
@@ -111,6 +116,32 @@ function startGame()
     cons.innerHTML += "Press enter to start.";
 }
 
+function placeStairs()
+{
+    console.log(dungeonLevel);
+    if (dungeonLevel != 0)
+    {
+        stairsUp.image.src = "images/stairsUp.png";
+        stairsUp.desc = "ascending stairs";
+        stairsUp.x = RNG(20);
+        stairsUp.y = RNG(20);
+        coordinates[stairsUp.x][stairsUp.y] = stairsUp;
+    }
+    
+    if (dungeonLevel != 6)
+    {
+        stairsDown.image.src = "images/stairsDown.png";
+        stairsDown.desc = "descending stairs";
+        stairsDown.x = RNG(20);
+        stairsDown.y = RNG(20);
+        coordinates[stairsDown.x][stairsDown.y] = stairsDown;
+    }
+    
+    
+    
+    
+}
+
 function environment()
 {
     this.image = new Image();
@@ -155,6 +186,7 @@ function updateItemData()
         cache.itemName = itemData[i]['itemName'];
         cache.itemType = itemData[i]['itemType'];
         cache.type = itemData[i]['type'];
+        cache.probability = itemData[i]['probability'];
         itemData[i] = cache;
         
         
@@ -224,26 +256,26 @@ function attack(assailant, defender)
     else if (attackDie === 20) //Critical Threat
     {
         cons.innerHTML += "<br/>A critical threat!";
-        attackDie = rollDice(20) + assailant.attackBonus + assailant.equippedAttackBonus;
+        attackDie = rollDice(20) + (assailant.attackBonus + assailant.equippedAttackBonus);
         if (attackDie >= defender.armorClass + defender.equippedArmorClass)
         {
             cons.innerHTML += "<br/>Oho! They scored an excellent hit!!";
-            damageDie = rollDice(assailant.damage + assailant.equippedDamage) * 2;
+            damageDie = rollDice(parseInt(assailant.damage) + parseInt(assailant.equippedDamage)) * 2;
             cons.innerHTML += "<br/>They did " + damageDie + " damage!!";
             defender.currentHP -= damageDie;
         } 
         else 
         {
             cons.innerHTML += "<br/>But it did not confirm.";
-            damageDie = rollDice(assailant.damage + assailant.equippedDamage);
+            damageDie = rollDice(parseInt(assailant.damage) + parseInt(assailant.equippedDamage));
             cons.innerHTML += "<br/>They hit for " + damageDie + " damage.";
             defender.currentHP -= damageDie;
         }	  
     } 
-    else if (attackDie + assailant.attackBonus + assailant.equippedAttackBonus >= defender.armorClass + defender.equippedArmorClass)
+    else if ((attackDie + assailant.attackBonus + assailant.equippedAttackBonus) >= (defender.armorClass + defender.equippedArmorClass))
     {
         cons.innerHTML += "<br/>They scored a hit!";
-        damageDie = rollDice(assailant.damage + assailant.equippedDamage);
+        damageDie = rollDice(parseInt(assailant.damage) + parseInt(assailant.equippedDamage));
         cons.innerHTML += "<br />They did " + damageDie + " damage.";
         defender.currentHP -= damageDie;
     }
@@ -265,11 +297,13 @@ function autoLoader()
     dungeonLoader();
     //randomBarrier();
     getRandomDungeon();
+    
     updateMonsterArray();
     enemyLoader();
     heroLoader();
     updateHTMLStats();
     //fenceLoader();
+    placeStairs();
     startGame();
 }
 
@@ -352,6 +386,22 @@ function being(image, xValue, yValue, options)
             itemOnGround.booleanValue = true;
             itemOnGround.x = x;
             itemOnGround.y = y;
+        }
+        else if (coordinates[x][y].desc == "ascending stairs" && this.type == "hero")
+        {
+            stairsCheck.action = "ascending";
+            stairsCheck.booleanValue = true;
+            stairsCheck.x = x;
+            stairsCheck.y = y;
+            cons.innerHTML += "There are " + coordinates[x][y].desc + " here. <br/>Do you wish to use them? Y/N";
+        }
+        else if (coordinates[x][y].desc == "descending stairs" && this.type == "hero")
+        {
+            stairsCheck.action = "descending";
+            stairsCheck.booleanValue = true;
+            stairsCheck.x = x;
+            stairsCheck.y = y;
+            cons.innerHTML += "There are " + coordinates[x][y].desc + " here. <br/>Do you wish to use them? Y/N";
         }
         //Otherwise...
         else
@@ -454,7 +504,12 @@ function displayInventory()
     cons.innerHTML = "You have the following items:<br/> ";
     for (var i = 0; i < hero.inventory.length; i++)
     {
-        cons.innerHTML += (i+1) + "..." + hero.inventory[i].itemName + "<br/>";
+        cons.innerHTML += (i+1) + "..." + hero.inventory[i].itemName;
+        if (hero.inventory[i].equipped)
+        {
+            cons.innerHTML += " (equipped)";
+        }
+        cons.innerHTML += "<br/>";
     }
 }
 
@@ -592,7 +647,7 @@ function heroLoader()
     hero.attackBonus = parseInt(heroData.attackBonus);
     hero.currentHP = parseInt(heroData.currentHP);
     hero.desc = heroData.description;
-    hero.damage = heroData.damage;
+    hero.damage = 1;
     var addArmorClass = 0, addAttackBonus = 0, addDamage = 0, addHealth = 0;
     for (var i = 0; i < inventoryItems.length; i++)
     {
@@ -609,7 +664,7 @@ function heroLoader()
         currentItem = inventoryItems[i];
         hero.inventory.push(currentItem);
     }
-    
+    hero.dungeonLevel = dungeonLevel;
     hero.equippedAttackBonus = addAttackBonus;
     hero.equippedArmorClass = addArmorClass;
     hero.equippedDamage = addDamage;
@@ -703,6 +758,14 @@ function rollDice(maxDie)
 //This now seems to work!
 function saveData() 
 {
+    if (stairsCheck.action == "ascending")
+    {
+        dungeonLevel--;
+    }
+    else
+    {
+        dungeonLevel++;
+    }
     var imageData = new Image();
     imageData = hero.image;
     delete hero.image;
@@ -716,6 +779,8 @@ function saveData()
                 
     hero.image = imageData;
     redrawCoordinates();
+    
+    window.location.reload();
 }
 
 //KEYHANDLER GET!!!
@@ -735,7 +800,13 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    if(hero.currentHP + hero.equippedHealth > 0 && !equipMenu.booleanValue && !itemOnGround.booleanValue && !doorCheck.booleanValue && !chestCheck.booleanValue && !chestItemCheck.booleanValue)
+    if(hero.currentHP + hero.equippedHealth > 0 && 
+            !equipMenu.booleanValue && 
+            !itemOnGround.booleanValue && 
+            !doorCheck.booleanValue && 
+            !chestCheck.booleanValue && 
+            !chestItemCheck.booleanValue && 
+            !stairsCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -859,7 +930,6 @@ document.onkeypress=function(e)
     else if (doorCheck.booleanValue)
     {
         openDoor(keyPressed);
-        
         redrawCoordinates();
     }
     else if (chestCheck.booleanValue)
@@ -887,6 +957,11 @@ document.onkeypress=function(e)
         {
             pickUpItem(keyPressed);
         }
+    }
+    else if (stairsCheck.booleanValue &&
+            (keyPressed == 89 || keyPressed == 78 || keyPressed == 121 || keyPressed == 110 ))
+    {
+        traverseStairs(keyPressed);
     }
     else if (parseInt(hero.currentHP + hero.equippedHealth) <= 0)
         cons.innerHTML = "You have died...";
@@ -917,6 +992,22 @@ function openChest(keyPressed)
     }
     chestCheck.booleanValue = false;
     
+}
+
+function traverseStairs(keyPressed)
+{
+    switch(keyPressed)
+    {
+        case 89:
+        case 121:
+            saveData();
+            break;
+        case 110:
+        case 78:
+            cons.innerHTML += "Very well.";
+            break;
+    }
+    stairsCheck.booleanValue = false;
 }
 
 function getChestItem(keyPressed)
@@ -1131,23 +1222,3 @@ function updateStats(equipper, index)
     */
     
 }
-
-
-//------- we can probebly remove these too-------
-var armorTable = [
-    "Studded Leather",
-    "Scalemail",
-    "Chainmail",
-    "Splintmail",
-    "Half-plate",
-    "Full-plate"
-];
-//------- we can probebly remove these too-------
-var acTable = {
-    "Studded Leather" : 3,
-    "Scalemail" : 4,
-    "Chainmail" : 5,
-    "Splintmail" : 6,
-    "Half-plate" : 7,
-    "Full-plate" : 8
-};
