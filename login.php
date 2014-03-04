@@ -104,9 +104,9 @@
                 <div id="announcements">
                     <h3>ANNOUNCEMENTS</h3>
                     <ul>
-                        <li>put notice here</li>
-                        <li>put notice here</li>
-                        <li>put notice here</li>
+                        <li>RECREATE ACCOUNTS!</li>
+                        <li>We have now entered into the next Beta session. New features have been added to the game and to accommodate these changes data needed to be added to the user accounts. In lieu of this all accounts have been removed. Please recreate your account to participate in the latest Beta patch.</li>
+                        <li>New features include equipping items, opening doors and treasure chests, picking up items, ascending and descending stairs. </li>
                     </ul>
                         
                 </div>

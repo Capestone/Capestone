@@ -46,7 +46,7 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
             $inventoryDBClass->saveInventory($userID, $itemID, $equipped);
         }
         
-         
+        //echo "it worked"; 
     }
     
     
