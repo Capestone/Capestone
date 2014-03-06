@@ -11,7 +11,7 @@
 
 function updateHTMLStats()
 {
-    var currentHP = parseInt(hero.currentHP) + parseInt(hero.equippedHealth);
+    var currentHP = parseInt(hero.currentHP);
     var maxHP = parseInt(hero.maxHP) + parseInt(hero.equippedHealth);
     var armorClass = parseInt(hero.armorClass) + parseInt(hero.equippedArmorClass); 
     var attackBonus = parseInt(hero.attackBonus) + parseInt(hero.equippedAttackBonus);
@@ -927,7 +927,7 @@ document.onkeypress=function(e)
                 
             //Drop Item - d
             case 100:
-                //dropItem();
+                //dropItem(keyPressed);
                 break;
             
             //Equip Item - e
@@ -944,7 +944,7 @@ document.onkeypress=function(e)
             //Save Data - s
             case 115:
                 //saveData(); //---------------------------commented this out for production server------------------
-                changeLevel();
+                //changeLevel();
                 break;
         }
         if (keyPressed === 99 || keyPressed === 101 || keyPressed === 105|| keyPressed === 115) 
@@ -1000,6 +1000,54 @@ document.onkeypress=function(e)
         cons.innerHTML = "You have died...";
 }
 
+/*
+function dropItem(keyPressed)
+{
+    if(hero.inventory.length < keyPressed - 48)
+    {
+        haveItem = false;
+        cons.innerHTML += "You don't have an item in that slot!";
+    }
+
+    if (haveItem)
+    {
+       switch(keyPressed)
+        {
+            case 49:
+                cons.innerHTML += "You drop the " + hero.inventory[0].itemName + ".";
+                break;
+            case 50:
+                cons.innerHTML += "You drop the " + hero.inventory[1].itemName + ".";
+                break;
+            case 51:
+                cons.innerHTML += "You drop the " + hero.inventory[2].itemName + ".";
+                break;
+            case 52:
+                cons.innerHTML += "You drop the " + hero.inventory[3].itemName + ".";
+                break;
+            case 53:
+                cons.innerHTML += "You drop the " + hero.inventory[4].itemName + ".";
+                break;
+            case 54:
+                cons.innerHTML += "You drop the " + hero.inventory[5].itemName + ".";
+                break;
+            case 55:
+                cons.innerHTML += "You drop the " + hero.inventory[6].itemName + ".";
+                break;
+            case 56:
+                cons.innerHTML += "You drop the " + hero.inventory[7].itemName + ".";
+                break;
+            case 57:
+                cons.innerHTML += "You drop the " + hero.inventory[8].itemName + ".";
+                break;
+            default:
+                cons.innerHTML += "Never mind...";
+                break;
+        } 
+
+    }
+}
+*/
 function changeLevel()
 {
     for(var i = 0; i < mapWidth; i++)
