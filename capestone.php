@@ -70,6 +70,9 @@
             }
         }
         
+        
+        
+        print_r($_SESSION);
         ?>
         
         <div id="wrapper">

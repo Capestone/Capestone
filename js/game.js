@@ -1,10 +1,10 @@
 //TODO:
 /*
  * NEED: Collision detection on load AND monster population
- * NEED: Stairs
- * NEED: Final Level
+ * NEED: Stairs -- looking good
+ * NEED: Final Level 
+ * NEED: the ability to drink potions or at least not equip them
  * WOULD LIKE: Drop items
- * WOULD LIKE: drink potions
  */
 
 
@@ -54,7 +54,7 @@ var mapHeight = 20;
 var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
-var dungeonLevel = 1; ////---------------right here you hard code it to 1 so so right now saving it will always be 2 or 0 even if it is already 2 or 0 on load------
+var dungeonLevel = heroData.dungeonLevel; ////---------------right here you hard code it to 1 so so right now saving it will always be 2 or 0 even if it is already 2 or 0 on load------
 var monstersOnThisLevel = new Array();
 var chest = false;
 var timePassed = 0;
@@ -119,7 +119,7 @@ function startGame()
 
 function placeStairs()
 {
-    console.log(dungeonLevel);
+    //console.log(dungeonLevel);
     if (dungeonLevel != 0)
     {
         stairsUp.image.src = "images/stairsUp.png";
@@ -303,7 +303,7 @@ function autoLoader()
     heroLoader();
     updateHTMLStats();
     //fenceLoader();
-    //placeStairs(); ---------------------------commented this out for production server-----------
+    placeStairs(); //---------------------------commented this out for production server-----------
     startGame();
 }
 
@@ -334,13 +334,14 @@ function being(image, xValue, yValue, options)
     {
 
         //To check if environment is populated...
-        if ((coordinates[x][y] == 0 || coordinates[x][y].pass == true) && actorCoordinates[x][y] == 0)
+        if ((coordinates[x][y] == 0 || coordinates[x][y].pass == true) && actorCoordinates[x][y] == 0) /*)*/
         {
+            
             actorCoordinates[this.x][this.y] = 0;
             this.x = x;
             this.y = y;
             actorCoordinates[this.x][this.y] = this;
-        } 
+        }
         //To check if monster or player is there
         else if ((actorCoordinates[x][y].currentHP + actorCoordinates[x][y].equippedHealth) > 0)
         {
@@ -550,6 +551,7 @@ function enemyBehavior(creature)
 
 function updateMonsterArray()
 {
+    //console.log("inside update monster array " + monsterData);
     for (var i = 0; i < monsterData.length; i++)
     {
         if (monsterData[i]['dungeonLevel'] == dungeonLevel)
@@ -562,7 +564,7 @@ function updateMonsterArray()
 function enemyLoader()
 {	
     //Enemy attributes
-    //console.log(monstersOnThisLevel.length);
+    //console.log("inside enemyLoader monsterOnThisLevel: " + monstersOnThisLevel[0]);
     var randomMonster = monstersOnThisLevel[RNG(monstersOnThisLevel.length)];
     enemyList[enemyIncrementer] = new being(randomMonster.imagePath);
     enemyList[enemyIncrementer].armorClass = parseInt(randomMonster.armorClass);
@@ -642,7 +644,7 @@ function heroLoader()
     hero = new being("images/rogue.png", 0, 0);
     //Gives hero.armorClass and hero.damage
     //randomInventory(hero);
-   
+    
     hero.armorClass = parseInt(heroData.armorClass);
     hero.attackBonus = parseInt(heroData.attackBonus);
     hero.currentHP = parseInt(heroData.currentHP);
@@ -685,7 +687,19 @@ function heroLoader()
     hero.type = "hero";
     hero.x = parseInt(heroData.x);
     hero.y = parseInt(heroData.y);
-    //coordinates[hero.x][hero.y] = hero;
+    
+    
+    if (coordinates[hero.x][hero.y] == 0  && actorCoordinates[hero.x][hero.y] == 0)
+    {
+        actorCoordinates[hero.x][hero.y] = hero;
+    }
+    else
+    {
+        hero.x += 1;
+        actorCoordinates[hero.x][hero.y] = hero;
+    }
+    
+    
 }
 
 function randomBarrier()
@@ -784,17 +798,20 @@ function saveData()
     //var move = hero.move;
     //delete hero.move;
     imageData = hero.image;
+    var tempInventory = hero.inventory;
     delete hero.image;
     delete hero.inventory;
     //var stringified = JSON.stringify(hero);
     $.ajax({url:"processSave.php",
             type:"POST",
             data:"heroData=" + JSON.stringify(hero, null, " "),
-            success: function(response) {alert(response);},
+            success: function(response) {console.log(response);},
             error: function(){alert("Something went wrong dude");} // keep this forever!!!!
                 });
     //hero.move = move;
     hero.image = imageData;
+    hero.inventory = tempInventory;
+    changeLevel();
     redrawCoordinates();
     
     //window.location.reload(true);  // this is what is causing the error i think because the php isnt finished like we thought it would
@@ -926,7 +943,8 @@ document.onkeypress=function(e)
                 
             //Save Data - s
             case 115:
-                //saveData(); ---------------------------commented this out for production server------------------
+                //saveData(); //---------------------------commented this out for production server------------------
+                changeLevel();
                 break;
         }
         if (keyPressed === 99 || keyPressed === 101 || keyPressed === 105|| keyPressed === 115) 
@@ -982,9 +1000,41 @@ document.onkeypress=function(e)
         cons.innerHTML = "You have died...";
 }
 
+function changeLevel()
+{
+    for(var i = 0; i < mapWidth; i++)
+    {
+        for (var j = 0; j < mapHeight; j++)
+        {
+            coordinates[i][j] = 0;
+            actorCoordinates[i][j] = 0;
+        }
+    }
+    
+    var heroCache = hero;    
+    
+    enemyList = new Array();
+    monstersOnThisLevel = new Array();
+    enemyIncrementer = 0;
+    //updateItemData();
+    //canvasBackground();
+    dungeonLoader();
+    //randomBarrier();
+    getRandomDungeon();
+    updateMonsterArray();
+    enemyLoader();
+    //heroLoader();
+    hero = heroCache;
+    updateHTMLStats();
+    //fenceLoader();
+    placeStairs(); //---------------------------commented this out for production server-----------
+    //startGame();
+    
+}
+
 function openChest(keyPressed)
 {
-    console.log(keyPressed);
+    //console.log(keyPressed);
     switch(keyPressed)
     {
         case 89:
@@ -1023,6 +1073,7 @@ function traverseStairs(keyPressed)
             break;
     }
     stairsCheck.booleanValue = false;
+    
 }
 
 function getChestItem(keyPressed)

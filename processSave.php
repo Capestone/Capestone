@@ -11,8 +11,8 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
     // this is where everything is going to be saved into database
     if ( count($_POST) )
     {
-        $_SESSION["heroData"] = $heroData;
-        
+        //$_SESSION["heroData"] = $heroData;
+        print_r($_SESSION);
         $userID = $_SESSION["userID"];
         $armorClass = $heroData['armorClass'];
         $attackBonus = $heroData['attackBonus'];
@@ -33,12 +33,12 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
         
         $itemIDs = $heroData['itemIDs'];
         $equipped = $heroData['equipped'];
-        
+        /*
         echo'item ID are: ';
         print_r($itemIDs);
         echo'equipped values are: ';
         print_r($equipped);
-        
+        */
         $totalInventory = count($itemIDs);
         
         $inventoryDBClass->clearInventory($userID);
@@ -50,7 +50,8 @@ if (isset($_POST["heroData"]) && !empty($_POST["heroData"]))
             $inventoryDBClass->saveInventory($userID, $NewitemID, $Newequipped);
         }
         
-        echo "it worked"; 
+        //echo "it worked"; 
+        //print_r($_SESSION);
     }
     
     
