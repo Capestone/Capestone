@@ -407,7 +407,7 @@ function dungeonLoader()
         }
         for (var i = 0; i <= 9; i++)
         {
-            if(i===3 || i===4 || i===7 || i===8)
+            if(i===3 || i===7)
             {
                 coordinates[x + 1][y + i] = new environment();
                 coordinates[x + 1][y + i].image.src = "images/column.png";
@@ -415,7 +415,7 @@ function dungeonLoader()
         }
         for (var i = 0; i <= 9; i++)
         {
-            if(i===0 || i===1 || i===4 || i===5 || i===8 || i===9)
+            if(i===0 || i===1 || i===5 || i===9)
             {
                 coordinates[x + 2][y + i] = new environment();
                 coordinates[x + 2][y + i].image.src = "images/column.png";
@@ -447,7 +447,7 @@ function dungeonLoader()
         }
         for (var i = 0; i <= 9; i++)
         {
-            if(i===0 || i===1 || i===4 || i===5 || i===8 || i===9)
+            if(i===0 || i===4 || i===5 || i===8 || i===9)
             {
                 coordinates[x + 6][y + i] = new environment();
                 coordinates[x + 6][y + i].image.src = "images/column.png";
@@ -455,7 +455,7 @@ function dungeonLoader()
         }
         for (var i = 0; i <= 9; i++)
         {
-            if(i===1 || i===2 || i===5 || i===6)
+            if( i===2 || i===5 )
             {
                 coordinates[x + 7][y + i] = new environment();
                 coordinates[x + 7][y + i].image.src = "images/column.png";
@@ -463,7 +463,7 @@ function dungeonLoader()
         }
         for (var i = 0; i <= 9; i++)
         {
-            if(i===2 || i===3 || i===6 || i===7)
+            if(i===2 || i===3 || i===7)
             {
                 coordinates[x + 8][y + i] = new environment();
                 coordinates[x + 8][y + i].image.src = "images/column.png";
