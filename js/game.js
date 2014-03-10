@@ -64,6 +64,7 @@ var equipMenu = new interactive();
 var chestCheck = new interactive();
 var doorCheck = new interactive();
 var chestItemCheck = new interactive();
+var dropItemCheck = new interactive();
 var stairsUp = new environment();
 var stairsDown = new environment();
 var stairsCheck = new interactive();
@@ -443,13 +444,13 @@ function checkDeath(assailant, defender) {
     // of scaling values for its properties. Now I'm going crazy. Let's maybe talk about this.
 
     // Also adds opponent's inventory
-    if (defender.type == 'hero' && (defender.currentHP + defender.equippedHealth) <= 0)
+    if (defender.type == 'hero' && (defender.currentHP) <= 0)
     {
         defender.image.src = "";
         cons.innerHTML += "The hero has been struck down by " + assailant.desc + ". All hope is lost." ;
         redrawCoordinates();
     }
-    else if ((defender.currentHP + defender.equippedHealth) <= 0) {
+    else if ((defender.currentHP) <= 0) {
         actorCoordinates[defender.x][defender.y] = 0;
         enemyList[defender.index].image.src = "";
         cons.innerHTML += assailant.desc + " strikes down " + defender.desc + " with the fury of the Gods!";
@@ -840,7 +841,8 @@ document.onkeypress=function(e)
             !doorCheck.booleanValue && 
             !chestCheck.booleanValue && 
             !chestItemCheck.booleanValue && 
-            !stairsCheck.booleanValue)
+            !stairsCheck.booleanValue &&
+            !dropItemCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -927,7 +929,8 @@ document.onkeypress=function(e)
                 
             //Drop Item - d
             case 100:
-                //dropItem(keyPressed);
+                displayInventory();
+                dropItemCheck.booleanValue = true;
                 break;
             
             //Equip Item - e
@@ -939,6 +942,10 @@ document.onkeypress=function(e)
             //Display Inventory - i
             case 105:
                 displayInventory();
+                break;
+            
+            case 113:
+                drinkPotion();
                 break;
                 
             //Save Data - s
@@ -959,6 +966,10 @@ document.onkeypress=function(e)
             }
         }
         redrawCoordinates();
+    }
+    else if (dropItemCheck.booleanValue)
+    {
+        dropItem(keyPressed);
     }
     else if (doorCheck.booleanValue)
     {
@@ -996,58 +1007,87 @@ document.onkeypress=function(e)
     {
         traverseStairs(keyPressed);
     }
+    
+    
     else if (parseInt(hero.currentHP + hero.equippedHealth) <= 0)
         cons.innerHTML = "You have died...";
 }
 
-/*
+
 function dropItem(keyPressed)
 {
     if(hero.inventory.length < keyPressed - 48)
     {
-        haveItem = false;
         cons.innerHTML += "You don't have an item in that slot!";
     }
-
-    if (haveItem)
+    else
     {
-       switch(keyPressed)
+        switch(keyPressed)
         {
             case 49:
+
                 cons.innerHTML += "You drop the " + hero.inventory[0].itemName + ".";
+                destroyItem(0);
                 break;
             case 50:
                 cons.innerHTML += "You drop the " + hero.inventory[1].itemName + ".";
+                destroyItem(1);
                 break;
             case 51:
                 cons.innerHTML += "You drop the " + hero.inventory[2].itemName + ".";
+                destroyItem(2);
                 break;
             case 52:
                 cons.innerHTML += "You drop the " + hero.inventory[3].itemName + ".";
+                destroyItem(3);
                 break;
             case 53:
                 cons.innerHTML += "You drop the " + hero.inventory[4].itemName + ".";
+                destroyItem(4);
                 break;
             case 54:
                 cons.innerHTML += "You drop the " + hero.inventory[5].itemName + ".";
+                destroyItem(5);
                 break;
             case 55:
                 cons.innerHTML += "You drop the " + hero.inventory[6].itemName + ".";
+                destroyItem(6);
                 break;
             case 56:
                 cons.innerHTML += "You drop the " + hero.inventory[7].itemName + ".";
+                destroyItem(7);
                 break;
             case 57:
                 cons.innerHTML += "You drop the " + hero.inventory[8].itemName + ".";
+                destroyItem(8);
                 break;
             default:
                 cons.innerHTML += "Never mind...";
+                var nevermind = true;
                 break;
         } 
-
+        if (!nevermind)
+        {
+            cons.innerHTML += "<br/>It gets consumed in a burst of flame!";
+        }
     }
+
+    
+     dropItemCheck.booleanValue = false;
 }
-*/
+
+function drinkPotion(index)
+{
+    cons.innerHTML += "You drink the " + hero.inventory[index].desc;
+    hero.currentHP += hero.inventory[index].desc;
+    destroyItem(index);
+}
+
+function destroyItem(index)
+{
+    hero.inventory.splice(index, 1);
+}
+
 function changeLevel()
 {
     for(var i = 0; i < mapWidth; i++)
@@ -1209,69 +1249,65 @@ function anItemIsAt(x, y)
 function equipItem(keyPressed)
 {
     displayInventory();
-    var haveItem = true;
     
     if(hero.inventory.length < keyPressed - 48)
     {
-        haveItem = false;
         cons.innerHTML += "You don't have an item in that slot!";
     }
 
-    if (haveItem)
+    switch(keyPressed)
     {
-       switch(keyPressed)
-        {
-            case 49:
-                cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
-                equipCheck(0);
-                updateStats(hero, 0);
-                break;
-            case 50:
-                cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
-                equipCheck(1);
-                updateStats(hero, 1);
-                break;
-            case 51:
-                cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
-                equipCheck(2);
-                updateStats(hero, 2);
-                break;
-            case 52:
-                cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
-                equipCheck(3);
-                updateStats(hero, 3);
-                break;
-            case 53:
-                cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
-                equipCheck(4);
-                updateStats(hero, 4);
-                break;
-            case 54:
-                cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
-                equipCheck(5);
-                updateStats(hero, 5);
-                break;
-            case 55:
-                cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
-                equipCheck(6);
-                updateStats(hero, 6);
-                break;
-            case 56:
-                cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
-                equipCheck(7);
-                updateStats(hero, 7);
-                break;
-            case 57:
-                cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
-                equipCheck(8);
-                updateStats(hero, 8);
-                break;
-            default:
-                cons.innerHTML += "Never mind...";
-                break;
-        } 
+        case 49:
+            cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
+            equipCheck(0);
+            updateStats(hero, 0);
+            break;
+        case 50:
+            cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
+            equipCheck(1);
+            updateStats(hero, 1);
+            break;
+        case 51:
+            cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
+            equipCheck(2);
+            updateStats(hero, 2);
+            break;
+        case 52:
+            cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
+            equipCheck(3);
+            updateStats(hero, 3);
+            break;
+        case 53:
+            cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
+            equipCheck(4);
+            updateStats(hero, 4);
+            break;
+        case 54:
+            cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
+            equipCheck(5);
+            updateStats(hero, 5);
+            break;
+        case 55:
+            cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
+            equipCheck(6);
+            updateStats(hero, 6);
+            break;
+        case 56:
+            cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
+            equipCheck(7);
+            updateStats(hero, 7);
+            break;
+        case 57:
+            cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
+            equipCheck(8);
+            updateStats(hero, 8);
+            break;
+        default:
+            cons.innerHTML += "Never mind...";
+            break;
+    } 
 
-    }
+
 
     equipMenu.booleanValue = false;
     
