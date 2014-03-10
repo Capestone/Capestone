@@ -34,12 +34,10 @@
                 <h3>STEPHEN MCCORMICK</h3>
                 <p class="creatorInfo"> The primary duty for Stephen McCormick was web development. Stephen was tasked with creating and maintaining the website content and appeal. 
                     Style and keeping game details up to date were also a part of this. He was also in charge of PHP and other server side code for signing up, 
-                    logging in, and retrieving data from the database to be used in the game. Stephen also, on occasion, assisted Erik Lougee in JavaScript development and troubleshooting. 
+                    logging in, and retrieving data from the database to be used in the game. Stephen also, on more than one occasion, assisted Erik Lougee in JavaScript development and troubleshooting. 
                     He also took part in level design and implementation. There was a joint effort between Stephen and Erik when integrating PHP and JavaScript with AJAX. </p>
                 <h3>ERIK LOUGEE</h3>
-                <p class="creatorInfo"> blah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah 
-                    blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blahblah blah blah </p>
+                <p class="creatorInfo"> I worked mainly on the Javascript game engine, game / level design, and rules of the game. Stephen and I both collaborated on aspects such as database design and problem solving. There were many issues we came across that, with some diligence, were able to overcome. It was a pleasure working with Stephen and I hope that our technical careers intertwine in the future. </p>
                 
             </div> <!-- end div container -->
             
