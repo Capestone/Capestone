@@ -63,6 +63,7 @@ var itemOnGround = new interactive();
 var equipMenu = new interactive();
 var chestCheck = new interactive();
 var doorCheck = new interactive();
+var quaffPotionCheck = new interactive();
 var chestItemCheck = new interactive();
 var dropItemCheck = new interactive();
 var stairsUp = new environment();
@@ -842,7 +843,8 @@ document.onkeypress=function(e)
             !chestCheck.booleanValue && 
             !chestItemCheck.booleanValue && 
             !stairsCheck.booleanValue &&
-            !dropItemCheck.booleanValue)
+            !dropItemCheck.booleanValue &&
+            !quaffPotionCheck.booleanValue)
     {
         //Makes a new monster every 50 turns
         if (timePassed % 50 == 0)
@@ -944,8 +946,10 @@ document.onkeypress=function(e)
                 displayInventory();
                 break;
             
+            //Quaff potion - q
             case 113:
-                drinkPotion();
+                displayInventory();
+                quaffPotionCheck.booleanValue = true;
                 break;
                 
             //Save Data - s
@@ -966,6 +970,10 @@ document.onkeypress=function(e)
             }
         }
         redrawCoordinates();
+    }
+    else if (quaffPotionCheck.booleanValue)
+    {
+        quaffPotion(keyPressed);
     }
     else if (dropItemCheck.booleanValue)
     {
@@ -1025,7 +1033,6 @@ function dropItem(keyPressed)
         switch(keyPressed)
         {
             case 49:
-
                 cons.innerHTML += "You drop the " + hero.inventory[0].itemName + ".";
                 destroyItem(0);
                 break;
@@ -1076,11 +1083,76 @@ function dropItem(keyPressed)
      dropItemCheck.booleanValue = false;
 }
 
-function drinkPotion(index)
+function quaffPotion(keyPressed)
 {
-    cons.innerHTML += "You drink the " + hero.inventory[index].desc;
-    hero.currentHP += hero.inventory[index].desc;
-    destroyItem(index);
+    var index = keyPressed - 49;
+    console.log("INDEX IS THIS: " + index);
+    if(hero.inventory.length < index)
+    {
+        cons.innerHTML += "You don't have an item in that slot!";
+    }
+    
+    if (hero.inventory[index].itemType != 'Potion')
+    {
+        cons.innerHTML += "That's a funny thing to quaff...";
+    }
+    switch(keyPressed)
+    {
+        case 49:
+            cons.innerHTML += "You quaff the " + hero.inventory[0].itemName + ".";
+            //destroyItem(0);
+            break;
+        case 50:
+            cons.innerHTML += "You quaff the " + hero.inventory[1].itemName + ".";
+            //destroyItem(1);
+            break;
+        case 51:
+            cons.innerHTML += "You quaff the " + hero.inventory[2].itemName + ".";
+            //destroyItem(2);
+            break;
+        case 52:
+            cons.innerHTML += "You quaff the " + hero.inventory[3].itemName + ".";
+            //destroyItem(3);
+            break;
+        case 53:
+            cons.innerHTML += "You quaff the " + hero.inventory[4].itemName + ".";
+            //destroyItem(4);
+            break;
+        case 54:
+            cons.innerHTML += "You quaff the " + hero.inventory[5].itemName + ".";
+            //destroyItem(5);
+            break;
+        case 55:
+            cons.innerHTML += "You quaff the " + hero.inventory[6].itemName + ".";
+            //destroyItem(6);
+            break;
+        case 56:
+            cons.innerHTML += "You quaff the " + hero.inventory[7].itemName + ".";
+            //destroyItem(7);
+            break;
+        case 57:
+            cons.innerHTML += "You quaff the " + hero.inventory[8].itemName + ".";
+            //destroyItem(8);
+            break;
+        default:
+            cons.innerHTML += "Never mind...";
+            var nevermind = true;
+            break;
+    } 
+    if (!nevermind)
+    {
+        hero.currentHP += parseInt(hero.inventory[index].health);
+        
+        if (hero.currentHP > hero.equippedHealth + hero.maxHP)
+        {
+            hero.currentHP = hero.equippedHealth + hero.maxHP;
+            
+        }
+        destroyItem(index);
+    }
+    
+    quaffPotionCheck.booleanValue = false;
+    redrawCoordinates();
 }
 
 function destroyItem(index)
