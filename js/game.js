@@ -581,8 +581,18 @@ function enemyLoader()
     
     //Going to need to change this so the monster doesn't get added on top of a tile
     //Just need to check the matrix first
-    enemyList[enemyIncrementer].x = RNG(20);
-    enemyList[enemyIncrementer].y = RNG(20);
+    randomX = RNG(20);
+    randomY = RNG(20);
+    
+    while (coordinates[randomX][randomY] != 0 || actorCoordinates[randomX][randomY] != 0)
+    {
+        console.log("Finding new position for enemy...");
+        randomX = RNG(20);
+        randomY = RNG(20);
+    }
+    
+    enemyList[enemyIncrementer].x = randomX;
+    enemyList[enemyIncrementer].y = randomY;
 
     actorCoordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
     enemyIncrementer++;
@@ -688,18 +698,26 @@ function heroLoader()
     hero.x = parseInt(heroData.x);
     hero.y = parseInt(heroData.y);
     
+    checkCollision(hero);
     
-    if (coordinates[hero.x][hero.y] == 0  && actorCoordinates[hero.x][hero.y] == 0)
+    
+    actorCoordinates[hero.x][hero.y] = hero;
+    
+}
+
+function checkCollision(actor)
+{
+    randomX = RNG(20);
+    randomY = RNG(20);
+    
+    while (coordinates[actor.x][actor.y] != 0 || actorCoordinates[actor.x][actor.y] != 0)
     {
-        actorCoordinates[hero.x][hero.y] = hero;
+        console.log("Finding new position...");
+        randomX = RNG(20);
+        randomY = RNG(20);
+        hero.x = randomX;
+        hero.y = randomY;
     }
-    else
-    {
-        hero.x += 1;
-        actorCoordinates[hero.x][hero.y] = hero;
-    }
-    
-    
 }
 
 function randomBarrier()
@@ -919,7 +937,7 @@ document.onkeypress=function(e)
             
             //Only for testing... - a
             case 97:
-                console.log(hero);
+                //console.log(hero);
                 break;
             
             //Display Controls - c
@@ -1084,7 +1102,7 @@ function dropItem(keyPressed)
 function quaffPotion(keyPressed)
 {
     var index = keyPressed - 49;
-    console.log("INDEX IS THIS: " + index);
+    //console.log("INDEX IS THIS: " + index);
     if(hero.inventory.length < index)
     {
         cons.innerHTML += "You don't have an item in that slot!";
@@ -1175,24 +1193,20 @@ function changeLevel()
         }
     }
     
-    var heroCache = hero;    
+    //var heroCache = hero;    
     
     enemyList = new Array();
     monstersOnThisLevel = new Array();
     enemyIncrementer = 0;
-    //updateItemData();
-    //canvasBackground();
     dungeonLoader();
-    //randomBarrier();
     getRandomDungeon();
     updateMonsterArray();
     enemyLoader();
-    //heroLoader();
-    hero = heroCache;
+    
+    //hero = heroCache;
+    
     updateHTMLStats();
-    //fenceLoader();
-    placeStairs(); //---------------------------commented this out for production server-----------
-    //startGame();
+    placeStairs(); 
     
 }
 

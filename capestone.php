@@ -133,11 +133,11 @@
                 </div>
                 
             </div> <!-- end div container -->
-            <!--
+            
             <div id="footer">
                     <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
-            </div>    -->
+            </div>    
         
         </div><!-- end div wrapper -->
         <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
