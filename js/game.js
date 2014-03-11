@@ -3,8 +3,6 @@
  * NEED: Collision detection on load AND monster population
  * NEED: Stairs -- looking good
  * NEED: Final Level 
- * NEED: the ability to drink potions or at least not equip them
- * WOULD LIKE: Drop items
  */
 
 
@@ -836,7 +834,7 @@ document.onkeypress=function(e)
      * is in the array, if it is we check to see if its empty, and if it isn't then we attack it.
      * This structure avoids all weird undefined runtime errors.
      * */
-    if(hero.currentHP + hero.equippedHealth > 0 && 
+    if(hero.currentHP && 
             !equipMenu.booleanValue && 
             !itemOnGround.booleanValue && 
             !doorCheck.booleanValue && 
@@ -857,7 +855,7 @@ document.onkeypress=function(e)
         {
             if (hero.currentHP < hero.maxHP)
             {
-                hero.currentHP += RNG(3);
+                hero.currentHP += RNG(5);
             }
             if (hero.currentHP > hero.maxHP)
             {
@@ -1326,74 +1324,82 @@ function anItemIsAt(x, y)
 
 function equipItem(keyPressed)
 {
+    var index = keyPressed - 49;
     displayInventory();
     
     if(hero.inventory.length < keyPressed - 48)
     {
         cons.innerHTML += "You don't have an item in that slot!";
     }
-
-    switch(keyPressed)
-    {
-        case 49:
-            cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
-            equipCheck(0);
-            updateStats(hero, 0);
-            break;
-        case 50:
-            cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
-            equipCheck(1);
-            updateStats(hero, 1);
-            break;
-        case 51:
-            cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
-            equipCheck(2);
-            updateStats(hero, 2);
-            break;
-        case 52:
-            cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
-            equipCheck(3);
-            updateStats(hero, 3);
-            break;
-        case 53:
-            cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
-            equipCheck(4);
-            updateStats(hero, 4);
-            break;
-        case 54:
-            cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
-            equipCheck(5);
-            updateStats(hero, 5);
-            break;
-        case 55:
-            cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
-            equipCheck(6);
-            updateStats(hero, 6);
-            break;
-        case 56:
-            cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
-            equipCheck(7);
-            updateStats(hero, 7);
-            break;
-        case 57:
-            cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
-            equipCheck(8);
-            updateStats(hero, 8);
-            break;
-        default:
-            cons.innerHTML += "Never mind...";
-            break;
-    } 
-
-
-
-    equipMenu.booleanValue = false;
     
-    for(var i = 0; i < enemyList.length; i++)
+    if (hero.inventory[index].itemType == 'Potion')
     {
-        enemyBehavior(enemyList[i]);
+        cons.innerHTML += "You can't equip a potion, you insensitive clod!";
     }
-    redrawCoordinates();
+    else
+    {
+        switch(keyPressed)
+        {
+            case 49:
+                cons.innerHTML += "You equip the " + hero.inventory[0].itemName + ".";
+                equipCheck(0);
+                updateStats(hero, 0);
+                break;
+            case 50:
+                cons.innerHTML += "You equip the " + hero.inventory[1].itemName + ".";
+                equipCheck(1);
+                updateStats(hero, 1);
+                break;
+            case 51:
+                cons.innerHTML += "You equip the " + hero.inventory[2].itemName + ".";
+                equipCheck(2);
+                updateStats(hero, 2);
+                break;
+            case 52:
+                cons.innerHTML += "You equip the " + hero.inventory[3].itemName + ".";
+                equipCheck(3);
+                updateStats(hero, 3);
+                break;
+            case 53:
+                cons.innerHTML += "You equip the " + hero.inventory[4].itemName + ".";
+                equipCheck(4);
+                updateStats(hero, 4);
+                break;
+            case 54:
+                cons.innerHTML += "You equip the " + hero.inventory[5].itemName + ".";
+                equipCheck(5);
+                updateStats(hero, 5);
+                break;
+            case 55:
+                cons.innerHTML += "You equip the " + hero.inventory[6].itemName + ".";
+                equipCheck(6);
+                updateStats(hero, 6);
+                break;
+            case 56:
+                cons.innerHTML += "You equip the " + hero.inventory[7].itemName + ".";
+                equipCheck(7);
+                updateStats(hero, 7);
+                break;
+            case 57:
+                cons.innerHTML += "You equip the " + hero.inventory[8].itemName + ".";
+                equipCheck(8);
+                updateStats(hero, 8);
+                break;
+            default:
+                cons.innerHTML += "Never mind...";
+                break;
+        } 
+
+
+
+        equipMenu.booleanValue = false;
+
+        for(var i = 0; i < enemyList.length; i++)
+        {
+            enemyBehavior(enemyList[i]);
+        }
+        redrawCoordinates();
+    }
 }
 
 function equipCheck(index)

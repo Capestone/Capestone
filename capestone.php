@@ -121,16 +121,23 @@
                     <p class="playerInfo">Dungeon lvl: </p><p id="dungeonLvl" class="playerInfo">20</p>
                 </div>
                 
+                <div id="legend">
+                    <img src="images/vaultDoor.png">&nbsp <p class ="playerInfo">Door</p><br/>
+                    <img src="images/stairsUp.png">&nbsp <p class ="playerInfo">Ascending Stairs</p><br/>
+                    <img src="images/stairsDown.png">&nbsp <p class ="playerInfo">Descending Stairs</p><br/>
+                    <img src="images/closedChest.png">&nbsp <p class ="playerInfo">Treasure Chest</p><br/>
+                </div>
+                
                 <div id="controlSection">
                     <img src="images/game controls.png" alt="game controls" height="240" width="635">
                 </div>
                 
             </div> <!-- end div container -->
-            
-            <div id="footer">  <!--  start footer  -->
+            <!--
+            <div id="footer">
                     <p class="info"><a href="termsOfUse.php" style="color:white; text-decoration:none">Terms of Use</a> | <a href="siteMap.php" style="color:white; text-decoration:none">Site Map</a> | <a href="contact.php" style="color:white; text-decoration:none">Contact</a></p>
                     <p class="copyr">&copy; McCormick and Lougee, 2014.</p>
-            </div>  <!--  end footer  -->
+            </div>    -->
         
         </div><!-- end div wrapper -->
         <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
