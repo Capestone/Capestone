@@ -1095,61 +1095,67 @@ function quaffPotion(keyPressed)
     if (hero.inventory[index].itemType != 'Potion')
     {
         cons.innerHTML += "That's a funny thing to quaff...";
+        cons.innerHTML += "<br/>You attempt to quaff the " + hero.inventory[index].itemName + ", but you can't seem to shove it down your throat without seriously injuring yourself.";
+        cons.innerHTML += "<br/>You decide to abandon the attempt.";
     }
-    switch(keyPressed)
+    else
     {
-        case 49:
-            cons.innerHTML += "You quaff the " + hero.inventory[0].itemName + ".";
-            //destroyItem(0);
-            break;
-        case 50:
-            cons.innerHTML += "You quaff the " + hero.inventory[1].itemName + ".";
-            //destroyItem(1);
-            break;
-        case 51:
-            cons.innerHTML += "You quaff the " + hero.inventory[2].itemName + ".";
-            //destroyItem(2);
-            break;
-        case 52:
-            cons.innerHTML += "You quaff the " + hero.inventory[3].itemName + ".";
-            //destroyItem(3);
-            break;
-        case 53:
-            cons.innerHTML += "You quaff the " + hero.inventory[4].itemName + ".";
-            //destroyItem(4);
-            break;
-        case 54:
-            cons.innerHTML += "You quaff the " + hero.inventory[5].itemName + ".";
-            //destroyItem(5);
-            break;
-        case 55:
-            cons.innerHTML += "You quaff the " + hero.inventory[6].itemName + ".";
-            //destroyItem(6);
-            break;
-        case 56:
-            cons.innerHTML += "You quaff the " + hero.inventory[7].itemName + ".";
-            //destroyItem(7);
-            break;
-        case 57:
-            cons.innerHTML += "You quaff the " + hero.inventory[8].itemName + ".";
-            //destroyItem(8);
-            break;
-        default:
-            cons.innerHTML += "Never mind...";
-            var nevermind = true;
-            break;
-    } 
-    if (!nevermind)
-    {
-        hero.currentHP += parseInt(hero.inventory[index].health);
-        
-        if (hero.currentHP > hero.equippedHealth + hero.maxHP)
+        switch(keyPressed)
         {
-            hero.currentHP = hero.equippedHealth + hero.maxHP;
-            
+            case 49:
+                cons.innerHTML += "You quaff the " + hero.inventory[0].itemName + ".";
+                //destroyItem(0);
+                break;
+            case 50:
+                cons.innerHTML += "You quaff the " + hero.inventory[1].itemName + ".";
+                //destroyItem(1);
+                break;
+            case 51:
+                cons.innerHTML += "You quaff the " + hero.inventory[2].itemName + ".";
+                //destroyItem(2);
+                break;
+            case 52:
+                cons.innerHTML += "You quaff the " + hero.inventory[3].itemName + ".";
+                //destroyItem(3);
+                break;
+            case 53:
+                cons.innerHTML += "You quaff the " + hero.inventory[4].itemName + ".";
+                //destroyItem(4);
+                break;
+            case 54:
+                cons.innerHTML += "You quaff the " + hero.inventory[5].itemName + ".";
+                //destroyItem(5);
+                break;
+            case 55:
+                cons.innerHTML += "You quaff the " + hero.inventory[6].itemName + ".";
+                //destroyItem(6);
+                break;
+            case 56:
+                cons.innerHTML += "You quaff the " + hero.inventory[7].itemName + ".";
+                //destroyItem(7);
+                break;
+            case 57:
+                cons.innerHTML += "You quaff the " + hero.inventory[8].itemName + ".";
+                //destroyItem(8);
+                break;
+            default:
+                cons.innerHTML += "Never mind...";
+                var nevermind = true;
+                break;
+        } 
+        if (!nevermind)
+        {
+            hero.currentHP += parseInt(hero.inventory[index].health);
+
+            if (hero.currentHP > hero.equippedHealth + hero.maxHP)
+            {
+                hero.currentHP = hero.equippedHealth + hero.maxHP;
+
+            }
+            destroyItem(index);
         }
-        destroyItem(index);
     }
+    
     
     quaffPotionCheck.booleanValue = false;
     redrawCoordinates();
