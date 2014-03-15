@@ -924,6 +924,145 @@ function dungeonLoader()
             }
         }
     }
+    //FINAL LEVEL
+    finalLevel = function()
+    {
+        endgame = true;
+        enemyList[enemyIncrementer] = new being("images/dragon.png");
+        enemyList[enemyIncrementer].armorClass = 15;
+        enemyList[enemyIncrementer].equippedArmorClass = 0;
+        enemyList[enemyIncrementer].attackBonus = 10;
+        enemyList[enemyIncrementer].equippedAttackBonus = 0;
+        enemyList[enemyIncrementer].currentHP = 100;
+        enemyList[enemyIncrementer].damage = 10;
+        enemyList[enemyIncrementer].desc = "Hell Dragon";
+        enemyList[enemyIncrementer].maxHP = 100;
+        enemyList[enemyIncrementer].pass = false;
+        enemyList[enemyIncrementer].index = 0;
+        enemyList[enemyIncrementer].x = 9;
+        enemyList[enemyIncrementer].y = 5;
+
+        actorCoordinates[enemyList[enemyIncrementer].x][enemyList[enemyIncrementer].y] = enemyList[enemyIncrementer];
+        enemyIncrementer++;
+        
+        hero.x = 9;
+        hero.y = 18;
+        
+        for (var i = 5; i < 15; i++)
+        {
+            if (i != 9)
+            {
+                coordinates[i][2] = new environment();
+                coordinates[i][2].image.src = "images/rockWall.png";
+            }
+            else
+            {
+                coordinates[i][2] = new environment();
+                coordinates[i][2].image.src = "images/vaultDoor.png";
+                coordinates[i][2].type = "door";
+            }
+            
+            if (i != 9)
+            {
+                coordinates[i][17] = new environment();
+                coordinates[i][17].image.src = "images/rockWall.png";
+            }
+            else
+            {
+                coordinates[i][17] = new environment();
+                coordinates[i][17].image.src = "images/vaultDoor.png";
+                coordinates[i][17].type = "door";
+            }
+            
+            coordinates[3][i] = new environment();
+            coordinates[3][i].image.src = "images/rockWall.png";
+            
+            coordinates[16][i] = new environment();
+            coordinates[16][i].image.src = "images/rockWall.png";
+        }
+        
+        for (var i = 3; i < 6; i++)
+        {
+            coordinates[5][i] = new environment();
+            coordinates[5][i].image.src = "images/rockWall.png";
+            
+            coordinates[14][i] = new environment();
+            coordinates[14][i].image.src = "images/rockWall.png";
+            
+            coordinates[5][i + 11] = new environment();
+            coordinates[5][i + 11].image.src = "images/rockWall.png";
+            
+            coordinates[14][i + 11] = new environment();
+            coordinates[14][i + 11].image.src = "images/rockWall.png";
+        }
+        
+        for (var i = 8; i < 12; i++)
+        {
+            coordinates[i][0] = new environment();
+            coordinates[i][0].image.src = "images/rockWall.png";
+            
+            coordinates[i][19] = new environment();
+            coordinates[i][19].image.src = "images/rockWall.png";
+            
+            if (i == 8)
+            {
+                coordinates[i][1] = new environment();
+                coordinates[i][1].image.src = "images/rockWall.png";
+                coordinates[i][18] = new environment();
+                coordinates[i][18].image.src = "images/rockWall.png";
+            }
+            else if (i == 11)
+            {
+                coordinates[i][1] = new environment();
+                coordinates[i][1].image.src = "images/rockWall.png";
+                coordinates[i][18] = new environment();
+                coordinates[i][18].image.src = "images/rockWall.png";
+            }
+            
+        }
+        
+        coordinates[7][7] = new environment();
+        coordinates[7][7].image.src = "images/brokenColumn.png";
+        coordinates[12][7] = new environment();
+        coordinates[12][7].image.src = "images/Column.png";
+        coordinates[7][12] = new environment();
+        coordinates[7][12].image.src = "images/Column.png";
+        coordinates[12][12] = new environment();
+        coordinates[12][12].image.src = "images/Column.png";
+        
+        coordinates[7][8] = new environment();
+        coordinates[7][8].image.src = "images/candelabra.png";
+        coordinates[12][8] = new environment();
+        coordinates[12][8].image.src = "images/candelabra.png";
+        coordinates[7][11] = new environment();
+        coordinates[7][11].image.src = "images/candelabra.png";
+        coordinates[12][11] = new environment();
+        coordinates[12][11].image.src = "images/candelabra.png";
+        
+        coordinates[4][5] = new environment();
+        coordinates[4][5].image.src = "images/rockWall.png";
+        coordinates[15][5] = new environment();
+        coordinates[15][5].image.src = "images/rockWall.png";
+        coordinates[15][14] = new environment();
+        coordinates[15][14].image.src = "images/rockWall.png";
+        coordinates[4][14] = new environment();
+        coordinates[4][14].image.src = "images/rockWall.png";
+        
+        var capeStone = new item();
+        
+        
+        coordinates[10][1] = new environment();
+        coordinates[10][1].image.src = "images/closedChest.png";
+        coordinates[10][1].itemName = "treasure chest";
+        coordinates[10][1].inventory.push();
+        
+        stairsUp.image.src = "images/stairsUp.png";
+        stairsUp.desc = "ascending stairs";
+        stairsUp.x = 10;
+        stairsUp.y = 18;
+        coordinates[stairsUp.x][stairsUp.y] = stairsUp;
+        
+    }
 }
 
 //probability roll 1 - 100

@@ -52,7 +52,7 @@ var mapHeight = 20;
 var widthPixels = 320;
 var heightPixels = 480;
 var enemyList = new Array();
-var dungeonLevel = heroData.dungeonLevel; ////---------------right here you hard code it to 1 so so right now saving it will always be 2 or 0 even if it is already 2 or 0 on load------
+var dungeonLevel = heroData.dungeonLevel; 
 var monstersOnThisLevel = new Array();
 var chest = false;
 var timePassed = 0;
@@ -69,6 +69,9 @@ var stairsDown = new environment();
 var stairsCheck = new interactive();
 var itemLocationX = 0;
 var itemLocationY = 0;
+var finalLevel;
+var endgame = false;
+var capestone = false;
 
 ////Object instantiation
 var hero = "";
@@ -120,7 +123,15 @@ function startGame()
 function placeStairs()
 {
     //console.log(dungeonLevel);
-    if (dungeonLevel != 0)
+    if (dungeonLevel != 0 && capestone == false)
+    {
+        stairsUp.image.src = "images/stairsUp.png";
+        stairsUp.desc = "ascending stairs";
+        stairsUp.x = RNG(20);
+        stairsUp.y = RNG(20);
+        coordinates[stairsUp.x][stairsUp.y] = stairsUp;
+    }
+    else
     {
         stairsUp.image.src = "images/stairsUp.png";
         stairsUp.desc = "ascending stairs";
@@ -137,6 +148,7 @@ function placeStairs()
         stairsDown.y = RNG(20);
         coordinates[stairsDown.x][stairsDown.y] = stairsDown;
     }
+    
 }
 
 
@@ -172,8 +184,6 @@ function item()
 
 function updateItemData()
 {
-    
-    
     for (var i = 0; i < itemData.length; i++)
     {
         var cache = new item();
@@ -211,35 +221,41 @@ function placeWeapon(index, x, y)
 
 function getRandomDungeon()
 {
-    //This is good for now
-    var quadrantOne = RNG(dungeonCode.length);
-    var quadrantTwo = RNG(dungeonCode.length);
-    var quadrantThree = RNG(dungeonCode.length);
-    var quadrantFour = RNG(dungeonCode.length);
-    
-    while (quadrantOne == quadrantTwo)
+    if (hero.dungeonLevel == 6)
     {
-        quadrantTwo = RNG(dungeonCode.length);
+        finalLevel();
     }
-    
-    while (quadrantOne == quadrantThree || quadrantTwo == quadrantThree)
+    else if (hero.dungeonLevel == -1)
     {
-        quadrantThree = RNG(dungeonCode.length);
+        cons.innerHTML = "YOU ARE WINNER";
     }
-    
-    while (quadrantOne == quadrantFour || quadrantTwo == quadrantFour || quadrantThree == quadrantFour)
+    else
     {
-        quadrantFour = RNG(dungeonCode.length);
+        var quadrantOne = RNG(dungeonCode.length);
+        var quadrantTwo = RNG(dungeonCode.length);
+        var quadrantThree = RNG(dungeonCode.length);
+        var quadrantFour = RNG(dungeonCode.length);
+
+        while (quadrantOne == quadrantTwo)
+        {
+            quadrantTwo = RNG(dungeonCode.length);
+        }
+
+        while (quadrantOne == quadrantThree || quadrantTwo == quadrantThree)
+        {
+            quadrantThree = RNG(dungeonCode.length);
+        }
+
+        while (quadrantOne == quadrantFour || quadrantTwo == quadrantFour || quadrantThree == quadrantFour)
+        {
+            quadrantFour = RNG(dungeonCode.length);
+        }
+
+        dungeonCode[quadrantOne](0,0);
+        dungeonCode[quadrantTwo](10, 0);
+        dungeonCode[quadrantThree](0, 10);
+        dungeonCode[quadrantFour](10, 10);
     }
-    
-    dungeonCode[quadrantOne](0,0);
-    dungeonCode[quadrantTwo](10, 0);
-    dungeonCode[quadrantThree](0, 10);
-    dungeonCode[quadrantFour](10, 10);
-    
-    
-    
-    //placeWeapon(0, 1, 0);
 }
 
 //Attack function
@@ -292,19 +308,35 @@ function attack(assailant, defender)
 //Autoloader function
 function autoLoader()
 {
-    updateItemData();
-    canvasBackground();
-    dungeonLoader();
-    //randomBarrier();
-    getRandomDungeon();
-    
-    updateMonsterArray();
-    enemyLoader();
     heroLoader();
-    updateHTMLStats();
-    //fenceLoader();
-    placeStairs(); //---------------------------commented this out for production server-----------
-    startGame();
+    console.log(hero.dungeonLevel);
+    if (hero.dungeonLevel == 6)
+    {
+        endgame = true;
+    }
+    
+    if (endgame)
+    {
+        canvasBackground();
+        //heroLoader();
+        updateHTMLStats();
+        dungeonLoader();
+        finalLevel();
+        redrawCoordinates();
+    }
+    else
+    {
+        updateItemData();
+        canvasBackground();
+        dungeonLoader();
+        getRandomDungeon();
+        updateMonsterArray();
+        enemyLoader();
+        //heroLoader();
+        updateHTMLStats();
+        placeStairs();
+        startGame();
+    }
 }
 
 
@@ -562,7 +594,7 @@ function updateMonsterArray()
 }
 
 function enemyLoader()
-{	
+{
     //Enemy attributes
     //console.log("inside enemyLoader monsterOnThisLevel: " + monstersOnThisLevel[0]);
     var randomMonster = monstersOnThisLevel[RNG(monstersOnThisLevel.length)];
@@ -1192,22 +1224,32 @@ function changeLevel()
             actorCoordinates[i][j] = 0;
         }
     }
-    
-    //var heroCache = hero;    
-    
-    enemyList = new Array();
-    monstersOnThisLevel = new Array();
-    enemyIncrementer = 0;
-    dungeonLoader();
-    getRandomDungeon();
-    updateMonsterArray();
-    enemyLoader();
-    
-    //hero = heroCache;
-    
-    updateHTMLStats();
-    placeStairs(); 
-    
+    if (dungeonLevel != 6)
+    {
+        //var heroCache = hero;    
+
+        enemyList = new Array();
+        monstersOnThisLevel = new Array();
+        enemyIncrementer = 0;
+        dungeonLoader();
+        getRandomDungeon();
+        updateMonsterArray();
+        enemyLoader();
+
+        //hero = heroCache;
+
+        updateHTMLStats();
+        placeStairs(); 
+    }
+    else
+    {
+        enemyList = new Array();
+        monstersOnThisLevel = new Array();
+        enemyIncrementer = 0;
+        dungeonLoader();
+        updateHTMLStats();
+        finalLevel();
+    }
 }
 
 function openChest(keyPressed)
