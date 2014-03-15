@@ -25,7 +25,7 @@
                     <a class="btn" href="techDoc.php"><b>TECH DOC</b></a>
                     <a class="btn" href="erd.php"><b>ERD</b></a>	
                     <a class="btn" href="screenShots.php"><b>SCREENS</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="powerPoint.php"><b>PP</b></a>
                     <a class="btn" href="login.php"><b>GAME</b></a>
                 </div>  
             </div>  <!--  end nav  -->    
@@ -37,7 +37,7 @@
                 <a href="techDoc.php">TECH DOC</a> <br />
                 <a href="erd.php">ENTITY-RELATIONSHIP DIAGRAM</a> <br />	
                 <a href="screenShots.php">SCREEN SHOTS</a> <br />
-                <a href="#">Link</a> <br />
+                <a href="powerPoint.php">POWER POINT</a> <br />
                 <p class="playerInfo">GAME</p> <br />
                 <a href="signup.php" style="margin-left:3em">SIGN UP</a> <br />
                 <a href="login.php" style="margin-left:3em">LOGIN</a> <br />

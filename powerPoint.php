@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Terms of Use</title>
+        <title>Power Point</title>
         <link rel="stylesheet" type="text/css" href="css/main.css" />
     </head>
     <body style="background-image: url('images/sprite_background.png')">
@@ -31,13 +31,10 @@
             </div>  <!--  end nav  -->    
            
             <div id="container">
-                <h3>Terms of Use</h3>
-                <p class="creatorInfo"> As of February, 2014 this is a nonprofit website. This website was created with the intention of displaying 
-                    Stephen McCormick’s and Erik Lougee’s programing skills for the Capstone project at New England Institute of Technology, Associates Program. 
-                    The sprit sheet used for the game was purchased directly from its creator with understanding that the sprite sheet would be used and displayed online. 
-                    The design, code, style, and concept of the capestone game were developed by Stephen McCormick and Erik Lougee. The design, code, style, and concept 
-                    of the capestone game are intellectual property of Stephen McCormick and Erik Lougee. In the event that this website and game go into production the creators, 
-                    Stephen McCormick and Erik Lougee, reserve the right to make changes to the game and user content and profiles without warning.  </p>
+                <span>Download this PDF here: <a href="download.php"> finalPP.pdf</a></span>
+                <div id="pdf" style="opacity:'1'">
+                <object data="pdf/finalPP.pdf" type="application/pdf" width="100%" height="100%"></object>
+                </div>
             </div> <!-- end div container -->
             
             <div id="footer">  <!--  start footer  -->

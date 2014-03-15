@@ -74,7 +74,7 @@
                     <a class="btn" href="techDoc.php"><b>TECH DOC</b></a>
                     <a class="btn" href="erd.php"><b>ERD</b></a>	
                     <a class="btn" href="screenShots.php"><b>SCREENS</b></a>
-                    <a class="btn" href="#"><b>Link</b></a>
+                    <a class="btn" href="powerPoint.php"><b>PP</b></a>
                     <a class="btn" href="login.php"><b>GAME</b></a>
                 </div>  
             </div>  <!--  end nav  -->    
